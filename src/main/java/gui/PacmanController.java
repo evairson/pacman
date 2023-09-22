@@ -1,4 +1,10 @@
 package gui;
+/**
+ * Classe pour le controleur du Pacman
+ * keyPressedHandler : récupère la touche appuyée et change la direction du Pacman
+ * avec event.getCode() qui renvoie la touche appuyée
+ * keyReleasedHandler : rien à faire ???
+ */
 
 import model.Direction;
 import model.PacMan;

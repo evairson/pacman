@@ -4,15 +4,20 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * Représente un point dans le plan avec des coordonnées réelles, utilisé pour la position du joueur.
+ *
+ */
 public record RealCoordinates(double x, double y) {
 
+    //  Constantes pour représenter des coordonnées réelles spécifiques (les points cardinaux globalement et l'origine)
     public static final RealCoordinates ZERO = new RealCoordinates(0, 0);
     public static final RealCoordinates NORTH_UNIT = new RealCoordinates(0, -1);
     public static final RealCoordinates EAST_UNIT = new RealCoordinates(1, 0);
     public static final RealCoordinates SOUTH_UNIT = new RealCoordinates(0, 1);
     public static final RealCoordinates WEST_UNIT = new RealCoordinates(-1, 0);
 
-
+    // Deux méthodes pour ajouter et multiplier des coordonnées réelles
     public RealCoordinates plus(RealCoordinates other) {
         return new RealCoordinates(x + other.x, y + other.y);
     }
@@ -34,11 +39,12 @@ public record RealCoordinates(double x, double y) {
         )
         );
     }
-
+    // Méthode pour arrondir les coordonnées réelles à des coordonnées entières
     public IntCoordinates round() {
         return new IntCoordinates((int) Math.round(x), (int) Math.round(y));
     }
 
+    // Méthodes pour arrondir les coordonnées réelles avec des parties fractionnaires arrondies.
     public RealCoordinates floorX() {
         return new RealCoordinates((int) Math.floor(x), y);
     }
@@ -55,6 +61,7 @@ public record RealCoordinates(double x, double y) {
         return new RealCoordinates(x, (int) Math.ceil(y));
     }
 
+    // Méthode pour calculer la distance entre deux coordonnées réelles
     public RealCoordinates warp(int width, int height) {
         var rx = x;
         var ry = y;

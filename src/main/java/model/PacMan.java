@@ -3,7 +3,12 @@ package model;
 import geometry.RealCoordinates;
 
 /**
- * Implements Pac-Man character using singleton pattern. FIXME: check whether singleton is really a good idea.
+ * Implémente PacMan comme un singleton.
+ * TODO : ajouter les fonctionnalités suivantes :
+ * 1. Gestion du temps d'énergie : un timer qui se décrémente à chaque tick
+ *    et qui désactive l'état énergisé quand il atteint 0.
+ *    (voir https://stackoverflow.com/questions/4044726/how-to-set-a-timer-in-java)
+ *
  */
 public final class PacMan implements Critter {
     private Direction direction = Direction.NONE;

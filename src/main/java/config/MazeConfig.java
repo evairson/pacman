@@ -56,8 +56,40 @@ public class MazeConfig {
     }
 
 
-    // simple example with a square shape
-    // TODO: mazes should be loaded from a text file
+    /** TODO : labyrinthes pourraient être configurés à partir d'un fichier texte
+     *  1. Définir une structure de fichier texte qui représente le labyrinthe, et des caractères pour représenter les
+     *     différents types de cellules. Par exemple, le fichier suivant pourrait représenter un labyrinthe :
+     *     <pre>
+     *         +---+---+---+---+---+---+
+     *         | .   .   . | .   .   . |
+     *         + .-+ .-+ .-+ .-+ .-+ .+
+     *         | . | . | .   . | . | . |
+     *         + .+ .+ .+ .-+ .+ .+ .+
+     *         | .   . | . | . | .   . |
+     *         + .-+ .+ .+ .+ .+ .-+ .+
+     *         | . | .   . | .   . | . |
+     *         +---+---+---+---+---+---+
+     *     </pre>
+     *         Dans ce fichier, les caractères utilisés sont :
+     *         <ul>
+     *             <li> '+' pour les coins </li>
+     *             <li> '-' pour les murs horizontaux </li>
+     *             <li> '|' pour les murs verticaux </li>
+     *             <li> '.' pour les points </li>
+     *             <li> ' ' pour les cases vides </li>
+     *             <li> 'E' le Xanax de Pacman (pour ceux qui ont la réf xd) </li>
+     *          </ul>
+     *  2. On pourrait alors utiliser la fonction suivante pour lire un labyrinthe à partir d'un fichier :
+     *     <pre>
+     *         public static MazeConfig readFromFile(String filename) {
+     *         // TODO
+     *         }
+     *     </pre>
+     *  3. Ajout d'une méthode de lecture de fichier dans la classe {@link MazeConfig}
+     *
+     * @return
+     */
+
     public static MazeConfig makeExample1() {
         return new MazeConfig(new Cell[][]{
                 {nTee(DOT),    hPipe(DOT),     hPipe(DOT),     hPipe(DOT),     hPipe(DOT),     nTee(DOT)},

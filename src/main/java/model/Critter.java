@@ -1,5 +1,12 @@
 package model;
 
+/**
+ * Interface Java sealed pour implémenter Critter et ses sous-classes PacMan et Ghost
+ * @see Ghost
+ * @see PacMan
+ *
+ */
+
 import geometry.RealCoordinates;
 
 public sealed interface Critter permits Ghost, PacMan {

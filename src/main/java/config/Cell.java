@@ -1,8 +1,18 @@
 package config;
 
+// La classe Cell est déclarée comme un enregistrement (record) qui est une nouveauté de Java 14.
+
 public record Cell(boolean northWall, boolean eastWall, boolean southWall, boolean westWall, Cell.Content initialContent) {
+
+
     public enum Content { NOTHING, DOT, ENERGIZER}
-    // FIXME: all these factories are convenient, but it is not very "economic" to have so many methods!
+
+    /** TO DO : Modification avec une suele méthode de création 'create" qui prend comme paramètres les valeurs des murs dans chaque direction/
+     * ainsi que le contenu initial de la cellule. Les autres méthodes de création sont supprimées.
+     *
+     */
+
+    // open cells
     public static Cell open(Content c) { return new Cell(false, false, false, false, c); }
     public static Cell closed(Content c) { return new Cell(true, true, false, false, c); }
     // straight pipes

@@ -1,5 +1,10 @@
 package gui;
 
+/**
+ * Cette classe est responsable de la création des éléments graphiques pour UNE CELLULE du labyrinthe.
+ */
+
+
 import geometry.IntCoordinates;
 import javafx.scene.Group;
 import javafx.scene.Node;
@@ -16,6 +21,26 @@ public class CellGraphicsFactory {
     public CellGraphicsFactory(double scale) {
         this.scale = scale;
     }
+
+    /**
+     * Crée les éléments graphiques pour une cellule donnée.
+     * @param state
+     * @param pos
+     * @return un objet GraphicsUpdater qui permet de mettre à jour les éléments graphiques
+     */
+
+    /**
+     * Bon maintenant, avec respect : c'est quoi ce code ? KAPPA
+     *
+     * 1. Utilisation de constante : scale/15, scale/5, scale/10, scale/2 ou 9 * scale / 10
+     *  c'est quand même déguelasse
+     * 2. Méthodes distinctes pour chaque élément graphique
+     * 3. Couleurs en paramètre ? comme ça le client choisi la couleur qu'il veut
+     * 4. COMPLIQUÉ : Gestion des dimensions dynamiques :
+     * pour l'instant les dimensions sont fixes, mais si on veut changer la taille de la fenêtre
+     * il faut changer les dimensions de chaque élément graphique
+     */
+
 
     public GraphicsUpdater makeGraphics(MazeState state, IntCoordinates pos) {
         var group = new Group();

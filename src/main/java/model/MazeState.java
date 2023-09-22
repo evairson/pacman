@@ -1,5 +1,15 @@
 package model;
 
+/**
+ * Cette classe représente l'état du labyrinthe.
+ * Elle contient les informations suivantes :
+ * - la configuration du labyrinthe (cf. {@link config.MazeConfig})
+ * - la gestion des collisions entre les différents éléments du labyrinthe
+ * - le score du joueur
+ * - le nombre de vies restantes
+ * - la position initiale de chaque élément du labyrinthe
+ */
+
 import config.MazeConfig;
 import geometry.IntCoordinates;
 import geometry.RealCoordinates;
@@ -51,7 +61,25 @@ public final class MazeState {
     }
 
     public void update(long deltaTns) {
-        // FIXME: too many things in this method. Maybe some responsibilities can be delegated to other methods or classes?
+
+        /**
+         * Reponsable de mettre à jour l'état du jeu.
+         * Cette méthode est appelée à chaque frame.
+         * Elle gère les collisions entre les différents éléments du labyrinthe.
+         * Elle met à jour la position de chaque élément du labyrinthe.
+         * Elle met à jour le score du joueur.
+         * Elle met à jour le nombre de vies restantes.
+         *
+         *
+         * BEAUCOUP DE CHOSES À FAIRE :
+         * 1. Intégrer JavaFX pour afficher le score, le nombre de vies restantes, etc.
+         * 2. Afficher un écran de fin de jeu, plutôt que d'appeler un vilain System.exit(0)
+         *    message de fin de jeu + permettre au joueur de recommencer ou de quitter le jeu.
+         *    (cf. https://docs.oracle.com/javase/8/javafx/api/javafx/scene/control/Alert.html)
+         *    (cf. https://docs.oracle.com/javase/8/javafx/api/javafx/scene/control/Dialog.html)
+         * 3. déléguer certaines repsonsabilités à d'autres méthodes ?
+         */
+
         for  (var critter: critters) {
             var curPos = critter.getPos();
             var nextPos = critter.nextPos(deltaTns);

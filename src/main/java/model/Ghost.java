@@ -1,5 +1,14 @@
 package model;
 
+/**
+ * Pas grand chose à détailler, ça définit simplement les 4 fantômes.
+ * CEPENDANT, il faut implémenter un comportement différent pour chaque fantôme.
+ * Chaque fantome devrait avoir sa propre classe ou méthode qui implémente sa logique de déplacement.
+ * une classe BlinkyAI, InkyAI, PinkyAI, ClydeAI qui implémentent une interface GhostAI ???
+ * Utiliser les données du jeu pour déterminer la direction du fantôme. (la position de PacMan par exemple)
+ *
+ */
+
 import geometry.RealCoordinates;
 
 public enum Ghost implements Critter {

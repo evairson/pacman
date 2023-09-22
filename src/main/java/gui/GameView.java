@@ -1,5 +1,17 @@
 package gui;
 
+/**
+ * La classe GameView est responsable de l'affichage et l'animation du jeu.
+ * Elle est composée de GraphicsUpdater qui sont chargés de mettre à jour
+ * l'affichage d'un élément du jeu.
+ *
+ * J'ai pas grand chose à ajouter dans cette classe, mis à part que si l'on veut ajouter
+ * du son, il faudra le faire ici.
+ * Par exemple avec import javafx.scene.media.AudioClip; et un attribut privé AudioClip
+ * qui sera initialisé dans le constructeur.
+ *
+ */
+
 import geometry.IntCoordinates;
 import javafx.animation.AnimationTimer;
 import javafx.scene.layout.Pane;
@@ -31,16 +43,21 @@ public class GameView {
         // pixels per cell
         root.setMinWidth(maze.getWidth() * scale);
         root.setMinHeight(maze.getHeight() * scale);
+        // Définir la couleur de fond du nœud racine
         root.setStyle("-fx-background-color: #000000");
         var critterFactory = new CritterGraphicsFactory(scale);
         var cellFactory = new CellGraphicsFactory(scale);
         graphicsUpdaters = new ArrayList<>();
+
+        // Ajouter les créatures à la vue en utilisant CritterGraphicsFactory
         for (var critter : maze.getCritters()) addGraphics(critterFactory.makeGraphics(critter));
+
+        // Ajouter les cellules du labyrinthe à la vue en utilisant CellGraphicsFactory
         for (int x = 0; x < maze.getWidth(); x++)
             for (int y = 0; y < maze.getHeight(); y++)
                 addGraphics(cellFactory.makeGraphics(maze, new IntCoordinates(x, y)));
     }
-
+    // Méthode pour démarrer l'animation
     public void animate() {
         new AnimationTimer() {
             long last = 0;
