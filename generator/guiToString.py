@@ -3,6 +3,9 @@ import PySimpleGUI as sg
 lines = columns = 8
 main_layout = []
 
+#Set size
+sz = (2,2)
+
 #North = 0
 #South = 1
 #East = 2
@@ -15,13 +18,13 @@ for i in range(lines):#lines
     #Generates north walls
     for j in range(columns):
         if i == 0:
-            layout_row.append(sg.Button(" ",size=(4,2),pad=(0,0),button_color=("blue"),border_width=0))
-            layout_row.append(sg.Button("On",key=f"-WALL{i,j,0}-",size=(4,2),pad=(0,0),border_width=0,button_color = "blue"))
-            layout_row.append(sg.Button(" ",size=(4,2),pad=(0,0),button_color=("blue"),border_width=0))
+            layout_row.append(sg.Button(" ",size=sz,pad=(0,0),button_color=("blue"),border_width=0))
+            layout_row.append(sg.Button("On",key=f"-WALL{i,j,0}-",size=sz,pad=(0,0),border_width=0,button_color = "blue"))
+            layout_row.append(sg.Button(" ",size=sz,pad=(0,0),button_color=("blue"),border_width=0))
         else:
-            layout_row.append(sg.Button(" ",size=(4,2),pad=(0,0),button_color=("black"),border_width=0))
-            layout_row.append(sg.Button("Off",key=f"-WALL{i,j,0}-",size=(4,2),pad=(0,0),border_width=0,button_color = "black"))
-            layout_row.append(sg.Button(" ",size=(4,2),pad=(0,0),button_color=("black"),border_width=0))
+            layout_row.append(sg.Button(" ",size=sz,pad=(0,0),button_color=("black"),border_width=0))
+            layout_row.append(sg.Button("Off",key=f"-WALL{i,j,0}-",size=sz,pad=(0,0),border_width=0,button_color = "black"))
+            layout_row.append(sg.Button(" ",size=sz,pad=(0,0),button_color=("black"),border_width=0))
 
     main_layout.append(layout_row)
 
@@ -30,26 +33,26 @@ for i in range(lines):#lines
     #Generates east and west walls
     for j in range(columns):
         if j == 0:
-            layout_row.append(sg.Button("On",key=f"-WALL{i,j,3}-",size=(4,2),pad=(0,0),border_width=0,button_color = "blue"))
-            layout_row.append(sg.Button("Cell",key=f"-CELL{i,j}-",size=(4,2),pad=(0,0),border_width=0,button_color = "red"))
-            layout_row.append(sg.Button("Off",key=f"-WALL{i,j,2}-",size=(4,2),pad=(0,0),border_width=0,button_color = "black"))
+            layout_row.append(sg.Button("On",key=f"-WALL{i,j,3}-",size=sz,pad=(0,0),border_width=0,button_color = "blue"))
+            layout_row.append(sg.Button("Cell",key=f"-CELL{i,j}-",size=sz,pad=(0,0),border_width=0,button_color = "red"))
+            layout_row.append(sg.Button("Off",key=f"-WALL{i,j,2}-",size=sz,pad=(0,0),border_width=0,button_color = "black"))
         elif j == columns - 1:
-            layout_row.append(sg.Button("Off",key=f"-WALL{i,j,3}-",size=(4,2),pad=(0,0),border_width=0,button_color = "black"))
-            layout_row.append(sg.Button("Cell",key=f"-CELL{i,j}-",size=(4,2),pad=(0,0),border_width=0,button_color = "red"))
-            layout_row.append(sg.Button("On",key=f"-WALL{i,j,2}-",size=(4,2),pad=(0,0),border_width=0,button_color = "blue"))
+            layout_row.append(sg.Button("Off",key=f"-WALL{i,j,3}-",size=sz,pad=(0,0),border_width=0,button_color = "black"))
+            layout_row.append(sg.Button("Cell",key=f"-CELL{i,j}-",size=sz,pad=(0,0),border_width=0,button_color = "red"))
+            layout_row.append(sg.Button("On",key=f"-WALL{i,j,2}-",size=sz,pad=(0,0),border_width=0,button_color = "blue"))
         else:
-            layout_row.append(sg.Button("Off",key=f"-WALL{i,j,3}-",size=(4,2),pad=(0,0),border_width=0,button_color = "black"))
-            layout_row.append(sg.Button("Cell",key=f"-CELL{i,j}-",size=(4,2),pad=(0,0),border_width=0,button_color = "red"))
-            layout_row.append(sg.Button("Off",key=f"-WALL{i,j,2}-",size=(4,2),pad=(0,0),border_width=0,button_color = "black"))
+            layout_row.append(sg.Button("Off",key=f"-WALL{i,j,3}-",size=sz,pad=(0,0),border_width=0,button_color = "black"))
+            layout_row.append(sg.Button("Cell",key=f"-CELL{i,j}-",size=sz,pad=(0,0),border_width=0,button_color = "red"))
+            layout_row.append(sg.Button("Off",key=f"-WALL{i,j,2}-",size=sz,pad=(0,0),border_width=0,button_color = "black"))
     main_layout.append(layout_row)
 
 
     layout_row = []
     #Generates south walls
     for j in range(columns):
-        layout_row.append(sg.Button(" ",size=(4,2),pad=(0,0),button_color=("black"),border_width=0))
-        layout_row.append(sg.Button("Off",key=f"-WALL{i,j,1}-",size=(4,2),pad=(0,0),border_width=0,button_color = "black"))
-        layout_row.append(sg.Button(" ",size=(4,2),pad=(0,0),button_color=("black"),border_width=0))
+        layout_row.append(sg.Button(" ",size=sz,pad=(0,0),button_color=("black"),border_width=0))
+        layout_row.append(sg.Button("Off",key=f"-WALL{i,j,1}-",size=sz,pad=(0,0),border_width=0,button_color = "black"))
+        layout_row.append(sg.Button(" ",size=sz,pad=(0,0),button_color=("black"),border_width=0))
     main_layout.append(layout_row)
 
 
