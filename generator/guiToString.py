@@ -8,27 +8,48 @@ main_layout = []
 #East = 2
 #West = 3
 
+#TODO faire les contours en bleu( ceux du top par défaut à 0) NE PAS OUBLIER LE DICO, le système de transition, factoriser les trucs moches
+
 for i in range(lines):#lines
     layout_row = []
     #Generates north walls
     for j in range(columns):
-        layout_row.append(sg.Button("Off",key=f"-WALL{i,j,0}-",size=(6,1),pad=((30,30),0),expand_x=False))
+        if i == 0:
+            layout_row.append(sg.Button(" ",size=(4,2),pad=(0,0),button_color=("blue"),border_width=0))
+            layout_row.append(sg.Button("On",key=f"-WALL{i,j,0}-",size=(4,2),pad=(0,0),border_width=0,button_color = "blue"))
+            layout_row.append(sg.Button(" ",size=(4,2),pad=(0,0),button_color=("blue"),border_width=0))
+        else:
+            layout_row.append(sg.Button(" ",size=(4,2),pad=(0,0),button_color=("black"),border_width=0))
+            layout_row.append(sg.Button("Off",key=f"-WALL{i,j,0}-",size=(4,2),pad=(0,0),border_width=0,button_color = "black"))
+            layout_row.append(sg.Button(" ",size=(4,2),pad=(0,0),button_color=("black"),border_width=0))
+
     main_layout.append(layout_row)
 
 
     layout_row = []
     #Generates east and west walls
     for j in range(columns):
-        layout_row.append(sg.Button("Off",key=f"-WALL{i,j,3}-",size=(2,2),pad=((5,10),(10,10))))
-        layout_row.append(sg.Button("Off",key=f"-CELL{i,j}-"))
-        layout_row.append(sg.Button("Off",key=f"-WALL{i,j,2}-",size=(2,2),pad=((10,5),(10,10))))
+        if j == 0:
+            layout_row.append(sg.Button("On",key=f"-WALL{i,j,3}-",size=(4,2),pad=(0,0),border_width=0,button_color = "blue"))
+            layout_row.append(sg.Button("Cell",key=f"-CELL{i,j}-",size=(4,2),pad=(0,0),border_width=0,button_color = "red"))
+            layout_row.append(sg.Button("Off",key=f"-WALL{i,j,2}-",size=(4,2),pad=(0,0),border_width=0,button_color = "black"))
+        elif j == columns - 1:
+            layout_row.append(sg.Button("Off",key=f"-WALL{i,j,3}-",size=(4,2),pad=(0,0),border_width=0,button_color = "black"))
+            layout_row.append(sg.Button("Cell",key=f"-CELL{i,j}-",size=(4,2),pad=(0,0),border_width=0,button_color = "red"))
+            layout_row.append(sg.Button("On",key=f"-WALL{i,j,2}-",size=(4,2),pad=(0,0),border_width=0,button_color = "blue"))
+        else:
+            layout_row.append(sg.Button("Off",key=f"-WALL{i,j,3}-",size=(4,2),pad=(0,0),border_width=0,button_color = "black"))
+            layout_row.append(sg.Button("Cell",key=f"-CELL{i,j}-",size=(4,2),pad=(0,0),border_width=0,button_color = "red"))
+            layout_row.append(sg.Button("Off",key=f"-WALL{i,j,2}-",size=(4,2),pad=(0,0),border_width=0,button_color = "black"))
     main_layout.append(layout_row)
 
 
     layout_row = []
     #Generates south walls
     for j in range(columns):
-        layout_row.append(sg.Button("Off",key=f"-WALL{i,j,1}-",size=(6,1),pad=((30,30),0),expand_x=False))
+        layout_row.append(sg.Button(" ",size=(4,2),pad=(0,0),button_color=("black"),border_width=0))
+        layout_row.append(sg.Button("Off",key=f"-WALL{i,j,1}-",size=(4,2),pad=(0,0),border_width=0,button_color = "black"))
+        layout_row.append(sg.Button(" ",size=(4,2),pad=(0,0),button_color=("black"),border_width=0))
     main_layout.append(layout_row)
 
 
@@ -36,7 +57,7 @@ for i in range(lines):#lines
 states = {(i,j,orientation) : False for i in range(lines) for j in range(columns) for orientation in range(4)}
 
 #Initializes the window
-window = sg.Window("Test", main_layout)
+window = sg.Window("Test", main_layout,background_color="black")
 
 #Event Loop
 while True:
