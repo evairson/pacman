@@ -1,6 +1,6 @@
 import PySimpleGUI as sg
 
-lines = columns = 8
+lines = columns = 7
 main_layout = []
 
 #Set size
@@ -20,6 +20,14 @@ for i in range(lines):#lines
         if i == 0:
             layout_row.append(sg.Button(" ",size=sz,pad=(0,0),button_color=("blue"),border_width=0))
             layout_row.append(sg.Button("On",key=f"-WALL{i,j,0}-",size=sz,pad=(0,0),border_width=0,button_color = "blue"))
+            layout_row.append(sg.Button(" ",size=sz,pad=(0,0),button_color=("blue"),border_width=0))
+        elif j == 0:
+            layout_row.append(sg.Button(" ",size=sz,pad=(0,0),button_color=("blue"),border_width=0))
+            layout_row.append(sg.Button("Off",key=f"-WALL{i,j,0}-",size=sz,pad=(0,0),border_width=0,button_color = "black"))
+            layout_row.append(sg.Button(" ",size=sz,pad=(0,0),button_color=("black"),border_width=0))
+        elif j == columns - 1:
+            layout_row.append(sg.Button(" ",size=sz,pad=(0,0),button_color=("black"),border_width=0))
+            layout_row.append(sg.Button("Off",key=f"-WALL{i,j,0}-",size=sz,pad=(0,0),border_width=0,button_color = "black"))
             layout_row.append(sg.Button(" ",size=sz,pad=(0,0),button_color=("blue"),border_width=0))
         else:
             layout_row.append(sg.Button(" ",size=sz,pad=(0,0),button_color=("black"),border_width=0))
@@ -50,9 +58,20 @@ for i in range(lines):#lines
     layout_row = []
     #Generates south walls
     for j in range(columns):
-        layout_row.append(sg.Button(" ",size=sz,pad=(0,0),button_color=("black"),border_width=0))
-        layout_row.append(sg.Button("Off",key=f"-WALL{i,j,1}-",size=sz,pad=(0,0),border_width=0,button_color = "black"))
-        layout_row.append(sg.Button(" ",size=sz,pad=(0,0),button_color=("black"),border_width=0))
+        if j == 0:
+            layout_row.append(sg.Button(" ",size=sz,pad=(0,0),button_color=("blue"),border_width=0))
+            layout_row.append(sg.Button("Off",key=f"-WALL{i,j,0}-",size=sz,pad=(0,0),border_width=0,button_color = "black"))
+            layout_row.append(sg.Button(" ",size=sz,pad=(0,0),button_color=("black"),border_width=0))
+        elif j == columns - 1:
+            layout_row.append(sg.Button(" ",size=sz,pad=(0,0),button_color=("black"),border_width=0))
+            layout_row.append(sg.Button("Off",key=f"-WALL{i,j,0}-",size=sz,pad=(0,0),border_width=0,button_color = "black"))
+            layout_row.append(sg.Button(" ",size=sz,pad=(0,0),button_color=("blue"),border_width=0))
+        
+        else:
+            layout_row.append(sg.Button(" ",size=sz,pad=(0,0),button_color=("black"),border_width=0))
+            layout_row.append(sg.Button("Off",key=f"-WALL{i,j,1}-",size=sz,pad=(0,0),border_width=0,button_color = "black"))
+            layout_row.append(sg.Button(" ",size=sz,pad=(0,0),button_color=("black"),border_width=0))
+
     main_layout.append(layout_row)
 
 
@@ -84,7 +103,7 @@ while True:
                 states[x+1,y,0] = states[x,y,o]
 
         
-        if not ((y == 0 and o == 3) or (y == columns - 1 and o == 2)):
+        if not ((y == 0 and o == 3) or (y == columns - 1 and o == 2)):#TODO correct bug with last left wall
             if o == 3:
                 window[f"-WALL{x,y-1,2}-"].update(("On","Off")[value],button_color=("white",("blue","black")[value]))
                 states[x,y-1,2] = states[x,y,o]
