@@ -1,6 +1,6 @@
 import PySimpleGUI as sg
 
-lines = columns = 7
+lines = columns = 6
 main_layout = []
 
 #Set size
@@ -11,7 +11,7 @@ sz = (2,2)
 #East = 2
 #West = 3
 
-#TODO faire les contours en bleu( ceux du top par défaut à 0) NE PAS OUBLIER LE DICO, le système de transition, factoriser les trucs moches, Mettre les boutons vide en blanc ou autre
+#TODO le système de transition, factoriser les trucs moches, Mettre les boutons vide en blanc ou autre, FAIRE UNE MENUBAR
 
 for i in range(lines):#lines
     layout_row = []
@@ -77,6 +77,7 @@ for i in range(lines):#lines
             layout_row.append(sg.Button(" ",size=sz,pad=(0,0),button_color=("blue"),border_width=0))
 
     main_layout.append(layout_row)
+
 
 
 #Generates states for walls : False = Empty, True = Full
