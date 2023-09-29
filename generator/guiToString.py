@@ -11,17 +11,30 @@ sz = (2,2)
 #East = 2
 #West = 3
 
-#TODO  demander le format des icones genre ptit fantome/pacman/etc, le système de transition, factoriser les trucs moches, Mettre les boutons vide en blanc ou autre, Système de d'arguments ligne de commande
+#TODO  les wall commutent en tore,le système de traduction vers une string, factoriser les trucs moches, Mettre les boutons vide en blanc ou autre, Système de d'arguments ligne de commande
 
 #Top Screen menu definition
 menu_def = [
-   ['Cells', ['Pacgum', 'btn2', 'btn3', 'btn4',]]
+   ['Cells', ['Pacgum', 'Energizer', 'Pacman', 'Blinky', 'Pinky','Inky','Clyde']]
 ]
 
 #Permet de savoir quel action est liée au click
 #0 = Pacgum
-setterCell = 0 
+#1 = Energizer
+#2 = Pacman
+#3 = Blinky
+#4 = Pinky
+#5 = Inky
+#6 = Clyde
+setterCell = 0
 
+#Définit les symboles
+symbols = [".", "E", "pac","blk","pik","ink","cly"]
+
+#Gère si pacman ou un fantome a déjà été placé
+placed = {"pac":False, "blk":False, "pik":False, "ink":False, "cly":False}
+
+#Rajoute le menu
 main_layout.append([sg.Menu(menu_def)])
 
 #Initalizing grid layout
@@ -126,16 +139,47 @@ while True:
     #Permet de gérer les events du menu permettant de set les cellules
     if event == "Pacgum":
         setterCell = 0
+    if event == "Energizer":
+        setterCell = 1
+    if event == "Pacman":
+        setterCell = 2
+    if event == "Blinky":
+        setterCell = 3
+    if event == "Pinky":
+        setterCell = 4
+    if event == "Inky":
+        setterCell = 5
+    if event == "Clyde":
+        setterCell = 6
 
     
     #Permet de gérer le changement des cellules
+
     if event.startswith("-CELL"):
+
         #Récupère les coordonnées de la cellule cliquée
         x,y = int(event[6]),int(event[9])
-        #Affiche le changement à l'écran
-        window[f"-CELL{x,y}-"].update(["."][setterCell])
-        #Met à jour le dictionnaire
-        cellsStates[x,y] = setterCell
+
+
+        if setterCell >= 2:
+            if not placed[symbols[setterCell]]:
+                cellsStates[x,y] = (x,y)
+                window[f"-CELL{x,y}-"].update(symbols[setterCell])
+                placed[symbols[setterCell]] = (x,y)
+            
+            else:
+                window[f"-CELL{placed[symbols[setterCell]]}-"].update("Cell")
+                cellsStates[x,y] = (x,y)
+                placed[symbols[setterCell]] = (x,y)
+                window[f"-CELL{x,y}-"].update(symbols[setterCell])
+
+
+        else:
+            #Affiche le changement à l'écran
+            window[f"-CELL{x,y}-"].update(symbols[setterCell])
+
+            #Met à jour le dictionnaire
+            cellsStates[x,y] = setterCell
 
 
     #Permet de détecter les walls
@@ -157,13 +201,20 @@ while True:
                 wallsStates[x+1,y,0] = wallsStates[x,y,o]
 
         
-        if not ((y == 0 and o == 3) or (y == columns - 1 and o == 2)):#TODO correct bug with last left wall
+        if not ((y == 0 and o == 3) or (y == columns - 1 and o == 2)):
             if o == 3:
                 window[f"-WALL{x,y-1,2}-"].update(("On","Off")[value],button_color=("white",("blue","black")[value]))
                 wallsStates[x,y-1,2] = wallsStates[x,y,o]
             if o == 2:
                 window[f"-WALL{x,y+1,3}-"].update(("On","Off")[value],button_color=("white",("blue","black")[value]))     
                 wallsStates[x,y+1,3] = wallsStates[x,y,o]
+
+        
+        if (x == 0 and o == 0):
+            window[f"-WALL{columns-1,y,1}-"].update(("On","Off")[value],button_color=("white",("blue","black")[value]))
+            wallsStates[columns-1,y,1] = wallsStates[x,y,o]
+
+        print(x,y,o)
 
 
 window.close()
