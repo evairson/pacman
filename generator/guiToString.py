@@ -4,7 +4,7 @@ lines = columns = 6
 main_layout = []
 
 #Set size
-sz = (4,2)
+sz = (2,2)
 
 #North = 0
 #South = 1
