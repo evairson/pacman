@@ -3,6 +3,7 @@ package config;
 import geometry.IntCoordinates;
 
 import static config.Cell.Content.DOT;
+import static config.Cell.Content.ENERGIZER;
 import static config.Cell.*;
 import static config.Cell.Content.NOTHING;
 
@@ -92,7 +93,7 @@ public class MazeConfig {
 
     public static MazeConfig makeExample1() {
         return new MazeConfig(new Cell[][]{
-                {nTee(DOT),    hPipe(DOT),     hPipe(DOT),     hPipe(DOT),     hPipe(DOT),     nTee(DOT)},
+                {nTee(ENERGIZER),    hPipe(DOT),     hPipe(DOT),     hPipe(DOT),     hPipe(DOT),     nTee(DOT)},
                 {vPipe(DOT),    seVee(NOTHING), nTee(NOTHING),  nTee(NOTHING),  swVee(NOTHING), vPipe(DOT)},
                 {vPipe(DOT),     wTee(NOTHING),  open(NOTHING),  open(NOTHING),  eTee(NOTHING),  vPipe(DOT)},
                 {vPipe(DOT),    wTee(NOTHING),  open(NOTHING),  open(NOTHING),  eTee(NOTHING),  vPipe(DOT)},

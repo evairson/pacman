@@ -1,5 +1,7 @@
 package model;
 
+import config.Cell;
+
 /**
  * Cette classe représente l'état du labyrinthe.
  * Elle contient les informations suivantes :
@@ -11,8 +13,10 @@ package model;
  */
 
 import config.MazeConfig;
+import config.Cell.Content;
 import geometry.IntCoordinates;
 import geometry.RealCoordinates;
+import javafx.geometry.Pos;
 
 import java.util.List;
 import java.util.Map;
@@ -124,7 +128,13 @@ public final class MazeState {
         // FIXME Pac-Man rules should somehow be in Pacman class
         var pacPos = PacMan.INSTANCE.getPos().round();
         if (!gridState[pacPos.y()][pacPos.x()]) {
-            addScore(1);
+            if(config.getCell(pacPos).initialContent()==Content.ENERGIZER){ /* score energizer */
+                addScore(5); 
+                PacMan.INSTANCE.setEnergized(true);
+            }
+            else {
+                addScore(1);
+            }
             gridState[pacPos.y()][pacPos.x()] = true;
         }
         for (var critter : critters) {
@@ -148,6 +158,7 @@ public final class MazeState {
     private void displayScore() {
         // FIXME: this should be displayed in the JavaFX view, not in the console
         System.out.println("Score: " + score);
+        System.out.println(PacMan.INSTANCE.isEnergized());
     }
 
     private void playerLost() {
