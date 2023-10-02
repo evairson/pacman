@@ -41,7 +41,6 @@ public class CellGraphicsFactory {
      * il faut changer les dimensions de chaque élément graphique
      */
 
-
     public GraphicsUpdater makeGraphics(MazeState state, IntCoordinates pos) {
         var group = new Group();
         group.setTranslateX(pos.x()*scale);
