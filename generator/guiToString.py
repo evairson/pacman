@@ -210,7 +210,7 @@ while True:
                 wallsStates[x,y+1,3] = wallsStates[x,y,o]
 
         
-       if (x == 0 and o == 0):
+        if (x == 0 and o == 0):
             window[f"-WALL{columns-1,y,1}-"].update(("On","Off")[value],button_color=("white",("blue","black")[value]))
             wallsStates[columns-1,y,1] = wallsStates[x,y,o]
 
