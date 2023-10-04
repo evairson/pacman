@@ -17,6 +17,7 @@ import config.Cell.Content;
 import geometry.IntCoordinates;
 import geometry.RealCoordinates;
 import javafx.geometry.Pos;
+import GhostsIA.ClydeAI;
 
 import java.util.List;
 import java.util.Map;
@@ -89,6 +90,9 @@ public final class MazeState {
             var nextPos = critter.nextPos(deltaTns);
             var curNeighbours = curPos.intNeighbours();
             var nextNeighbours = nextPos.intNeighbours();
+            if(critter==CLYDE){
+                CLYDE.setDirection(ClydeAI.getDirection());
+            }
             if (!curNeighbours.containsAll(nextNeighbours)) { // the critter would overlap new cells. Do we allow it?
                 switch (critter.getDirection()) {
                     case NORTH -> {
@@ -120,14 +124,12 @@ public final class MazeState {
                         }
                     }
                 }
-
             }
-
             critter.setPos(nextPos.warp(width, height));
         }
         // FIXME Pac-Man rules should somehow be in Pacman class
         var pacPos = PacMan.INSTANCE.getPos().round();
-        if (!gridState[pacPos.y()][pacPos.x()]) {
+        if (!gridState[pacPos.y()][pacPos.x()]) { // Energizer
             if(config.getCell(pacPos).initialContent()==Content.ENERGIZER){ /* score energizer */
                 addScore(5); 
                 PacMan.INSTANCE.setEnergized(true);
@@ -137,7 +139,7 @@ public final class MazeState {
             }
             gridState[pacPos.y()][pacPos.x()] = true;
         }
-        for (var critter : critters) {
+        for (var critter : critters) { // Collision PacMan Ghosts
             if (critter instanceof Ghost && critter.getPos().round().equals(pacPos)) {
                 if (PacMan.INSTANCE.isEnergized()) {
                     addScore(10);
