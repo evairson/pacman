@@ -89,6 +89,22 @@ public final class MazeState {
             var nextPos = critter.nextPos(deltaTns);
             var curNeighbours = curPos.intNeighbours();
             var nextNeighbours = nextPos.intNeighbours();
+            if (critter == BLINKY) {
+                // Pour Blinky, forcer la direction vers le sud (vers le bas)
+                critter.setDirection(Direction.SOUTH);
+            }
+            if (critter == PINKY) {
+                // Pour PINKY, forcer la direction vers le'EAST (vers la droite)
+                critter.setDirection(Direction.EAST);
+            }
+            if (critter == INKY) {
+                // Pour INKY, forcer la direction vers le WEST (vers la gauche)
+                critter.setDirection(Direction.WEST);
+            }
+            if (critter == CLYDE) {
+                // Pour CLYDE, forcer la direction vers le nord (vers le haut)
+                critter.setDirection(Direction.NORTH);
+            }
             if (!curNeighbours.containsAll(nextNeighbours)) { // the critter would overlap new cells. Do we allow it?
                 switch (critter.getDirection()) {
                     case NORTH -> {
@@ -137,6 +153,7 @@ public final class MazeState {
             }
             gridState[pacPos.y()][pacPos.x()] = true;
         }
+
         for (var critter : critters) {
             if (critter instanceof Ghost && critter.getPos().round().equals(pacPos)) {
                 if (PacMan.INSTANCE.isEnergized()) {
@@ -188,4 +205,16 @@ public final class MazeState {
     public boolean getGridState(IntCoordinates pos) {
         return gridState[pos.y()][pos.x()];
     }
+
+//    public void move(Ghost ghost){
+//        var PacmanDirection = PacMan.INSTANCE.getDirection();
+//        switch (PacmanDirection){
+//            case NONE -> ghost.setDirection(NONE);
+//            case SOUTH -> ghost.setDirection(SOUTH);
+//            case NORTH -> ghost.setDirection(NORTH);
+//            case WEST -> ghost.setDirection(WEST);
+//            case EAST -> ghost.setDirection(EAST);
+//        }
+//
+//    }
 }
