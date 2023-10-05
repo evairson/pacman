@@ -3,7 +3,8 @@ import PySimpleGUI as sg
 lines = 4
 columns = 6
 main_layout = []
-
+#Name of the export file
+exportName = []
 #Set size
 sz = (3,2)
 
@@ -12,11 +13,12 @@ sz = (3,2)
 #East = 2
 #West = 3
 
-#TODO  le système de traduction vers une string, factoriser les trucs moches, Mettre les boutons vide en blanc ou autre, Système de d'arguments ligne de commande
+#TODO  factoriser les trucs moches, Mettre les boutons vide en blanc ou autre, Système de d'arguments ligne de commande, Pacman et les autres prennent la place des pac gums terrible
 
 #Top Screen menu definition
 menu_def = [
-   ['Cells', ['Pacgum', 'Energizer', 'Pacman', 'Blinky', 'Pinky','Inky','Clyde']]
+   ['Cells', ['Pacgum', 'Energizer', 'Pacman', 'Blinky', 'Pinky','Inky','Clyde',"Fill with pacgums"]],
+   ['File',['Export']]
 ]
 
 #Permet de savoir quel action est liée au click
@@ -127,6 +129,23 @@ cellsStates = {(i,j) : -1 for i in range(lines) for j in range(columns)}
 #Initializes the window
 window = sg.Window("Test", main_layout,background_color="black")
 
+#Initializes the second window
+def exportWindow():
+    exportWindowLayout = [[sg.Text("Entrez le nom du fichier d'exportation")],
+    [sg.Input(key = "-EXPORTINPUT-", expand_x=True), sg.Button("Ok", key = "-OKEXPORT-")]
+    ]
+
+    exportWindow = sg.Window('Export to file', exportWindowLayout)
+
+    while True:
+        event, values = exportWindow.read()
+        if event == sg.WIN_CLOSED:
+            break
+        if event == '-OKEXPORT-':
+            exportName.append(values["-EXPORTINPUT-"])
+            exportWindow.close()
+    exportWindow.close()
+
 #Event Loop
 while True:
 
@@ -152,6 +171,12 @@ while True:
         setterCell = 5
     if event == "Clyde":
         setterCell = 6
+
+    if event == "Fill with pacgums":
+        for i in range(lines):
+            for j in range(columns):
+                cellsStates[i,j] = 0
+                window[f"-CELL{i,j}-"].update(".")
 
     
     #Permet de gérer le changement des cellules
@@ -193,6 +218,8 @@ while True:
         wallsStates[x,y,o] = not value
         window[f"-WALL{x,y,o}-"].update(("On","Off")[value],button_color=("white",("blue","black")[value]))
 
+
+        #Commutativité des walls cote à cote
         if not ((x == 0 and o == 0) or (x == lines - 1 and o == 1)):
             if o == 0:
                 window[f"-WALL{x-1,y,1}-"].update(("On","Off")[value],button_color=("white",("blue","black")[value]))
@@ -210,7 +237,8 @@ while True:
                 window[f"-WALL{x,y+1,3}-"].update(("On","Off")[value],button_color=("white",("blue","black")[value]))     
                 wallsStates[x,y+1,3] = wallsStates[x,y,o]
 
-        
+
+        #Commutativité des walls en tore
         if (x == 0 and o == 0):
             window[f"-WALL{lines-1,y,1}-"].update(("On","Off")[value],button_color=("white",("blue","black")[value]))
             wallsStates[lines-1,y,1] = wallsStates[x,y,o]
@@ -224,18 +252,77 @@ while True:
             window[f"-WALL{x,0,3}-"].update(("On","Off")[value],button_color=("white",("blue","black")[value]))
             wallsStates[x,0,3] = wallsStates[x,y,o]
 
-        print(x,y,o)
+    #Exportation modules
+    if event == "Export":
+        exportWindow()
+        window.close()
 
 
 window.close()
 
-output = ""
-for i in range(lines*2+1): #4*2 lignes + 1 cest le bazar
-    output += "+"
+output = []
+for i in range(lines):
+    line = []
     for j in range(columns):
-        output += "---"
-        output += ("+")
-    output += "\n"
+        column = []
+        for o in range(4):
+            column.append([])
+        line.append(column)
+    output.append(line)
+
+for i in range(lines):
+    for j in range(columns):
+        for o in range(4):
+            if o == 0 or o == 1:
+                if wallsStates[i,j,o]:
+                    output[i][j][o] = "---"
+                else:
+                    output[i][j][o] = "   "
+            if o == 2:
+                if wallsStates[i,j,o]:
+                    output[i][j][o] = "|"
+                else:
+                    output[i][j][o] = " "
+            if o == 3:
+                if wallsStates[i,j,o]:
+                    output[i][j][o] = "| "
+                else:
+                    output[i][j][o] = " "
+
+outstr = ""
+for i in range(lines):
+    for j in range(columns):
+        outstr += "+" + output[i][j][0]
+    outstr += "+"
+    outstr += "\n"
+    for j in range(columns):
+        outstr += output[i][j][3]
+        if cellsStates[i,j] == 0:
+            outstr += ". "
+        elif cellsStates[i,j] == 1:
+            outstr += "E "
+        else:
+            outstr += "  "
+        outstr += output[i][j][2]
+    outstr += "\n"
+    if i == lines-1:
+        for j in range(columns):
+            outstr+= "+" + output[i][j][1]
+        outstr+="+"
+
+newstr = outstr.replace("||","|")
+newstr += "\n"
+
+#Puts the (x, y) coos into the x,y format
+def formatCoos(t):
+    if t == False:
+        return "error"
+    return str(t)[1] +","+str(t)[4]
+
+for i in range(2,7):
+    current = symbols[i]
+    newstr += f"{current.upper()}{formatCoos(placed[current])}\n"
 
 
-print(output)
+with open(f"{exportName[0]}.txt","w") as f:
+    f.write(newstr)
