@@ -1,17 +1,18 @@
 import PySimpleGUI as sg
 
-lines = columns = 6
+lines = 4
+columns = 6
 main_layout = []
 
 #Set size
-sz = (2,2)
+sz = (3,2)
 
 #North = 0
 #South = 1
 #East = 2
 #West = 3
 
-#TODO  les wall commutent en tore,le système de traduction vers une string, factoriser les trucs moches, Mettre les boutons vide en blanc ou autre, Système de d'arguments ligne de commande
+#TODO  le système de traduction vers une string, factoriser les trucs moches, Mettre les boutons vide en blanc ou autre, Système de d'arguments ligne de commande
 
 #Top Screen menu definition
 menu_def = [
@@ -211,10 +212,30 @@ while True:
 
         
         if (x == 0 and o == 0):
-            window[f"-WALL{columns-1,y,1}-"].update(("On","Off")[value],button_color=("white",("blue","black")[value]))
-            wallsStates[columns-1,y,1] = wallsStates[x,y,o]
+            window[f"-WALL{lines-1,y,1}-"].update(("On","Off")[value],button_color=("white",("blue","black")[value]))
+            wallsStates[lines-1,y,1] = wallsStates[x,y,o]
+        if (x == lines - 1 and o == 1):
+            window[f"-WALL{0,y,0}-"].update(("On","Off")[value],button_color=("white",("blue","black")[value]))
+            wallsStates[0,y,0] = wallsStates[x,y,o]
+        if (y == 0 and o == 3):
+            window[f"-WALL{x,columns - 1,2}-"].update(("On","Off")[value],button_color=("white",("blue","black")[value]))
+            wallsStates[x,columns - 1,2] = wallsStates[x,y,o]
+        if (y == columns - 1 and o == 2):
+            window[f"-WALL{x,0,3}-"].update(("On","Off")[value],button_color=("white",("blue","black")[value]))
+            wallsStates[x,0,3] = wallsStates[x,y,o]
 
         print(x,y,o)
 
 
 window.close()
+
+output = ""
+for i in range(lines*2+1): #4*2 lignes + 1 cest le bazar
+    output += "+"
+    for j in range(columns):
+        output += "---"
+        output += ("+")
+    output += "\n"
+
+
+print(output)
