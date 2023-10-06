@@ -1,24 +1,36 @@
+import sys
 import PySimpleGUI as sg
 
-lines = 4
-columns = 6
+
+#Gère le système d'arguments de ligne de commande
+args = sys.argv
+if len(args) != 5:
+    print("Error with the number of command ligne parameters, processing with default parameters")
+    lines = 6
+    columns = 6
+    sz = (3,2)
+else:
+    lines = int(args[1])
+    columns = int(args[2])
+    sz = (int(args[3]),int(args[4]))
+
+print(f"Processing with parameters {lines}/{columns}/{sz[0]}/{sz[1]} (lines/columns/sizeX/sizeY)")
 main_layout = []
 #Name of the export file
 exportName = []
 #Set size
-sz = (3,2)
 
 #North = 0
 #South = 1
 #East = 2
 #West = 3
 
-#TODO  factoriser les trucs moches, Mettre les boutons vide en blanc ou autre, Système de d'arguments ligne de commande, Pacman et les autres prennent la place des pac gums terrible, Faire readme.md
+#TODO  Faire readme.md
 
 #Top Screen menu definition
 menu_def = [
-   ['Cells', ['Pacgum', 'Energizer', 'Pacman', 'Blinky', 'Pinky','Inky','Clyde',"Fill with pacgums"]],
-   ['File',['Export']]
+   ['File',['Export']],
+   ['Cells', ['Pacgum', 'Energizer', 'Pacman', 'Blinky', 'Pinky','Inky','Clyde',"Fill with pacgums"]]
 ]
 
 #Permet de savoir quel action est liée au click
@@ -49,14 +61,6 @@ for i in range(lines):#lines
             layout_row.append(sg.Button(" ",size=sz,pad=(0,0),button_color=("blue"),border_width=0))
             layout_row.append(sg.Button("On",key=f"-WALL{i,j,0}-",size=sz,pad=(0,0),border_width=0,button_color = "blue"))
             layout_row.append(sg.Button(" ",size=sz,pad=(0,0),button_color=("blue"),border_width=0))
-        elif j == 0:
-            layout_row.append(sg.Button(" ",size=sz,pad=(0,0),button_color=("blue"),border_width=0))
-            layout_row.append(sg.Button("Off",key=f"-WALL{i,j,0}-",size=sz,pad=(0,0),border_width=0,button_color = "black"))
-            layout_row.append(sg.Button(" ",size=sz,pad=(0,0),button_color=("blue"),border_width=0))
-        elif j == columns - 1:
-            layout_row.append(sg.Button(" ",size=sz,pad=(0,0),button_color=("blue"),border_width=0))
-            layout_row.append(sg.Button("Off",key=f"-WALL{i,j,0}-",size=sz,pad=(0,0),border_width=0,button_color = "black"))
-            layout_row.append(sg.Button(" ",size=sz,pad=(0,0),button_color=("blue"),border_width=0))
         else:
             layout_row.append(sg.Button(" ",size=sz,pad=(0,0),button_color=("blue"),border_width=0))
             layout_row.append(sg.Button("Off",key=f"-WALL{i,j,0}-",size=sz,pad=(0,0),border_width=0,button_color = "black"))
@@ -70,15 +74,15 @@ for i in range(lines):#lines
     for j in range(columns):
         if j == 0:
             layout_row.append(sg.Button("On",key=f"-WALL{i,j,3}-",size=sz,pad=(0,0),border_width=0,button_color = "blue"))
-            layout_row.append(sg.Button("Cell",key=f"-CELL{i,j}-",size=sz,pad=(0,0),border_width=0,button_color = "red"))
+            layout_row.append(sg.Button("Vide",key=f"-CELL{i,j}-",size=sz,pad=(0,0),border_width=0,button_color = "red"))
             layout_row.append(sg.Button("Off",key=f"-WALL{i,j,2}-",size=sz,pad=(0,0),border_width=0,button_color = "black"))
         elif j == columns - 1:
             layout_row.append(sg.Button("Off",key=f"-WALL{i,j,3}-",size=sz,pad=(0,0),border_width=0,button_color = "black"))
-            layout_row.append(sg.Button("Cell",key=f"-CELL{i,j}-",size=sz,pad=(0,0),border_width=0,button_color = "red"))
+            layout_row.append(sg.Button("Vide",key=f"-CELL{i,j}-",size=sz,pad=(0,0),border_width=0,button_color = "red"))
             layout_row.append(sg.Button("On",key=f"-WALL{i,j,2}-",size=sz,pad=(0,0),border_width=0,button_color = "blue"))
         else:
             layout_row.append(sg.Button("Off",key=f"-WALL{i,j,3}-",size=sz,pad=(0,0),border_width=0,button_color = "black"))
-            layout_row.append(sg.Button("Cell",key=f"-CELL{i,j}-",size=sz,pad=(0,0),border_width=0,button_color = "red"))
+            layout_row.append(sg.Button("Vide",key=f"-CELL{i,j}-",size=sz,pad=(0,0),border_width=0,button_color = "red"))
             layout_row.append(sg.Button("Off",key=f"-WALL{i,j,2}-",size=sz,pad=(0,0),border_width=0,button_color = "black"))
     main_layout.append(layout_row)
 
@@ -90,15 +94,6 @@ for i in range(lines):#lines
             layout_row.append(sg.Button(" ",size=sz,pad=(0,0),button_color=("blue"),border_width=0))
             layout_row.append(sg.Button("On",key=f"-WALL{i,j,1}-",size=sz,pad=(0,0),border_width=0,button_color = "blue"))
             layout_row.append(sg.Button(" ",size=sz,pad=(0,0),button_color=("blue"),border_width=0))
-        elif j == 0:
-            layout_row.append(sg.Button(" ",size=sz,pad=(0,0),button_color=("blue"),border_width=0))
-            layout_row.append(sg.Button("Off",key=f"-WALL{i,j,1}-",size=sz,pad=(0,0),border_width=0,button_color = "black"))
-            layout_row.append(sg.Button(" ",size=sz,pad=(0,0),button_color=("blue"),border_width=0))
-        elif j == columns - 1:
-            layout_row.append(sg.Button(" ",size=sz,pad=(0,0),button_color=("blue"),border_width=0))
-            layout_row.append(sg.Button("Off",key=f"-WALL{i,j,1}-",size=sz,pad=(0,0),border_width=0,button_color = "black"))
-            layout_row.append(sg.Button(" ",size=sz,pad=(0,0),button_color=("blue"),border_width=0))
-        
         else:
             layout_row.append(sg.Button(" ",size=sz,pad=(0,0),button_color=("blue"),border_width=0))
             layout_row.append(sg.Button("Off",key=f"-WALL{i,j,1}-",size=sz,pad=(0,0),border_width=0,button_color = "black"))
@@ -326,3 +321,4 @@ for i in range(2,7):
 
 with open(f"{exportName[0]}.txt","w") as f:
     f.write(newstr)
+print(f"Successfully exported to {exportName[0]}.txt, now aborting")
