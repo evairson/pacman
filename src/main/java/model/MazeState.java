@@ -1,7 +1,5 @@
 package model;
 
-import config.Cell;
-
 /**
  * Cette classe représente l'état du labyrinthe.
  * Elle contient les informations suivantes :
@@ -16,7 +14,6 @@ import config.MazeConfig;
 import config.Cell.Content;
 import geometry.IntCoordinates;
 import geometry.RealCoordinates;
-import javafx.geometry.Pos;
 
 import java.util.List;
 import java.util.Map;
@@ -130,7 +127,8 @@ public final class MazeState {
         if (!gridState[pacPos.y()][pacPos.x()]) {
             if(config.getCell(pacPos).initialContent()==Content.ENERGIZER){ /* score energizer */
                 addScore(5); 
-                PacMan.INSTANCE.setEnergized(true);
+                PacMan.INSTANCE.setEnergized();
+                
             }
             else {
                 addScore(1);
