@@ -25,8 +25,6 @@ exportName = []
 #East = 2
 #West = 3
 
-#TODO  Faire readme.md
-
 #Top Screen menu definition
 menu_def = [
    ['File',['Export']],
@@ -58,13 +56,13 @@ for i in range(lines):#lines
     #Generates north walls
     for j in range(columns):
         if i == 0:
-            layout_row.append(sg.Button(" ",size=sz,pad=(0,0),button_color=("blue"),border_width=0))
+            layout_row.append(sg.Button(" ",size=sz,pad=(0,0),button_color=("blue"),border_width=0,disabled=True))
             layout_row.append(sg.Button("On",key=f"-WALL{i,j,0}-",size=sz,pad=(0,0),border_width=0,button_color = "blue"))
-            layout_row.append(sg.Button(" ",size=sz,pad=(0,0),button_color=("blue"),border_width=0))
+            layout_row.append(sg.Button(" ",size=sz,pad=(0,0),button_color=("blue"),border_width=0,disabled=True))
         else:
-            layout_row.append(sg.Button(" ",size=sz,pad=(0,0),button_color=("blue"),border_width=0))
+            layout_row.append(sg.Button(" ",size=sz,pad=(0,0),button_color=("blue"),border_width=0,disabled=True))
             layout_row.append(sg.Button("Off",key=f"-WALL{i,j,0}-",size=sz,pad=(0,0),border_width=0,button_color = "black"))
-            layout_row.append(sg.Button(" ",size=sz,pad=(0,0),button_color=("blue"),border_width=0))
+            layout_row.append(sg.Button(" ",size=sz,pad=(0,0),button_color=("blue"),border_width=0,disabled=True))
 
     main_layout.append(layout_row)
 
@@ -91,13 +89,13 @@ for i in range(lines):#lines
     #Generates south walls
     for j in range(columns):
         if i == lines - 1:
-            layout_row.append(sg.Button(" ",size=sz,pad=(0,0),button_color=("blue"),border_width=0))
+            layout_row.append(sg.Button(" ",size=sz,pad=(0,0),button_color=("blue"),border_width=0,disabled=True))
             layout_row.append(sg.Button("On",key=f"-WALL{i,j,1}-",size=sz,pad=(0,0),border_width=0,button_color = "blue"))
-            layout_row.append(sg.Button(" ",size=sz,pad=(0,0),button_color=("blue"),border_width=0))
+            layout_row.append(sg.Button(" ",size=sz,pad=(0,0),button_color=("blue"),border_width=0,disabled=True))
         else:
-            layout_row.append(sg.Button(" ",size=sz,pad=(0,0),button_color=("blue"),border_width=0))
+            layout_row.append(sg.Button(" ",size=sz,pad=(0,0),button_color=("blue"),border_width=0,disabled=True))
             layout_row.append(sg.Button("Off",key=f"-WALL{i,j,1}-",size=sz,pad=(0,0),border_width=0,button_color = "black"))
-            layout_row.append(sg.Button(" ",size=sz,pad=(0,0),button_color=("blue"),border_width=0))
+            layout_row.append(sg.Button(" ",size=sz,pad=(0,0),button_color=("blue"),border_width=0,disabled=True))
 
     main_layout.append(layout_row)
 
