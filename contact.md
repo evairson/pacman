@@ -12,4 +12,4 @@ Théo SALMONA : +33 6 27 65 91 64 theo.salmona@etu.u-paris.fr
 
 Clément BLAVY : +33 7 82 33 04 19 clemeblav@gmail.com
 
-Ait-Ali-Braham Igor : +33 6 03 56 68 19 igor.ait-ali-braham@etu.u-paris.fr
+Igor AIT-ALI-BRAHAM : +33 6 03 56 68 19 igor.ait-ali-braham@etu.u-paris.fr
