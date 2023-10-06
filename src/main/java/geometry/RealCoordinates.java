@@ -3,6 +3,7 @@ package geometry;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import model.Direction;
 
 /**
  * Représente un point dans le plan avec des coordonnées réelles, utilisé pour la position du joueur.
@@ -66,5 +67,13 @@ public record RealCoordinates(double x, double y) {
         double rx = (x + width) % width;
         double ry = (y + height) % height;
         return new RealCoordinates(rx, ry);
+    }
+
+    public boolean isIntCoordinate(Direction dir){ // Vérifie qu'une des coordonnées est entière
+        if((dir == Direction.EAST) || (dir == Direction.WEST)){
+            return (Math.ceil(this.x) == this.x);
+        } else {
+            return (Math.ceil(this.y) == this.y);
+        }
     }
 }
