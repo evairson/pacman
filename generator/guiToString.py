@@ -13,7 +13,7 @@ sz = (3,2)
 #East = 2
 #West = 3
 
-#TODO  factoriser les trucs moches, Mettre les boutons vide en blanc ou autre, Système de d'arguments ligne de commande, Pacman et les autres prennent la place des pac gums terrible
+#TODO  factoriser les trucs moches, Mettre les boutons vide en blanc ou autre, Système de d'arguments ligne de commande, Pacman et les autres prennent la place des pac gums terrible, Faire readme.md
 
 #Top Screen menu definition
 menu_def = [
