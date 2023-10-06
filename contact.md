@@ -11,3 +11,5 @@ Moetez BEDOUI : (moetezbedoui2021@gmail.com) +33 7 68 05 96 15
 Théo SALMONA : +33 6 27 65 91 64 theo.salmona@etu.u-paris.fr
 
 Clément BLAVY : +33 7 82 33 04 19 clemeblav@gmail.com
+
+Igor AIT-ALI-BRAHAM : +33 6 03 56 68 19 igor.ait-ali-braham@etu.u-paris.fr

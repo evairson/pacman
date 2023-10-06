@@ -1,5 +1,9 @@
 package model;
 
+import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
+
 import geometry.RealCoordinates;
 
 /**
@@ -54,7 +58,17 @@ public final class PacMan implements Critter {
         return energized;
     }
 
-    public void setEnergized(boolean energized) {
-        this.energized = energized;
+    public Timer setEnergized() {
+        PacMan pacman = this;
+        Timer t = new Timer();
+        TimerTask task = new TimerTask() {
+            public void run() {
+                pacman.energized = false;   
+                t.cancel();
+                }
+        };
+        this.energized = true;
+        t.schedule(task, 10000L);
+        return t;
     }
 }
