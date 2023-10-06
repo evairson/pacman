@@ -6,12 +6,12 @@
 Sont prérequis pour faire tourner le fichier :
 
 - Python 3.9 (version 3.9.2 utilisée de mon côté, à vous de voir).
-- Outil d'installation pip (Faire quelque chose comme `python3 -m pip install --upgrade pip`, à voir ou regarder sur [cette page](https://pip.pypa.io/en/stable/installation/){:target="_blank"} si jamais il y a des problèmes).
+- Outil d'installation pip (Faire quelque chose comme `python3 -m pip install --upgrade pip`, à voir ou regarder sur [cette page](https://pip.pypa.io/en/stable/installation/) si jamais il y a des problèmes).
 - Mettre à jour pip sinon à l'aide de la commande ci-dessus.
 - Package tkinter à installer avec `pip install tk` (vous pouvez vérifier la bonne installation en entrant dans votre terminal `python3 -m tkinter`, si une petite fenetre s'affiche, c'est bon!).
 - Package PySimpleGui à installer avec `pip install PySimpleGUI` (le package PySimpleGui tourne à l'aide de Tkinter donc il est impératif d'installer Tkinter avant sinon aie aie aie).
 
-Si jamais vous avez des questions sur Tkinter ou PySimpleGui, ne pas hésiter à regarder leurs docs [ici](https://docs.python.org/3/library/tkinter.html){:target="_blank"} et [là](https://pypi.org/project/PySimpleGUI/){:target="_blank"}.
+Si jamais vous avez des questions sur Tkinter ou PySimpleGui, ne pas hésiter à regarder leurs docs [ici](https://docs.python.org/3/library/tkinter.html) et [là](https://pypi.org/project/PySimpleGUI/).
 
 ### Faire tourner le script
 
