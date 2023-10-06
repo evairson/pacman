@@ -134,7 +134,7 @@ public final class MazeState {
         if (!gridState[pacPos.y()][pacPos.x()]) {
             if(config.getCell(pacPos).initialContent()==Content.ENERGIZER){ /* score energizer */
                 addScore(5); 
-                PacMan.INSTANCE.setEnergized(true);
+                PacMan.INSTANCE.setEnergized();
             }
             else {
                 addScore(1);
