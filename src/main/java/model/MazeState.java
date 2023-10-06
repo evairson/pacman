@@ -1,5 +1,7 @@
 package model;
 
+import config.Cell;
+
 /**
  * Cette classe représente l'état du labyrinthe.
  * Elle contient les informations suivantes :
@@ -14,7 +16,8 @@ import config.MazeConfig;
 import config.Cell.Content;
 import geometry.IntCoordinates;
 import geometry.RealCoordinates;
-
+import javafx.geometry.Pos;
+import GhostsAI.ClydeAI;
 import java.util.List;
 import java.util.Map;
 
@@ -86,21 +89,9 @@ public final class MazeState {
             var nextPos = critter.nextPos(deltaTns);
             var curNeighbours = curPos.intNeighbours();
             var nextNeighbours = nextPos.intNeighbours();
-            if (critter == BLINKY) {
-                // Pour Blinky, forcer la direction vers le sud (vers le bas)
-                critter.setDirection(Direction.SOUTH);
-            }
-            if (critter == PINKY) {
-                // Pour PINKY, forcer la direction vers le'EAST (vers la droite)
-                critter.setDirection(Direction.EAST);
-            }
-            if (critter == INKY) {
-                // Pour INKY, forcer la direction vers le WEST (vers la gauche)
-                critter.setDirection(Direction.WEST);
-            }
             if (critter == CLYDE) {
-                // Pour CLYDE, forcer la direction vers le nord (vers le haut)
-                critter.setDirection(Direction.NORTH);
+                Direction newDirClyde = Direction.SOUTH;
+                CLYDE.setDirection(newDirClyde);
             }
             if (!curNeighbours.containsAll(nextNeighbours)) { // the critter would overlap new cells. Do we allow it?
                 switch (critter.getDirection()) {
@@ -143,8 +134,7 @@ public final class MazeState {
         if (!gridState[pacPos.y()][pacPos.x()]) {
             if(config.getCell(pacPos).initialContent()==Content.ENERGIZER){ /* score energizer */
                 addScore(5); 
-                PacMan.INSTANCE.setEnergized();
-                
+                PacMan.INSTANCE.setEnergized(true);
             }
             else {
                 addScore(1);
@@ -213,6 +203,77 @@ public final class MazeState {
 //            case WEST -> ghost.setDirection(WEST);
 //            case EAST -> ghost.setDirection(EAST);
 //        }
-//
 //    }
+    private boolean isWallAtPosition(IntCoordinates position, Direction direction) {
+        Cell cell = config.getCell(position);
+    //on Vérifie selon la cellule si il y a un mur dans une direction demandée.
+        switch (direction) {
+            case NORTH:
+                return cell.northWall();
+            case EAST:
+                return cell.eastWall();
+            case SOUTH:
+                return cell.southWall();
+            case WEST:
+                return cell.westWall();
+            default:
+                return false; //pas de mur dans la direction demandée
+        }
+    }
+
+    /*Cette fonction update est appelée dans MazeState.update() pour voir si la dernière direction demandée
+      est possible à effectuer à chaque rafraichissement de la grille.
+    */
+//    public void update() {
+//        //On vérifie si pacman peut se déplacer dans la direction demandée.
+//        if (lastInputDirection!=null&&canMoveInDirection(lastInputDirection)) {
+//            RealCoordinates currentPos = PacMan.INSTANCE.getPos();
+//            RealCoordinates NewPos = new RealCoordinates(Math.round(currentPos.getX()), Math.round(currentPos.getY()));
+//            /*
+//            ici on a une mini zone de tolérance, mais en 4.9999 pacman ne peut pas descendre par exemple, il doit etre
+//            exactement en 5.0 donc on "Téléporte" pacman à la position pour qu'il reste centré.
+//            La zone de tolérance étant réellement petite, on ne voit pas la différence, le mouvement reste entièrement fluide
+//            */
+//            PacMan.INSTANCE.setPos(NewPos);
+//            //un fois qu'il est centré sur la case on change sa direction et ça marche car il est pile en .0
+//            PacMan.INSTANCE.setDirection(lastInputDirection);
+//            lastInputDirection=null;
+//        }
+//    }
+
+    private boolean canMoveInDirection(Direction direction, Critter critter) {
+        //On récipère la position actuelle de pacman
+//        RealCoordinates currentPos = PacMan.INSTANCE.getPos();
+        RealCoordinates currentPos = critter.getPos();
+        /*
+        on définit l'écart de tolérance pour trouver quand pacman s'approche le plus possible du centre de la cellule
+        en effet, en faisant les updates, pacman sera par exemple en 1,823 puis en 1,934040 puis en 2,003983 mais
+        jamais pile en 2,0 donc on teste quand il entre dans un certain ecart.
+        */
+        double tolerance = 0.025;
+
+        //ensuite on calcule au vu des ses deux coordonées s'il peut passer.
+        boolean isCenteredX = Math.abs(currentPos.x() - Math.round(currentPos.x())) < tolerance;
+        boolean isCenteredY = Math.abs(currentPos.y() - Math.round(currentPos.y())) < tolerance;
+
+        if (isCenteredX && isCenteredY) {
+            //Enfin, on vérifie selon la direction s'il y a un mur dans la cellule suivante.
+            //En effet, même s'il est centré, la présence d'un mur empeche tout simplement pacman de se déplacer.
+            switch (direction) {
+                case NORTH:
+                    return !isWallAtPosition(currentPos.round(), direction);
+                case EAST:
+                    return !isWallAtPosition(currentPos.round(), direction);
+                case SOUTH:
+                    return !isWallAtPosition(currentPos.round(), direction);
+                case WEST:
+                    return !isWallAtPosition(currentPos.round(), direction);
+                case NONE:
+                    return true;
+            }
+        }
+        return false;
+    }
+
+//    private Direction[] hasChoices(Critter critter,)
 }
