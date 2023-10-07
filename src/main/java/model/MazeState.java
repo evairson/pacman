@@ -93,6 +93,8 @@ public final class MazeState {
             var curNeighbours = curPos.intNeighbours();
             var nextNeighbours = nextPos.intNeighbours();
             pacmanController.update();
+            var pacPos = PacMan.INSTANCE.getPos().round();
+            System.out.println("derchos99" + pacPos);
             if (critter == CLYDE) {
                 Direction newDirClyde = Direction.SOUTH;
                 CLYDE.setDirection(newDirClyde);

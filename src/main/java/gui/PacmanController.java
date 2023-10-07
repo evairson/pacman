@@ -83,7 +83,7 @@ public class PacmanController {
         en effet, en faisant les updates, pacman sera par exemple en 1,823 puis en 1,934040 puis en 2,003983 mais
         jamais pile en 2,0 donc on teste quand il entre dans un certain ecart.
         */
-        double tolerance = 0.025;
+        double tolerance = 0.2;
 
         //ensuite on calcule au vu des ses deux coordonées s'il peut passer.
         boolean isCenteredX = Math.abs(currentPos.x() - Math.round(currentPos.x())) < tolerance;

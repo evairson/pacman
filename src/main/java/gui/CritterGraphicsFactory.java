@@ -27,13 +27,13 @@ public final class CritterGraphicsFactory {
     }
     // Méthode qui crée la représentation graphique d'une créature.
     public GraphicsUpdater makeGraphics(Critter critter) {
-        var size = 0.7; // facteur d'echelle de l'image
+        var size = 0.5; // facteur d'echelle de l'image
         var url = (critter instanceof PacMan) ? "pacman.png" :
                 switch ((Ghost) critter) {
-                    case BLINKY -> "ghost_blinky.png";
-                    case CLYDE -> "ghost_clyde.png";
-                    case INKY -> "ghost_inky.png";
-                    case PINKY -> "ghost_pinky.png";
+                    case BLINKY -> "blinky.png";
+                    case CLYDE -> "clyde.png";
+                    case INKY -> "inky.png";
+                    case PINKY -> "pinky.png";
                 };
         // chargement de l'image à partir du fichier url
         var image = new ImageView(new Image(url, scale * size, scale * size, true, true));
