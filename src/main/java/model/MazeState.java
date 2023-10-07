@@ -90,8 +90,10 @@ public final class MazeState {
             var nextPos = critter.nextPos(deltaTns);
             var curNeighbours = curPos.intNeighbours();
             var nextNeighbours = nextPos.intNeighbours();
-            if(critter==CLYDE){
+            /*if(critter==CLYDE){
                 CLYDE.setDirection(ClydeAI.getDirection());
+                System.out.print(CLYDE.getPos().x() + " ");
+                System.out.println(CLYDE.getPos().y());
             }
             if (!curNeighbours.containsAll(nextNeighbours)) { // the critter would overlap new cells. Do we allow it?
                 switch (critter.getDirection()) {
@@ -124,7 +126,7 @@ public final class MazeState {
                         }
                     }
                 }
-            }
+            }*/
             critter.setPos(nextPos.warp(width, height));
         }
         // FIXME Pac-Man rules should somehow be in Pacman class

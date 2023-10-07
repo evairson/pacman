@@ -5,9 +5,11 @@ import geometry.RealCoordinates;
 import model.Critter;
 import java.util.Random;
 import model.Ghost;
+import config.MazeConfig;
 
 public class ClydeAI {
 
+    /*
     public static boolean checkLegalDir(Critter critter, Direction dir){
         switch(dir){
             case SOUTH, NORTH: return critter.getPos().isIntCoordinate(Direction.WEST);
@@ -33,5 +35,5 @@ public class ClydeAI {
         } else {
             return Direction.NONE;
         }
-    }
+    }*/
 }

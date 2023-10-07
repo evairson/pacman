@@ -12,6 +12,10 @@ import static config.Cell.Content.*;
 
 // tutur : la classe MazeConfig
 public class MazeConfig {
+
+    private final Cell[][] grid;
+    private final IntCoordinates pacManPos, blinkyPos, pinkyPos, inkyPos, clydePos;
+    private boolean[][] nodes;
     public MazeConfig(Cell[][] grid, IntCoordinates pacManPos, IntCoordinates blinkyPos, IntCoordinates pinkyPos,
                       IntCoordinates inkyPos, IntCoordinates clydePos) {
         this.grid = new Cell[grid.length][grid[0].length];
@@ -23,10 +27,14 @@ public class MazeConfig {
         this.inkyPos = inkyPos;
         this.pinkyPos = pinkyPos;
         this.clydePos = clydePos;
-    }
 
-    private final Cell[][] grid;
-    private final IntCoordinates pacManPos, blinkyPos, pinkyPos, inkyPos, clydePos;
+        this.nodes = new boolean[grid.length][grid[0].length];
+        for(int i = 0; i < grid.length; i++){
+            for(int j = 0; j < grid[0].length; j++){
+                nodes[i][j] = !grid[i][j].isPipe(); // Si ce n'est pas un couloir, c'est un noeud.
+            }
+        }
+    }
 
     public IntCoordinates getPacManPos() {
         return pacManPos;
@@ -58,6 +66,10 @@ public class MazeConfig {
 
     public Cell getCell(IntCoordinates pos) {
         return grid[Math.floorMod(pos.y(), getHeight())][Math.floorMod(pos.x(), getWidth())];
+    }
+
+    public boolean getNode(int x, int y){
+        return this.nodes[x][y];
     }
 
     /** txtToMaze prend en entrée le chemin vers un fichier texte (String) et renvoie le labyrinthe associé (MazeConfig)

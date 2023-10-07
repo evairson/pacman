@@ -7,20 +7,30 @@ package model;
  *
  */
 
+import geometry.IntCoordinates;
 import geometry.RealCoordinates;
+import config.MazeConfig;
 
-public sealed interface Critter permits Ghost, PacMan {
-    RealCoordinates getPos();
+public interface Critter {
 
-    Direction getDirection();
+    //Getters/Setters
+    public RealCoordinates getPos();
 
-    double getSpeed();
+    public Direction getDirection();
+
+    public double getSpeed();
+
+    public void setPos(RealCoordinates realCoordinates);
+
+    public void setDirection(Direction direction);
+
+    //Methods
 
     /**
      * @param deltaTNanoSeconds time since the last update in nanoseconds
      * @return the next position if there is no wall
      */
-    default RealCoordinates nextPos(long deltaTNanoSeconds) {
+    public default RealCoordinates nextPos(long deltaTNanoSeconds) {
         return getPos().plus((switch (getDirection()) {
             case NONE -> RealCoordinates.ZERO;
             case NORTH -> RealCoordinates.NORTH_UNIT;
@@ -30,6 +40,13 @@ public sealed interface Critter permits Ghost, PacMan {
         }).times(getSpeed()*deltaTNanoSeconds * 1E-9));
     }
 
-    void setPos(RealCoordinates realCoordinates);
-    void setDirection(Direction direction);
+    public RealCoordinates currNode(MazeConfig config);
+
+    public boolean isGoingToNode(RealCoordinates node);
+
+    public void tpToCenter(MazeConfig config);
+
+    public boolean isCentered(Direction dir);
+
+    public boolean checkLegalDir(MazeConfig config, Direction dir);
 }
