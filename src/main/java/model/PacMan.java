@@ -4,6 +4,8 @@ import config.MazeConfig;
 import geometry.IntCoordinates;
 import geometry.RealCoordinates;
 
+import java.util.Random;
+
 /**
  * Implémente PacMan comme un singleton.
  * TODO : ajouter les fonctionnalités suivantes :
@@ -16,11 +18,11 @@ public final class PacMan implements Critter {
 
     private RealCoordinates pos;
     private Direction direction;
-    private Direction lastDirection;
-    private double speed;
+    private Direction nextDir = Direction.NONE;
+    private final double speed = 2.;
     private boolean energized;
 
-    static final double EPSILON = 0.1;
+    static final double TPINTERVAL = 0.03;
 
     private PacMan() {
     }
@@ -51,62 +53,110 @@ public final class PacMan implements Critter {
     }
 
     //Methods
-    public void tpToCenter(MazeConfig config){
-        if(this.pos.isInNode(config)){
-            RealCoordinates node = this.currNode(config);
-            if(this.isGoingToNode(node) && this.getPos().dist(node) < EPSILON){
-                this.setPos(node);
-                this.direction = Direction.NONE;
-            }
-        }
+    @Override
+    public RealCoordinates currCellR() {
+        return new RealCoordinates(Math.round((float) this.getPos().x()), Math.round((float) this.getPos().y()));
     }
 
-    public RealCoordinates currNode(MazeConfig config){ // Renvoie les coordonnées du noeud sur lequel on est.
-        if(this.pos.isInNode(config)){
-            return new RealCoordinates(Math.round((float) this.getPos().x()), Math.round((float) this.getPos().y()));
-        } else {
-            return new RealCoordinates(0, 0);
-        }
+    @Override
+    public IntCoordinates currCellI(){
+        return new IntCoordinates(Math.round((float) this.getPos().x()), Math.round((float) this.getPos().y()));
     }
 
-    public boolean isGoingToNode(RealCoordinates node){ // Renvoie true si le critter se dirgige vers le centre du noeud sur lequel il est.
+    @Override
+    public boolean isGoingToCenter() {
+        RealCoordinates center = this.currCellR();
         switch (this.direction) {
             case NORTH -> {
-                return this.pos.y() >= node.y();
+                return this.pos.y() > center.y();
             }
             case SOUTH -> {
-                return this.pos.y() <= node.y();
+                return this.pos.y() < center.y();
             }
             case EAST -> {
-                return this.pos.x() >= node.x();
+                return this.pos.x() < center.x();
             }
             case WEST -> {
-                return this.pos.x() <= node.x();
+                return this.pos.x() > center.x();
             }
             default -> { return true; }
         }
     }
 
-    public boolean isCentered(Direction dir){ // Vérifie qu'on est centré sur la coordonnée sur laquelle on ne se déplace pas.
+    @Override
+    public void tpToCenter(){
+        RealCoordinates currCell = this.currCellR();
+        if(this.isGoingToCenter() && this.getPos().dist(currCell) < TPINTERVAL) {
+            this.setPos(currCell);
+            System.out.println(currCell.x() + ", " + currCell.y());
+        }
+    }
+
+    @Override
+    public boolean isCenteredDir(Direction dir) {
         return switch (dir) {
             case EAST, WEST ->
-                    Math.floor(this.getPos().y()) == this.getPos().y(); // On peut comparer des double car ils sont censé être égaux avec tpToCenter
-            case SOUTH, NORTH -> Math.floor(this.getPos().x()) == this.getPos().x();
+                    Math.round(this.getPos().y()) == this.getPos().y(); // On peut comparer des double car ils sont censé être égaux grâce tpToCenter
+            case SOUTH, NORTH -> Math.round(this.getPos().x()) == this.getPos().x();
             default -> true;
         };
     }
 
-    public boolean checkLegalDir(MazeConfig config, Direction dir){ // Vérifie qu'on est centré et qu'il n'y a pas de mur dans la direction.
-        if(this.isCentered(dir)){
-            return switch (dir) {
-                case WEST -> config.getCell(new IntCoordinates((int) Math.floor(this.getPos().x()), (int) Math.floor(this.getPos().y()))).westWall();
-                case EAST -> config.getCell(new IntCoordinates((int) Math.floor(this.getPos().x()), (int) Math.floor(this.getPos().y()))).eastWall();
-                case NORTH -> config.getCell(new IntCoordinates((int) Math.floor(this.getPos().x()), (int) Math.floor(this.getPos().y()))).northWall();
-                case SOUTH -> config.getCell(new IntCoordinates((int) Math.floor(this.getPos().x()), (int) Math.floor(this.getPos().y()))).southWall();
-                default -> true;
-            };
+    @Override
+    public boolean isCentered() {
+        return (Math.round(this.getPos().x()) == this.getPos().x()) && (Math.round(this.getPos().y()) == this.getPos().y());
+    }
+
+    @Override
+    public RealCoordinates getNextPos(long deltaTns, Direction dir, MazeConfig config) {
+        if(this.isCenteredDir(dir)){
+            RealCoordinates nextPos = // Calcul de la position suivante
+                    getPos().plus((switch(dir){
+                        case NONE -> RealCoordinates.ZERO;
+                        case NORTH -> RealCoordinates.NORTH_UNIT;
+                        case EAST -> RealCoordinates.EAST_UNIT;
+                        case SOUTH -> RealCoordinates.SOUTH_UNIT;
+                        case WEST -> RealCoordinates.WEST_UNIT;}).times(this.getSpeed() * deltaTns * 1E-9));
+            switch(dir){ // Ajustement en fonction des murs, on ne veut pas dépasser un mur
+                case WEST :
+                    if(config.getCell(this.currCellI()).westWall()){
+                        return new RealCoordinates(Math.max(nextPos.x(), Math.floor(this.getPos().x())), this.getPos().y());
+                    } else {
+                        return nextPos;
+                    }
+                case EAST :
+                    if(config.getCell(this.currCellI()).eastWall()){
+                        return new RealCoordinates(Math.min(nextPos.x(), Math.ceil(this.getPos().x())), this.getPos().y());
+                    } else {
+                        return nextPos;
+                    }
+                case NORTH :
+                    if(config.getCell(this.currCellI()).northWall()){
+                        return new RealCoordinates(this.getPos().x(), Math.max(nextPos.y(), Math.floor(this.getPos().y())));
+                    } else {
+                        return nextPos;
+                    }
+                case SOUTH :
+                    if(config.getCell(this.currCellI()).southWall()){
+                        return new RealCoordinates(this.getPos().x(), Math.min(nextPos.y(), Math.ceil(this.getPos().y())));
+                    } else {
+                        return nextPos;
+                    }
+                default : return this.getPos();
+            }
         } else {
-            return false;
+            return this.getPos();
+        }
+    }
+
+    public void setNextDir(Direction dir){
+        this.nextDir = dir;
+    }
+    public Direction getNextDir(){
+        if(this.isCenteredDir(nextDir)){
+            return nextDir;
+        } else {
+            return this.direction;
         }
     }
 

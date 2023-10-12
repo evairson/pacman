@@ -29,7 +29,7 @@ public final class CritterGraphicsFactory {
     public GraphicsUpdater makeGraphics(Critter critter) {
         var size = 0.7; // facteur d'echelle de l'image
         var url = (critter instanceof PacMan) ? "pacman.png" :
-                switch (critter) {
+                switch ((Ghost) critter) {
                     case BLINKY -> "ghost_blinky.png";
                     case CLYDE -> "ghost_clyde.png";
                     case INKY -> "ghost_inky.png";

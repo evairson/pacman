@@ -3,7 +3,6 @@ package geometry;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import model.Direction;
 import config.MazeConfig;
 
 /**
@@ -32,7 +31,7 @@ public record RealCoordinates(double x, double y) {
      *
      * @return the coordinates of all integer squares that a unit square with current coordinates would intersect
       */
-    public Set<IntCoordinates> intNeighbours() {
+    /*public Set<IntCoordinates> intNeighbours() {
         return new HashSet<>(List.of(
                 new IntCoordinates((int) Math.floor(x), (int) Math.floor(y)),
                 new IntCoordinates((int) Math.floor(x), (int) Math.ceil(y)),
@@ -40,7 +39,8 @@ public record RealCoordinates(double x, double y) {
                 new IntCoordinates((int) Math.ceil(x), (int) Math.ceil(y))
         )
         );
-    }
+    }*/
+
     // Méthode pour arrondir les coordonnées réelles à des coordonnées entières
     public IntCoordinates round() {
         return new IntCoordinates((int) Math.round(x), (int) Math.round(y));
@@ -70,18 +70,8 @@ public record RealCoordinates(double x, double y) {
         return new RealCoordinates(rx, ry);
     }
 
-    public boolean isInNode(MazeConfig config){ // Vérifie que la case sur laquelle on est est un noeud.
-        return !config.getCell(new IntCoordinates(Math.round((float) this.x), Math.round((float) this.y))).isPipe();
-    }
-
     public double dist(RealCoordinates c){ // Renvoie la distance euclidienne entre deux coordonnées réelles.
         return Math.sqrt(Math.pow((this.x - c.x), 2) + Math.pow((this.y - c.y), 2));
     }
-
-    /*public Direction nodeDir(MazeConfig config){ // Si on est dans un noeud,
-        if(isInNode(config)){
-
-        }
-    }*/
 
 }

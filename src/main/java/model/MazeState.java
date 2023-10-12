@@ -1,7 +1,5 @@
 package model;
 
-import config.Cell;
-
 /**
  * Cette classe représente l'état du labyrinthe.
  * Elle contient les informations suivantes :
@@ -16,9 +14,8 @@ import config.MazeConfig;
 import config.Cell.Content;
 import geometry.IntCoordinates;
 import geometry.RealCoordinates;
-import javafx.geometry.Pos;
-import GhostsIA.ClydeAI;
 
+import java.sql.SQLOutput;
 import java.util.List;
 import java.util.Map;
 
@@ -85,50 +82,13 @@ public final class MazeState {
          * 3. déléguer certaines repsonsabilités à d'autres méthodes ?
          */
 
-        for  (var critter: critters) {
-            var curPos = critter.getPos();
-            var nextPos = critter.nextPos(deltaTns);
-            var curNeighbours = curPos.intNeighbours();
-            var nextNeighbours = nextPos.intNeighbours();
-            /*if(critter==CLYDE){
-                CLYDE.setDirection(ClydeAI.getDirection());
-                System.out.print(CLYDE.getPos().x() + " ");
-                System.out.println(CLYDE.getPos().y());
-            }
-            if (!curNeighbours.containsAll(nextNeighbours)) { // the critter would overlap new cells. Do we allow it?
-                switch (critter.getDirection()) {
-                    case NORTH -> {
-                        for (var n: curNeighbours) if (config.getCell(n).northWall()) {
-                            nextPos = curPos.floorY();
-                            critter.setDirection(Direction.NONE);
-                            break;
-                        }
-                    }
-                    case EAST -> {
-                        for (var n: curNeighbours) if (config.getCell(n).eastWall()) {
-                            nextPos = curPos.ceilX();
-                            critter.setDirection(Direction.NONE);
-                            break;
-                        }
-                    }
-                    case SOUTH -> {
-                        for (var n: curNeighbours) if (config.getCell(n).southWall()) {
-                            nextPos = curPos.ceilY();
-                            critter.setDirection(Direction.NONE);
-                            break;
-                        }
-                    }
-                    case WEST -> {
-                        for (var n: curNeighbours) if (config.getCell(n).westWall()) {
-                            nextPos = curPos.floorX();
-                            critter.setDirection(Direction.NONE);
-                            break;
-                        }
-                    }
-                }
-            }*/
-            critter.setPos(nextPos.warp(width, height));
+        for (var critter: critters) {
+            critter.tpToCenter();
+            var nextDir = critter.getNextDir();
+            critter.setPos(critter.getNextPos(deltaTns, nextDir, config));
+            critter.setDirection(nextDir);
         }
+
         // FIXME Pac-Man rules should somehow be in Pacman class
         var pacPos = PacMan.INSTANCE.getPos().round();
         if (!gridState[pacPos.y()][pacPos.x()]) { // Energizer
@@ -147,8 +107,8 @@ public final class MazeState {
                     addScore(10);
                     resetCritter(critter);
                 } else {
-                    playerLost();
-                    return;
+                    /*playerLost(); //FIXME : UNCOMMENT THIS !!!
+                    return;*/
                 }
             }
         }

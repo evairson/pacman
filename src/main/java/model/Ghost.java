@@ -12,6 +12,7 @@ package model;
 import config.MazeConfig;
 import geometry.IntCoordinates;
 import geometry.RealCoordinates;
+import java.util.Random;
 
 public enum Ghost implements Critter {
 
@@ -20,11 +21,10 @@ public enum Ghost implements Critter {
 
     private RealCoordinates pos;
     private Direction direction;
-    private Direction lastDirection;
-    private double speed;
+    private final double speed = 1.3;
     private boolean energized;
 
-    private static final double EPSILON = 0.1;
+    private static final double TPINTERVAL = 0.02;
 
     // Getters/Setters
     @Override
@@ -50,66 +50,112 @@ public enum Ghost implements Critter {
 
     //Methods
     @Override
-    public void tpToCenter(MazeConfig config){
-        if(this.pos.isInNode(config)){
-            RealCoordinates node = this.currNode(config);
-            if(this.isGoingToNode(node) && this.getPos().dist(node) < EPSILON){
-                this.setPos(node);
-                this.direction = Direction.NONE;
-            }
-        }
+    public RealCoordinates currCellR(){
+        return new RealCoordinates(Math.round((float) this.pos.x()), Math.round((float) this.pos.y()));
     }
 
     @Override
-    public RealCoordinates currNode(MazeConfig config){ // Renvoie les coordonnées du noeud sur lequel on est.
-        if(this.pos.isInNode(config)){
-            return new RealCoordinates(Math.round((float) this.getPos().x()), Math.round((float) this.getPos().y()));
-        } else {
-            return new RealCoordinates(0, 0);
-        }
+    public IntCoordinates currCellI(){
+        return new IntCoordinates(Math.round((float) this.pos.x()), Math.round((float) this.pos.y()));
     }
 
     @Override
-    public boolean isGoingToNode(RealCoordinates node){ // Renvoie true si le critter se dirgige vers le centre du noeud sur lequel il est.
+    public boolean isGoingToCenter(){
+        RealCoordinates center = this.currCellR();
         switch (this.direction) {
             case NORTH -> {
-                return this.pos.y() >= node.y();
+                return this.pos.y() > center.y();
             }
             case SOUTH -> {
-                return this.pos.y() <= node.y();
+                return this.pos.y() < center.y();
             }
             case EAST -> {
-                return this.pos.x() >= node.x();
+                return this.pos.x() < center.x();
             }
             case WEST -> {
-                return this.pos.x() <= node.x();
+                return this.pos.x() > center.x();
             }
             default -> { return true; }
         }
     }
+    @Override
+    public void tpToCenter(){
+        RealCoordinates currCell = this.currCellR();
+        if(this.isGoingToCenter() && this.pos.dist(currCell) < TPINTERVAL) {
+            this.setPos(currCell);
+        }
+    }
 
     @Override
-    public boolean isCentered(Direction dir){ // Vérifie qu'on est centré sur la coordonnée sur laquelle on ne se déplace pas.
+    public boolean isCenteredDir(Direction dir){
         return switch (dir) {
             case EAST, WEST ->
-                    Math.floor(this.getPos().y()) == this.getPos().y(); // On peut comparer des double car ils sont censé être égaux avec tpToCenter
-            case SOUTH, NORTH -> Math.floor(this.getPos().x()) == this.getPos().x();
+                    Math.round(this.pos.y()) == this.pos.y(); // On peut comparer des double car ils sont censé être égaux grâce tpToCenter
+            case SOUTH, NORTH -> Math.round(this.pos.x()) == this.pos.x();
             default -> true;
         };
     }
 
-    @Override
-    public boolean checkLegalDir(MazeConfig config, Direction dir){ // Vérifie qu'on est centré et qu'il n'y a pas de mur dans la direction.
-        if(this.isCentered(dir)){
-            return switch (dir) {
-                case WEST -> config.getCell(new IntCoordinates((int) Math.floor(this.getPos().x()), (int) Math.floor(this.getPos().y()))).westWall();
-                case EAST -> config.getCell(new IntCoordinates((int) Math.floor(this.getPos().x()), (int) Math.floor(this.getPos().y()))).eastWall();
-                case NORTH -> config.getCell(new IntCoordinates((int) Math.floor(this.getPos().x()), (int) Math.floor(this.getPos().y()))).northWall();
-                case SOUTH -> config.getCell(new IntCoordinates((int) Math.floor(this.getPos().x()), (int) Math.floor(this.getPos().y()))).southWall();
-                default -> true;
+    public boolean isCentered(){
+        return (Math.round(this.pos.x()) == this.pos.x()) && (Math.round(this.pos.y()) == this.pos.y());
+    }
+
+
+    public RealCoordinates getNextPos(long deltaTns, Direction dir, MazeConfig config){
+        if(this.isCenteredDir(dir)){
+            RealCoordinates nextPos = // Calcul de la position suivante
+                    getPos().plus((switch(dir){
+                        case NONE -> RealCoordinates.ZERO;
+                        case NORTH -> RealCoordinates.NORTH_UNIT;
+                        case EAST -> RealCoordinates.EAST_UNIT;
+                        case SOUTH -> RealCoordinates.SOUTH_UNIT;
+                        case WEST -> RealCoordinates.WEST_UNIT;}).times(this.getSpeed() * deltaTns * 1E-9));
+            switch(dir){ // Ajustement en fonction des murs, on ne veut pas dépasser un mur
+                case WEST :
+                    if(config.getCell(this.currCellI()).westWall()){
+                        return new RealCoordinates(Math.max(nextPos.x(), Math.floor(this.pos.x())), this.pos.y());
+                    } else {
+                        return nextPos;
+                    }
+                case EAST :
+                    if(config.getCell(this.currCellI()).eastWall()){
+                        return new RealCoordinates(Math.min(nextPos.x(), Math.ceil(this.pos.x())), this.pos.y());
+                    } else {
+                        return nextPos;
+                    }
+                case NORTH :
+                    if(config.getCell(this.currCellI()).northWall()){
+                        return new RealCoordinates(this.pos.x(), Math.max(nextPos.y(), Math.floor(this.pos.y())));
+                    } else {
+                        return nextPos;
+                    }
+                case SOUTH :
+                    if(config.getCell(this.currCellI()).southWall()){
+                        return new RealCoordinates(this.pos.x(), Math.min(nextPos.y(), Math.ceil(this.pos.y())));
+                    } else {
+                        return nextPos;
+                    }
+                default : return this.pos;
+            }
+        } else {
+            return this.pos;
+        }
+    }
+
+    //TODO : faire en sorte que le choix de direction soit cohérent avec la case sur laquelle le ghost se situe.
+    // L'implémentation de getNextDir doit évidemment changer selon le ghost concerné et appellera les classes IA quand elles seront définies.
+    public Direction getNextDir(){ // test implementation
+        if(this.isCentered()){
+            Random rd = new Random();
+            int n = rd.nextInt(4);
+            return switch (n) {
+                case 0 -> Direction.SOUTH;
+                case 1 -> Direction.NORTH;
+                case 2 -> Direction.EAST;
+                default -> Direction.WEST;
             };
         } else {
-            return false;
+            return this.direction;
         }
     }
 }

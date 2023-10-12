@@ -14,15 +14,15 @@ import config.MazeConfig;
 public interface Critter {
 
     //Getters/Setters
-    public RealCoordinates getPos();
+    RealCoordinates getPos();
 
-    public Direction getDirection();
+    Direction getDirection();
 
-    public double getSpeed();
+    double getSpeed();
 
-    public void setPos(RealCoordinates realCoordinates);
+    void setPos(RealCoordinates realCoordinates);
 
-    public void setDirection(Direction direction);
+    void setDirection(Direction direction);
 
     //Methods
 
@@ -30,23 +30,29 @@ public interface Critter {
      * @param deltaTNanoSeconds time since the last update in nanoseconds
      * @return the next position if there is no wall
      */
-    public default RealCoordinates nextPos(long deltaTNanoSeconds) {
+    default RealCoordinates nextPos(long deltaTNanoSeconds) {
         return getPos().plus((switch (getDirection()) {
             case NONE -> RealCoordinates.ZERO;
             case NORTH -> RealCoordinates.NORTH_UNIT;
             case EAST -> RealCoordinates.EAST_UNIT;
             case SOUTH -> RealCoordinates.SOUTH_UNIT;
             case WEST -> RealCoordinates.WEST_UNIT;
-        }).times(getSpeed()*deltaTNanoSeconds * 1E-9));
+        }).times(getSpeed() * deltaTNanoSeconds * 1E-9));
     }
 
-    public RealCoordinates currNode(MazeConfig config);
+    RealCoordinates currCellR(); // Renvoie les coordonnées REELLES de la cellule sur laquelle le critter est.
 
-    public boolean isGoingToNode(RealCoordinates node);
+    IntCoordinates currCellI(); // Renvoie les coordonnées ENTIERES de la cellule sur la laquelle le critter est.
 
-    public void tpToCenter(MazeConfig config);
+    boolean isGoingToCenter(); // Renvoie true si le critter se dirige vers le centre de la cellule.
 
-    public boolean isCentered(Direction dir);
+    void tpToCenter(); // Téléporte le critter au centre de la cellule s'il est suffisament proche.
 
-    public boolean checkLegalDir(MazeConfig config, Direction dir);
+    boolean isCenteredDir(Direction dir); // Vérifie que le critter est centré sur l'axe sur lequel on ne se déplace pas.
+
+    boolean isCentered(); // Vérifie que le critter est au centre de la cellule.
+
+    RealCoordinates getNextPos(long deltaTns, Direction dir, MazeConfig config); // Calcule la position atteinte si le critter va dans la direction dir.
+
+    Direction getNextDir();
 }
