@@ -52,7 +52,7 @@ public interface Critter {
 
     boolean isCentered(); // Vérifie que le critter est au centre de la cellule.
 
-    RealCoordinates getNextPos(long deltaTns, Direction dir, MazeConfig config); // Calcule la position atteinte si le critter va dans la direction dir.
+    RealCoordinates getNextPos(long deltaTns, Direction dir, MazeConfig config); // Calcule la position suivante si le critter va dans la direction dir.
 
     Direction getNextDir();
 }
