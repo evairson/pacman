@@ -107,8 +107,8 @@ public final class MazeState {
                     addScore(10);
                     resetCritter(critter);
                 } else {
-                    /*playerLost(); //FIXME : UNCOMMENT THIS !!!
-                    return;*/
+                    playerLost(); //FIXME : UNCOMMENT ME !!!
+                    return;
                 }
             }
         }

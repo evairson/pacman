@@ -4,8 +4,6 @@ import config.MazeConfig;
 import geometry.IntCoordinates;
 import geometry.RealCoordinates;
 
-import java.util.Random;
-
 /**
  * Implémente PacMan comme un singleton.
  * TODO : ajouter les fonctionnalités suivantes :
@@ -88,7 +86,6 @@ public final class PacMan implements Critter {
         RealCoordinates currCell = this.currCellR();
         if(this.isGoingToCenter() && this.getPos().dist(currCell) < TPINTERVAL) {
             this.setPos(currCell);
-            System.out.println(currCell.x() + ", " + currCell.y());
         }
     }
 
