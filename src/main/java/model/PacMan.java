@@ -42,7 +42,7 @@ public final class PacMan implements Critter {
 
     @Override
     public double getSpeed() {
-        return isEnergized() ? 2.3 : 1.9;
+        return isEnergized() ? 2.5 : 2.1;
     }
 
     public void setPos(RealCoordinates pos) {
