@@ -48,10 +48,10 @@ public class CellGraphicsFactory {
         var cell = state.getConfig().getCell(pos);
         var dot = new Circle();
         group.getChildren().add(dot);
-        dot.setRadius(switch (cell.initialContent()) { case DOT -> scale/15; case ENERGIZER -> scale/5; case NOTHING -> 0; });
+        dot.setRadius(switch (cell.initialContent()) { case DOT -> scale/20; case ENERGIZER -> scale/5; case NOTHING -> 0; });
         dot.setCenterX(scale/2);
         dot.setCenterY(scale/2);
-        dot.setFill(Color.YELLOW);
+        dot.setFill(Color.WHITE);
         if (cell.northWall()) {
             var nWall = new Rectangle();
             nWall.setHeight(scale/10);

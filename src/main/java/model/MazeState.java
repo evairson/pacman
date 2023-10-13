@@ -94,7 +94,8 @@ public final class MazeState {
         if (!gridState[pacPos.y()][pacPos.x()]) { // Energizer
             if(config.getCell(pacPos).initialContent()==Content.ENERGIZER){ /* score energizer */
                 addScore(5); 
-                PacMan.INSTANCE.setEnergized(true);
+                PacMan.INSTANCE.setEnergized();
+                
             }
             else {
                 addScore(1);
@@ -122,7 +123,7 @@ public final class MazeState {
     private void displayScore() {
         // FIXME: this should be displayed in the JavaFX view, not in the console
         System.out.println("Score: " + score);
-        System.out.println(PacMan.INSTANCE.isEnergized());
+        //System.out.println(PacMan.INSTANCE.isEnergized());
     }
 
     private void playerLost() {

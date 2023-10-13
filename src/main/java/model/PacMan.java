@@ -2,6 +2,10 @@ package model;
 
 import config.MazeConfig;
 import geometry.IntCoordinates;
+import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
+
 import geometry.RealCoordinates;
 
 /**
@@ -15,9 +19,9 @@ import geometry.RealCoordinates;
 public final class PacMan implements Critter {
 
     private RealCoordinates pos;
-    private Direction direction;
+    private Direction direction = Direction.NONE;
     private Direction nextDir = Direction.NONE;
-    private final double speed = 2.;
+    //private final double speed = 2.;
     private boolean energized;
 
     static final double TPINTERVAL = 0.03;
@@ -28,40 +32,55 @@ public final class PacMan implements Critter {
     public static final PacMan INSTANCE = new PacMan();
 
     // Getters/Setters
-    public RealCoordinates getPos(){
+    public RealCoordinates getPos() {
         return this.pos;
     }
 
-    public Direction getDirection(){
+    public Direction getDirection() {
         return this.direction;
     }
 
-    public double getSpeed(){
-        return this.speed;
+    @Override
+    public double getSpeed() {
+        return isEnergized() ? 2.3 : 1.9;
     }
 
-    public void setPos(RealCoordinates pos) { this.pos = pos; }
+    public void setPos(RealCoordinates pos) {
+        this.pos = pos;
+    }
 
-    public void setDirection(Direction direction) { this.direction = direction; }
+    public void setDirection(Direction direction) {
+        this.direction = direction;
+    }
 
-    public boolean isEnergized() { return energized; } //TODO : handle timeout !
+    public boolean isEnergized() {
+        return energized;
+    } //TODO : handle timeout !
 
-    public void setEnergized(boolean energized) {
-        this.energized = energized;
+    public Timer setEnergized() {
+        PacMan pacman = this;
+        Timer t = new Timer();
+        TimerTask task = new TimerTask() {
+            public void run() {
+                pacman.energized = false;
+                t.cancel();
+            }
+        };
+        this.energized = true;
+        t.schedule(task, 10000L);
+        return t;
     }
 
     //Methods
-    @Override
     public RealCoordinates currCellR() {
         return new RealCoordinates(Math.round((float) this.getPos().x()), Math.round((float) this.getPos().y()));
     }
 
-    @Override
-    public IntCoordinates currCellI(){
-        return new IntCoordinates(Math.round((float) this.getPos().x()), Math.round((float) this.getPos().y()));
+    public IntCoordinates currCellI() {
+        return new IntCoordinates(Math.round((float) this.pos.x()), Math.round((float) this.pos.y()));
     }
 
-    @Override
+
     public boolean isGoingToCenter() {
         RealCoordinates center = this.currCellR();
         switch (this.direction) {
@@ -77,14 +96,16 @@ public final class PacMan implements Critter {
             case WEST -> {
                 return this.pos.x() > center.x();
             }
-            default -> { return true; }
+            default -> {
+                return true;
+            }
         }
     }
 
     @Override
-    public void tpToCenter(){
+    public void tpToCenter() {
         RealCoordinates currCell = this.currCellR();
-        if(this.isGoingToCenter() && this.getPos().dist(currCell) < TPINTERVAL) {
+        if (this.isGoingToCenter() && this.getPos().dist(currCell) < TPINTERVAL) {
             this.setPos(currCell);
         }
     }
@@ -93,8 +114,8 @@ public final class PacMan implements Critter {
     public boolean isCenteredDir(Direction dir) {
         return switch (dir) {
             case EAST, WEST ->
-                    Math.round(this.getPos().y()) == this.getPos().y(); // On peut comparer des double car ils sont censé être égaux grâce tpToCenter
-            case SOUTH, NORTH -> Math.round(this.getPos().x()) == this.getPos().x();
+                    Math.round(this.pos.y()) == this.pos.y(); // On peut comparer des double car ils sont censé être égaux grâce tpToCenter
+            case SOUTH, NORTH -> Math.round(this.pos.x()) == this.pos.x();
             default -> true;
         };
     }
@@ -156,5 +177,4 @@ public final class PacMan implements Critter {
             return this.direction;
         }
     }
-
 }
