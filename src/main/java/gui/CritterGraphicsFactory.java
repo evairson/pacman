@@ -6,6 +6,7 @@ import javafx.scene.image.ImageView;
 import model.Critter;
 import model.Ghost;
 import model.PacMan;
+import model.Direction;
 
 /**
  * Classe qui crée la représentation graphique de Pac-Man et des fantômes.
@@ -21,14 +22,31 @@ import model.PacMan;
 
 public final class CritterGraphicsFactory {
     private final double scale;
+    private String imgPacMan;
 
     public CritterGraphicsFactory(double scale) {
         this.scale = scale;
+        this.imgPacMan = "pacman-droite-ferme.png";
     }
+
+    // Choix de l'image de pacman
+    public String setimgPacman(Critter critter){
+        imgPacMan = switch(critter.getDirection()){
+            case EAST -> "pacman-droite-ferme.png";
+            case WEST -> "pacman-gauche-ferme.png";
+            case NORTH -> "pacman-haut-ferme.png";
+            case SOUTH -> "pacman-bas-ferme.png";
+            default -> imgPacMan;
+        };
+        return imgPacMan;
+    }
+
     // Méthode qui crée la représentation graphique d'une créature.
     public GraphicsUpdater makeGraphics(Critter critter) {
-        var size = 0.7; // facteur d'echelle de l'image
-        var url = (critter instanceof PacMan) ? "pacman.png" :
+
+
+        var size = 0.5; // facteur d'echelle de l'image
+        var url = (critter instanceof PacMan) ? setimgPacman(critter) :
                 switch ((Ghost) critter) {
                     case BLINKY -> "ghost_blinky.png";
                     case CLYDE -> "ghost_clyde.png";
@@ -40,7 +58,15 @@ public final class CritterGraphicsFactory {
         return new GraphicsUpdater() {
             @Override
             public void update() {
+
+                //changer image pacman 
+
+                if(critter instanceof PacMan){
+                    image.setImage(new Image(setimgPacman(critter), scale * size, scale * size, true, true));
+                }
                 // mise à jour de la position de l'image
+                
+
                 image.setTranslateX((critter.getPos().x() + (1 - size) / 2) * scale);
                 image.setTranslateY((critter.getPos().y() + (1 - size) / 2) * scale);
                 // Debug.out("sprite updated");
