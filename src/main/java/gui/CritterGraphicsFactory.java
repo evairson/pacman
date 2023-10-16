@@ -21,13 +21,15 @@ import model.PacMan;
 
 public final class CritterGraphicsFactory {
     private final double scale;
+    private final double offsetX = 0.01; //FIXME : très moche lol
+    private final double offsetY = 0.05;
 
     public CritterGraphicsFactory(double scale) {
         this.scale = scale;
     }
     // Méthode qui crée la représentation graphique d'une créature.
     public GraphicsUpdater makeGraphics(Critter critter) {
-        var size = 0.5; // facteur d'echelle de l'image
+        var size = 0.6; // facteur d'echelle de l'image
         var url = (critter instanceof PacMan) ? "pacman.png" :
                 switch ((Ghost) critter) {
                     case BLINKY -> "ghost_blinky.png";
@@ -41,8 +43,8 @@ public final class CritterGraphicsFactory {
             @Override
             public void update() {
                 // mise à jour de la position de l'image
-                image.setTranslateX((critter.getPos().x() + (1 - size) / 2) * scale);
-                image.setTranslateY((critter.getPos().y() + (1 - size) / 2) * scale);
+                image.setTranslateX((critter.getPos().x() + offsetX + (1 - size)/2) * scale);
+                image.setTranslateY((critter.getPos().y() + offsetY + (1 - size)/2) * scale);
                 // Debug.out("sprite updated");
             }
 

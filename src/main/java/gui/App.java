@@ -36,7 +36,7 @@ public class App extends Application {
         var config = MazeConfig.makeExampleTxt();
 
         // PacmanController est un listener d'événements clavier (ça récupère les touches promptées par l'user)
-        var pacmanController = new PacmanController(config);
+        var pacmanController = new PacmanController();
 
         /** gameScene est un objet de type Scene
          *
@@ -68,7 +68,7 @@ public class App extends Application {
         gameScene.setOnKeyPressed(pacmanController::keyPressedHandler);
         gameScene.setOnKeyReleased(pacmanController::keyReleasedHandler);
 
-        var maze = new MazeState(config, pacmanController);
+        var maze = new MazeState(config);
         var gameView = new GameView(maze, root, 100.0);
 
         /**

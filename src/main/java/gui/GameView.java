@@ -49,13 +49,13 @@ public class GameView {
         var cellFactory = new CellGraphicsFactory(scale);
         graphicsUpdaters = new ArrayList<>();
 
-        // Ajouter les créatures à la vue en utilisant CritterGraphicsFactory
-        for (var critter : maze.getCritters()) addGraphics(critterFactory.makeGraphics(critter));
-
         // Ajouter les cellules du labyrinthe à la vue en utilisant CellGraphicsFactory
         for (int x = 0; x < maze.getWidth(); x++)
             for (int y = 0; y < maze.getHeight(); y++)
                 addGraphics(cellFactory.makeGraphics(maze, new IntCoordinates(x, y)));
+
+        // Ajouter les créatures à la vue en utilisant CritterGraphicsFactory
+        for (var critter : maze.getCritters()) addGraphics(critterFactory.makeGraphics(critter));
     }
     // Méthode pour démarrer l'animation
     public void animate() {

@@ -1,8 +1,5 @@
 package model;
 
-import config.Cell;
-import gui.PacmanController;
-
 /**
  * Cette classe représente l'état du labyrinthe.
  * Elle contient les informations suivantes :
@@ -17,8 +14,8 @@ import config.MazeConfig;
 import config.Cell.Content;
 import geometry.IntCoordinates;
 import geometry.RealCoordinates;
-import javafx.geometry.Pos;
-import GhostsAI.ClydeAI;
+
+import java.sql.SQLOutput;
 import java.util.List;
 import java.util.Map;
 
@@ -28,7 +25,6 @@ public final class MazeState {
     private final MazeConfig config;
     private final int height;
     private final int width;
-    private final PacmanController pacmanController;
 
     private final boolean[][] gridState;
 
@@ -38,9 +34,8 @@ public final class MazeState {
     private final Map<Critter, RealCoordinates> initialPos;
     private int lives = 3;
 
-    public MazeState(MazeConfig config, PacmanController pacmanController) {
+    public MazeState(MazeConfig config) {
         this.config = config;
-        this.pacmanController = pacmanController;
         height = config.getHeight();
         width = config.getWidth();
         critters = List.of(PacMan.INSTANCE, Ghost.CLYDE, BLINKY, INKY, PINKY);
@@ -87,74 +82,42 @@ public final class MazeState {
          * 3. déléguer certaines repsonsabilités à d'autres méthodes ?
          */
 
-        for  (var critter: critters) {
-            var curPos = critter.getPos();
-            var nextPos = critter.nextPos(deltaTns);
-            var curNeighbours = curPos.intNeighbours();
-            var nextNeighbours = nextPos.intNeighbours();
-            pacmanController.update();
-            var pacPos = PacMan.INSTANCE.getPos().round();
-            System.out.println("derchos99" + pacPos);
-            if (critter == CLYDE) {
-                Direction newDirClyde = Direction.SOUTH;
-                CLYDE.setDirection(newDirClyde);
-            }
-            if (!curNeighbours.containsAll(nextNeighbours)) { // the critter would overlap new cells. Do we allow it?
-                switch (critter.getDirection()) {
-                    case NORTH -> {
-                        for (var n: curNeighbours) if (config.getCell(n).northWall()) {
-                            nextPos = curPos.floorY();
-                            critter.setDirection(Direction.NONE);
-                            break;
-                        }
-                    }
-                    case EAST -> {
-                        for (var n: curNeighbours) if (config.getCell(n).eastWall()) {
-                            nextPos = curPos.ceilX();
-                            critter.setDirection(Direction.NONE);
-                            break;
-                        }
-                    }
-                    case SOUTH -> {
-                        for (var n: curNeighbours) if (config.getCell(n).southWall()) {
-                            nextPos = curPos.ceilY();
-                            critter.setDirection(Direction.NONE);
-                            break;
-                        }
-                    }
-                    case WEST -> {
-                        for (var n: curNeighbours) if (config.getCell(n).westWall()) {
-                            nextPos = curPos.floorX();
-                            critter.setDirection(Direction.NONE);
-                            break;
-                        }
-                    }
+        for (var critter: critters){
+            critter.tpToCenter();
+            var nextDir = critter.getNextDir();
+            if(critter == PacMan.INSTANCE){
+                if(PacMan.INSTANCE.canSetDirection(nextDir, this.config)){
+                    critter.setPos(critter.getNextPos(deltaTns, nextDir, this.config));
+                    critter.setDirection(nextDir);
+                } else {
+                    critter.setPos(critter.getNextPos(deltaTns, critter.getDirection(), this.config));
                 }
-
+            } else {
+                critter.setPos(critter.getNextPos(deltaTns, nextDir, this.config));
+                critter.setDirection(nextDir);
             }
-
-            critter.setPos(nextPos.warp(width, height));
         }
+
         // FIXME Pac-Man rules should somehow be in Pacman class
         var pacPos = PacMan.INSTANCE.getPos().round();
-        if (!gridState[pacPos.y()][pacPos.x()]) {
+        if (!gridState[pacPos.y()][pacPos.x()]) { // Energizer
             if(config.getCell(pacPos).initialContent()==Content.ENERGIZER){ /* score energizer */
                 addScore(5); 
                 PacMan.INSTANCE.setEnergized();
+                
             }
             else {
                 addScore(1);
             }
             gridState[pacPos.y()][pacPos.x()] = true;
         }
-
-        for (var critter : critters) {
+        for (var critter : critters) { // Collision PacMan Ghosts
             if (critter instanceof Ghost && critter.getPos().round().equals(pacPos)) {
                 if (PacMan.INSTANCE.isEnergized()) {
                     addScore(10);
                     resetCritter(critter);
                 } else {
-                    playerLost();
+                    playerLost(); //FIXME : UNCOMMENT ME !!!
                     return;
                 }
             }
@@ -169,7 +132,7 @@ public final class MazeState {
     private void displayScore() {
         // FIXME: this should be displayed in the JavaFX view, not in the console
         System.out.println("Score: " + score);
-        System.out.println(PacMan.INSTANCE.isEnergized());
+        //System.out.println(PacMan.INSTANCE.isEnergized());
     }
 
     private void playerLost() {
@@ -199,17 +162,4 @@ public final class MazeState {
     public boolean getGridState(IntCoordinates pos) {
         return gridState[pos.y()][pos.x()];
     }
-
-//    public void move(Ghost ghost){
-//        var PacmanDirection = PacMan.INSTANCE.getDirection();
-//        switch (PacmanDirection){
-//            case NONE -> ghost.setDirection(NONE);
-//            case SOUTH -> ghost.setDirection(SOUTH);
-//            case NORTH -> ghost.setDirection(NORTH);
-//            case WEST -> ghost.setDirection(WEST);
-//            case EAST -> ghost.setDirection(EAST);
-//        }
-//    }
-
-//    private Direction[] hasChoices(Critter critter,)
 }
