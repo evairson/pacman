@@ -12,6 +12,9 @@ import static config.Cell.Content.*;
 
 // tutur : la classe MazeConfig
 public class MazeConfig {
+
+    private final Cell[][] grid;
+    private final IntCoordinates pacManPos, blinkyPos, pinkyPos, inkyPos, clydePos;
     public MazeConfig(Cell[][] grid, IntCoordinates pacManPos, IntCoordinates blinkyPos, IntCoordinates pinkyPos,
                       IntCoordinates inkyPos, IntCoordinates clydePos) {
         this.grid = new Cell[grid.length][];
@@ -27,9 +30,6 @@ public class MazeConfig {
         this.pinkyPos = pinkyPos;
         this.clydePos = clydePos;
     }
-
-    private final Cell[][] grid;
-    private final IntCoordinates pacManPos, blinkyPos, pinkyPos, inkyPos, clydePos;
 
     public IntCoordinates getPacManPos() {
         return pacManPos;

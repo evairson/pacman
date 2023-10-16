@@ -39,4 +39,9 @@ public record Cell(boolean northWall, boolean eastWall, boolean southWall, boole
     public static Cell create(boolean northWall, boolean eastWall, boolean southWall, boolean westWall, Content initialContent) {
         return new Cell(northWall,eastWall,southWall,westWall,initialContent);
     }
+
+    public boolean isPipe(){
+        return (northWall && southWall && !eastWall && ! westWall) ||
+                (eastWall && westWall && !northWall && ! southWall);
+    }
 }
