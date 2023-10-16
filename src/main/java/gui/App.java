@@ -8,6 +8,8 @@ package gui;
  */
 
 import javafx.application.Application;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
@@ -78,10 +80,12 @@ public class App extends Application {
         double heightScale = Math.floor(screenBounds.getHeight() / maze.getHeight())/10.0;
         double scale = Math.min((int)widthScale,(int)heightScale) * 10.0 - 3;
 
+
         var gameView = new GameView(maze, root, scale);
 
         /**
-         * Ces 3 dernières lignes permette 1. la configuration de la fenêtre avec gameScene comme contenu.
+         * Ces 3 dernières lignes permette
+         * 1. la configuration de la fenêtre avec gameScene comme contenu.
          * 2. l'affichage de la fenêtre.
          * 3. le lancement de l'animation du jeu.
          * c bo
