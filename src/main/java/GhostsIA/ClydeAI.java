@@ -12,11 +12,12 @@ public class ClydeAI {
     /*
     public static boolean checkLegalDir(Critter critter, Direction dir){
         switch(dir){
-            case SOUTH, NORTH: return critter.getPos().isIntCoordinate(Direction.WEST);
-            case EAST, WEST: return critter.getPos().isIntCoordinate(Direction.NORTH);
+            case SOUTH, NORTH: return critter.getPos().isCenteredDir(Direction.WEST);
+            case EAST, WEST: return critter.getPos().isCenteredDir(Direction.NORTH);
             default : return false;
         }
     }
+
     public static Direction getRandomDirection(){
         Random rd = new Random();
         int dir = rd.nextInt(4);

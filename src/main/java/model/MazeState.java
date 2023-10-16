@@ -85,8 +85,14 @@ public final class MazeState {
         for (var critter: critters) {
             critter.tpToCenter();
             var nextDir = critter.getNextDir();
-            critter.setPos(critter.getNextPos(deltaTns, nextDir, config));
-            critter.setDirection(nextDir);
+            critter.setPos(critter.getNextPos(deltaTns, nextDir, this.config));
+            if((critter == PacMan.INSTANCE) && (PacMan.INSTANCE.canSetDirection(nextDir, this.config))){
+                critter.setDirection(nextDir);
+                //System.out.println("a : " + critter.getDirection());
+                //System.out.println("b : " + nextDir);
+            } else {
+                critter.setDirection(nextDir);
+            }
         }
 
         // FIXME Pac-Man rules should somehow be in Pacman class

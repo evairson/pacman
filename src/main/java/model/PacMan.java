@@ -5,6 +5,7 @@ import geometry.IntCoordinates;
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
+import config.Cell;
 
 import geometry.RealCoordinates;
 
@@ -165,6 +166,18 @@ public final class PacMan implements Critter {
         } else {
             return this.getPos();
         }
+    }
+
+    public boolean canSetDirection(Direction dir, MazeConfig config){
+        Cell currCell = config.getCell(this.currCellI());
+        //System.out.println("Derchos 99 : " + this.currCellI().x() + ", " + this.currCellI().y());
+        return switch (dir) {
+            case NORTH -> !currCell.northWall();
+            case SOUTH -> !currCell.southWall();
+            case EAST -> !currCell.eastWall();
+            case WEST -> !currCell.westWall();
+            default -> false;
+        };
     }
 
     public void setNextDir(Direction dir){
