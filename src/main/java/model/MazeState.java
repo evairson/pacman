@@ -82,15 +82,18 @@ public final class MazeState {
          * 3. déléguer certaines repsonsabilités à d'autres méthodes ?
          */
 
-        for (var critter: critters) {
+        for (var critter: critters){
             critter.tpToCenter();
             var nextDir = critter.getNextDir();
-            critter.setPos(critter.getNextPos(deltaTns, nextDir, this.config));
-            if((critter == PacMan.INSTANCE) && (PacMan.INSTANCE.canSetDirection(nextDir, this.config))){
-                critter.setDirection(nextDir);
-                //System.out.println("a : " + critter.getDirection());
-                //System.out.println("b : " + nextDir);
+            if(critter == PacMan.INSTANCE){
+                if(PacMan.INSTANCE.canSetDirection(nextDir, this.config)){
+                    critter.setPos(critter.getNextPos(deltaTns, nextDir, this.config));
+                    critter.setDirection(nextDir);
+                } else {
+                    critter.setPos(critter.getNextPos(deltaTns, critter.getDirection(), this.config));
+                }
             } else {
+                //critter.setPos(critter.getNextPos(deltaTns, nextDir, this.config));
                 critter.setDirection(nextDir);
             }
         }

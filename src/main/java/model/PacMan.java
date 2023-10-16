@@ -25,7 +25,7 @@ public final class PacMan implements Critter {
     //private final double speed = 2.;
     private boolean energized;
 
-    static final double TPINTERVAL = 0.03;
+    static final double TPINTERVAL = 0.035;
 
     private PacMan() {
     }
@@ -43,7 +43,7 @@ public final class PacMan implements Critter {
 
     @Override
     public double getSpeed() {
-        return isEnergized() ? 2.5 : 2.1;
+        return isEnergized() ? 3.5 : 3.;
     }
 
     public void setPos(RealCoordinates pos) {
@@ -170,7 +170,6 @@ public final class PacMan implements Critter {
 
     public boolean canSetDirection(Direction dir, MazeConfig config){
         Cell currCell = config.getCell(this.currCellI());
-        //System.out.println("Derchos 99 : " + this.currCellI().x() + ", " + this.currCellI().y());
         return switch (dir) {
             case NORTH -> !currCell.northWall();
             case SOUTH -> !currCell.southWall();
@@ -179,6 +178,7 @@ public final class PacMan implements Critter {
             default -> false;
         };
     }
+
 
     public void setNextDir(Direction dir){
         this.nextDir = dir;
