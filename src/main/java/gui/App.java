@@ -81,6 +81,8 @@ public class App extends Application {
         double scale = Math.min((int)widthScale,(int)heightScale) * 10.0 - 3;
 
 
+
+
         var gameView = new GameView(maze, root, scale);
 
         /**
@@ -91,6 +93,10 @@ public class App extends Application {
          * c bo
          * pour l'instant c'est surtout moche en fait xd
          */
+
+        //Empeche de resize la fenetre
+        primaryStage.setResizable(false);
+
         primaryStage.setScene(gameScene);
         primaryStage.show();
         gameView.animate();
