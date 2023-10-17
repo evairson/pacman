@@ -1,5 +1,14 @@
 package gui;
 
+
+import java.beans.EventHandler;
+import javax.swing.plaf.basic.BasicSplitPaneUI.KeyboardUpLeftHandler;
+
+import geometry.RealCoordinates;
+import javafx.util.Duration;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -29,21 +38,25 @@ public final class CritterGraphicsFactory {
         this.imgPacMan = "pacman-droite-ferme.png";
     }
 
+
+
     // Choix de l'image de pacman
     public String setimgPacman(Critter critter){
         imgPacMan = switch(critter.getDirection()){
-            case EAST -> "pacman-droite-ferme.png";
-            case WEST -> "pacman-gauche-ferme.png";
-            case NORTH -> "pacman-haut-ferme.png";
-            case SOUTH -> "pacman-bas-ferme.png";
+            case EAST -> "pacman-droite";
+            case WEST -> "pacman-gauche";
+            case NORTH -> "pacman-haut";
+            case SOUTH -> "pacman-bas";
             default -> imgPacMan;
         };
         return imgPacMan;
     }
 
+
     // Méthode qui crée la représentation graphique d'une créature.
     public GraphicsUpdater makeGraphics(Critter critter) {
-
+        RealCoordinates pos = critter.getPos();
+        String etat = "ferme";
 
         var size = 0.5; // facteur d'echelle de l'image
         var url = (critter instanceof PacMan) ? setimgPacman(critter) :
@@ -58,11 +71,16 @@ public final class CritterGraphicsFactory {
         return new GraphicsUpdater() {
             @Override
             public void update() {
+                
 
                 //changer image pacman 
 
                 if(critter instanceof PacMan){
-                    image.setImage(new Image(setimgPacman(critter), scale * size, scale * size, true, true));
+                    if(critter.getPos()!= pos){
+                        if(etat == "ferme") etat = "ouvert"; 
+                        else etat = "ferme";
+                    }
+                    image.setImage(new Image(setimgPacman(critter)+"-"+etat+".png", scale * size, scale * size, true, true));
                 }
                 // mise à jour de la position de l'image
                 
