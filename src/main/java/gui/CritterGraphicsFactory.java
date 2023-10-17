@@ -16,6 +16,7 @@ import model.Critter;
 import model.Ghost;
 import model.PacMan;
 import model.Direction;
+import java.lang.Math;
 
 /**
  * Classe qui crée la représentation graphique de Pac-Man et des fantômes.
@@ -32,10 +33,14 @@ import model.Direction;
 public final class CritterGraphicsFactory {
     private final double scale;
     private String imgPacMan;
+    private String etat;
+    private RealCoordinates pos;
 
     public CritterGraphicsFactory(double scale) {
         this.scale = scale;
-        this.imgPacMan = "pacman-droite-ferme.png";
+        this.imgPacMan = "pacman-droite";
+        etat = "ferme";
+        pos = new RealCoordinates(0, 0);
     }
 
 
@@ -55,11 +60,9 @@ public final class CritterGraphicsFactory {
 
     // Méthode qui crée la représentation graphique d'une créature.
     public GraphicsUpdater makeGraphics(Critter critter) {
-        RealCoordinates pos = critter.getPos();
-        String etat = "ferme";
-
+        
         var size = 0.5; // facteur d'echelle de l'image
-        var url = (critter instanceof PacMan) ? setimgPacman(critter) :
+        var url = (critter instanceof PacMan) ? setimgPacman(critter)+"-"+etat+".png" :
                 switch ((Ghost) critter) {
                     case BLINKY -> "ghost_blinky.png";
                     case CLYDE -> "ghost_clyde.png";
@@ -71,23 +74,22 @@ public final class CritterGraphicsFactory {
         return new GraphicsUpdater() {
             @Override
             public void update() {
-                
 
-                //changer image pacman 
-
-                if(critter instanceof PacMan){
-                    if(critter.getPos()!= pos){
-                        if(etat == "ferme") etat = "ouvert"; 
-                        else etat = "ferme";
-                    }
-                    image.setImage(new Image(setimgPacman(critter)+"-"+etat+".png", scale * size, scale * size, true, true));
-                }
                 // mise à jour de la position de l'image
                 
-
                 image.setTranslateX((critter.getPos().x() + (1 - size) / 2) * scale);
                 image.setTranslateY((critter.getPos().y() + (1 - size) / 2) * scale);
                 // Debug.out("sprite updated");
+
+                //changer image pacman 
+                if(critter instanceof PacMan){
+                    if(Math.abs(critter.getPos().x() - pos.x()) >= 0.5 || Math.abs(critter.getPos().y() - pos.y()) >= 0.5 ){
+                        if(etat == "ferme") etat = "ouvert"; 
+                        else etat = "ferme";
+                        pos = critter.getPos();
+                    }
+                    image.setImage(new Image(setimgPacman(critter)+"-"+etat+".png", scale * size, scale * size, true, true));
+                }
             }
 
             @Override
