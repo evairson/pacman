@@ -8,8 +8,12 @@ package gui;
  */
 
 import javafx.application.Application;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import config.MazeConfig;
 import model.MazeState;
@@ -67,17 +71,31 @@ public class App extends Application {
 
         gameScene.setOnKeyPressed(pacmanController::keyPressedHandler);
         gameScene.setOnKeyReleased(pacmanController::keyReleasedHandler);
+        var maze = new MazeState(MazeConfig.makeExampleTxt());
 
-        var maze = new MazeState(config);
-        var gameView = new GameView(maze, root, 100.0);
+        //Récupère la taille de l'écran
+        Rectangle2D screenBounds = Screen.getPrimary().getBounds();
+
+
+        //Adapte la taille de l'écran en fonction du nombre de lignes et de colonnes, ainsi que de la taille de l'écran
+        double widthScale = Math.floor(screenBounds.getWidth() / maze.getWidth())/10.0;
+        double heightScale = Math.floor(screenBounds.getHeight() / maze.getHeight())/10.0;
+        double scale = Math.min((int)widthScale,(int)heightScale) * 10.0 - 3;
+
+        var gameView = new GameView(maze, root, scale);
 
         /**
-         * Ces 3 dernières lignes permette 1. la configuration de la fenêtre avec gameScene comme contenu.
+         * Ces 3 dernières lignes permette
+         * 1. la configuration de la fenêtre avec gameScene comme contenu.
          * 2. l'affichage de la fenêtre.
          * 3. le lancement de l'animation du jeu.
          * c bo
          * pour l'instant c'est surtout moche en fait xd
          */
+
+        //Empeche de resize la fenetre
+        primaryStage.setResizable(false);
+
         primaryStage.setScene(gameScene);
         primaryStage.show();
         gameView.animate();
