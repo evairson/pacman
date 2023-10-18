@@ -1,4 +1,4 @@
-package GhostsIA;
+package GhostsAI;
 
 public class PinkyAI {
 

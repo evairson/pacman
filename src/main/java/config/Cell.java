@@ -41,7 +41,7 @@ public record Cell(boolean northWall, boolean eastWall, boolean southWall, boole
     }
 
     public boolean isPipe(){
-        return (northWall && southWall && !eastWall && ! westWall) ||
-                (eastWall && westWall && !northWall && ! southWall);
+        return (northWall && southWall && !eastWall && !westWall) ||
+                (eastWall && westWall && !northWall && !southWall);
     }
 }
