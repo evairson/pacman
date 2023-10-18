@@ -16,6 +16,7 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import config.MazeConfig;
+import javafx.stage.StageStyle;
 import model.MazeState;
 
 import java.io.IOException;
@@ -97,8 +98,16 @@ public class App extends Application {
         //Empeche de resize la fenetre
         primaryStage.setResizable(false);
 
-        primaryStage.setScene(gameScene);
+
+        //Permet d'enlever la barre du haut (à voir pour la suite n'ayant pas fait de menu d'options in game ça m'a l'air complexe à rajouter de suite)
+        primaryStage.initStyle(StageStyle.UNDECORATED);
+
+
+        var mainMenu = new MainMenu();
+        primaryStage.setScene(mainMenu.startMenu(primaryStage,screenBounds.getWidth(),screenBounds.getHeight(),gameScene));
         primaryStage.show();
+//        primaryStage.setScene(gameScene);
+//        primaryStage.show();
         gameView.animate();
     }
 }
