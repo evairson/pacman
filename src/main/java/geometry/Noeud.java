@@ -22,7 +22,7 @@ public class Noeud {
             }
         }
         if(!currCell.southWall()){
-            if(this.coordinates.y() + 1 <= config.getHeight()){
+            if(this.coordinates.y() + 1 < config.getHeight()){
                 arr.add(new Noeud(new IntCoordinates(this.coordinates.x(), this.coordinates.y() + 1), this));
             }
         }
@@ -32,7 +32,7 @@ public class Noeud {
             }
         }
         if(!currCell.eastWall()){
-            if(this.coordinates.x() + 1 <= config.getWidth()){
+            if(this.coordinates.x() + 1 < config.getWidth()){
                 arr.add(new Noeud(new IntCoordinates(this.coordinates.x() + 1, this.coordinates.y()), this));
             }
         }

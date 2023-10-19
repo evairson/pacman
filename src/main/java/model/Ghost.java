@@ -22,10 +22,10 @@ public enum Ghost implements Critter {
 
     private RealCoordinates pos;
     private Direction direction;
-    private final double speed = 1.3;
+    private final double speed = 2.;
     private boolean energized;
 
-    private static final double TPINTERVAL = 0.02;
+    private static final double TPINTERVAL = 0.04;
 
     // Getters/Setters
     @Override
@@ -162,7 +162,7 @@ public enum Ghost implements Critter {
     }
     */
 
-    public Direction getNextDir(MazeConfig config, IntCoordinates pacPos){
+    public Direction getNextDir(MazeConfig config, IntCoordinates pacPos, Direction pacDir){
         switch(this){
             case CLYDE :
                 if(this.isCentered()){
@@ -176,7 +176,12 @@ public enum Ghost implements Critter {
                 } else {
                     return this.direction;
                 }
-
+            case PINKY :
+                if (this.isCentered()){
+                    return PinkyAI.getDirection(config, pacPos, this.currCellI(), pacDir);
+                } else {
+                    return this.direction;
+                }
             default : return Direction.NONE;
         }
     }
