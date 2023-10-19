@@ -13,7 +13,7 @@ import javafx.scene.input.KeyEvent;
 
 public class PacmanController {
     public void keyPressedHandler(KeyEvent event) {
-        PacMan.INSTANCE.setDirection(
+        PacMan.INSTANCE.setNextDir(
                 switch (event.getCode()) {
                     case LEFT -> Direction.WEST;
                     case RIGHT -> Direction.EAST;

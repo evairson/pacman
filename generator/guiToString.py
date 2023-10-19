@@ -12,7 +12,7 @@ if len(args) != 5:
 else:
     lines = int(args[1])
     columns = int(args[2])
-    sz = (int(args[3]),int(args[4]))
+    sz = (float(args[3]),float(args[4]))
 
 print(f"Processing with parameters {lines}/{columns}/{sz[0]}/{sz[1]} (lines/columns/sizeX/sizeY)")
 main_layout = []
@@ -120,7 +120,8 @@ cellsStates = {(i,j) : -1 for i in range(lines) for j in range(columns)}
 
 
 #Initializes the window
-window = sg.Window("Test", main_layout,background_color="black")
+column = [[sg.Column(main_layout,scrollable=True,size=(1280,720))]] #TODO la taille s'adapte aux proportions de l'écran
+window = sg.Window("Test", column,background_color="black",default_element_size=sz)
 
 #Initializes the second window
 def exportWindow():

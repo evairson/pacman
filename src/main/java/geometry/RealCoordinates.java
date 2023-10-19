@@ -3,6 +3,7 @@ package geometry;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import config.MazeConfig;
 
 /**
  * Représente un point dans le plan avec des coordonnées réelles, utilisé pour la position du joueur.
@@ -30,7 +31,7 @@ public record RealCoordinates(double x, double y) {
      *
      * @return the coordinates of all integer squares that a unit square with current coordinates would intersect
       */
-    public Set<IntCoordinates> intNeighbours() {
+    /*public Set<IntCoordinates> intNeighbours() {
         return new HashSet<>(List.of(
                 new IntCoordinates((int) Math.floor(x), (int) Math.floor(y)),
                 new IntCoordinates((int) Math.floor(x), (int) Math.ceil(y)),
@@ -38,7 +39,8 @@ public record RealCoordinates(double x, double y) {
                 new IntCoordinates((int) Math.ceil(x), (int) Math.ceil(y))
         )
         );
-    }
+    }*/
+
     // Méthode pour arrondir les coordonnées réelles à des coordonnées entières
     public IntCoordinates round() {
         return new IntCoordinates((int) Math.round(x), (int) Math.round(y));
@@ -63,16 +65,13 @@ public record RealCoordinates(double x, double y) {
 
     // Méthode pour calculer la distance entre deux coordonnées réelles
     public RealCoordinates warp(int width, int height) {
-        var rx = x;
-        var ry = y;
-        while (Math.round(rx) < 0)
-            rx += width;
-        while (Math.round(ry) < 0)
-            ry += height;
-        while (Math.round(rx) >= width)
-            rx -= width;
-        while (Math.round(rx) >= height)
-            ry -= height;
+        double rx = (x + width) % width;
+        double ry = (y + height) % height;
         return new RealCoordinates(rx, ry);
     }
+
+    public double dist(RealCoordinates c){ // Renvoie la distance euclidienne entre deux coordonnées réelles.
+        return Math.sqrt(Math.pow((this.x - c.x), 2) + Math.pow((this.y - c.y), 2));
+    }
+
 }

@@ -34,11 +34,15 @@ import java.util.TimerTask;
 
 public final class CritterGraphicsFactory {
     private final double scale;
+
     private String imgPacMan;
     private String etatPacman;
     private int[] etatghost;
     private RealCoordinates pos;
     private int[] etatTimeur;
+    private final double offsetX = 0.01; //FIXME : très moche lol
+    private final double offsetY = 0.05;
+
 
     public CritterGraphicsFactory(double scale) {
         this.scale = scale;
@@ -116,9 +120,10 @@ public final class CritterGraphicsFactory {
             public void update() {
 
                 // mise à jour de la position de l'image
-                
-                image.setTranslateX((critter.getPos().x() + (1 - size) / 2) * scale);
-                image.setTranslateY((critter.getPos().y() + (1 - size) / 2) * scale);
+
+                image.setTranslateX((critter.getPos().x() + offsetX + (1 - size)/2) * scale);
+                image.setTranslateY((critter.getPos().y() + offsetY + (1 - size)/2) * scale);
+
                 // Debug.out("sprite updated");
 
                 //changer image pacman 
