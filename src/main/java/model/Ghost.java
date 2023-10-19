@@ -9,6 +9,7 @@ package model;
  *
  */
 
+import GhostsAI.ClydeAI;
 import config.MazeConfig;
 import geometry.IntCoordinates;
 import geometry.RealCoordinates;
@@ -142,6 +143,7 @@ public enum Ghost implements Critter {
         }
     }
 
+    /*
     //TODO : faire en sorte que le choix de direction soit cohérent avec la case sur laquelle le ghost se situe.
     // L'implémentation de getNextDir doit évidemment changer selon le ghost concerné et appellera les classes IA quand elles seront définies.
     public Direction getNextDir(){ // test implementation
@@ -156,6 +158,19 @@ public enum Ghost implements Critter {
             };
         } else {
             return this.direction;
+        }
+    }
+    */
+
+    public Direction getNextDir(MazeConfig config){
+        switch(this){
+            case CLYDE :
+                if(this.isCentered()){
+                    return ClydeAI.getDirection(config, this.currCellI(), this.direction);
+                } else {
+                    return this.direction;
+                }
+            default : return Direction.NONE;
         }
     }
 }

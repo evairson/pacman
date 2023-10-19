@@ -1,37 +1,36 @@
-//package GhostsAI;
-//
-//import model.Direction;
-//import geometry.RealCoordinates;
-//import model.Critter;
-//import java.util.Random;
-//import model.Ghost;
-//
-//public class ClydeAI {
-//
-//    public static boolean checkLegalDir(Critter critter, Direction dir){
-//        switch(dir){
-//            case SOUTH, NORTH: return critter.getPos().isIntCoordinate(Direction.WEST);
-//            case EAST, WEST: return critter.getPos().isIntCoordinate(Direction.NORTH);
-//            default : return false;
-//        }
-//    }
-//    public static Direction getRandomDirection(){
-//        Random rd = new Random();
-//        int dir = rd.nextInt(4);
-//        return switch (dir) {
-//            case 0 -> Direction.SOUTH;
-//            case 1 -> Direction.NORTH;
-//            case 2 -> Direction.EAST;
-//            default -> Direction.WEST;
-//        };
-//    }
-//
-//    public static Direction getDirection(){
-//        Direction dir = getRandomDirection();
-//        if(checkLegalDir(Ghost.CLYDE, dir)){
-//            return dir;
-//        } else {
-//            return Direction.NONE;
-//        }
-//    }
-//}
+package GhostsAI;
+
+import geometry.IntCoordinates;
+import geometry.RealCoordinates;
+import model.Direction;
+
+import java.util.Random;
+
+import config.MazeConfig;
+
+public class ClydeAI{
+
+    public static Direction getRandomDir(){ // Renvoie une direction au hasard.
+        Random rd = new Random();
+        int n = rd.nextInt(4);
+        return switch (n) {
+            case 0 -> Direction.NORTH;
+            case 1 -> Direction.SOUTH;
+            case 2 -> Direction.EAST;
+            case 3 -> Direction.WEST;
+            default -> Direction.NONE;
+        };
+    }
+
+    public static boolean isInNode(MazeConfig config, IntCoordinates intC){ // Vérifie que la case courante est une intersection (càd pas une pipe)
+        return !config.getCell(intC).isPipe();
+    }
+
+    public static Direction getDirection(MazeConfig config, IntCoordinates intC, Direction defaultDir){
+        if(isInNode(config, intC)){
+            return getRandomDir();
+        } else {
+            return defaultDir;
+        }
+    }
+}

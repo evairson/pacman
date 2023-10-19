@@ -86,8 +86,8 @@ public final class MazeState {
 
         for (var critter: critters){
             critter.tpToCenter();
-            var nextDir = critter.getNextDir();
             if(critter == PacMan.INSTANCE){
+                var nextDir = ((PacMan) critter).getNextDir();
                 if(PacMan.INSTANCE.canSetDirection(nextDir, this.config)){
                     critter.setPos(critter.getNextPos(deltaTns, nextDir, this.config));
                     critter.setDirection(nextDir);
@@ -95,6 +95,7 @@ public final class MazeState {
                     critter.setPos(critter.getNextPos(deltaTns, critter.getDirection(), this.config));
                 }
             } else {
+                var nextDir = ((Ghost) critter).getNextDir(this.config);
                 critter.setPos(critter.getNextPos(deltaTns, nextDir, this.config));
                 critter.setDirection(nextDir);
             }
