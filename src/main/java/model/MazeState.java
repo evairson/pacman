@@ -200,7 +200,7 @@ public final class MazeState {
 
                                         if ( config.getCell(critter.currCellI()).southWall() ){ /* Si le ghost se trouve bloqué
                                         contre un mur au sud */
-                                            if ( PacMan.INSTANCE.getPos().x() < critter.getPos().x() ){ /*Si pacman 
+                                            if ( PacMan.INSTANCE.getPos().x() > critter.getPos().x() ){ /*Si pacman 
                                             est toujours à droite du ghost */
                                                 if ( !config.getCell(critter.currCellI()).westWall() ) { /*si le ghost n'est pas 
                                                         bloque a gauche */
@@ -235,6 +235,49 @@ public final class MazeState {
                                         critter.setDirection(nextDir);
                                     }
 
+                            }
+
+                            if (PacMan.INSTANCE.getPos().y() > critter.getPos().y() 
+                                && PacMan.INSTANCE.getPos().x() <critter.getPos().x() ){ //pacman au dessous d'un fantome a gauche
+                                    
+                                if (PacMan.INSTANCE.getPos().y() - critter.getPos().y() <= 1.5
+                                    && PacMan.INSTANCE.getPos().x() - critter.getPos().x() >= -1.5
+                                    && PacMan.INSTANCE.getDirection()==Direction.NORTH){
+                                        
+                                        nextDir = PacMan.INSTANCE.getNextDir();
+                                        critter.setPos(critter.getNextPos(deltaTns, nextDir, config));
+                                        critter.setDirection(nextDir);// le ghost se dirige vers le nord aussi
+
+                                        if ( config.getCell(critter.currCellI()).northWall() ){ /*si le ghost se 
+                                            bloque contre un mur au nord  */
+                                            
+                                            if (PacMan.INSTANCE.getPos().x() < critter.getPos().x()) { // si pac est toujours à gauche du ghost
+
+                                                if ( !config.getCell(critter.currCellI()).eastWall() ){
+                                                    nextDir=Direction.EAST;
+                                                    critter.setPos(critter.getNextPos(deltaTns, nextDir, config));
+                                                    critter.setDirection(nextDir);
+
+                                                }
+                                                else if ( !config.getCell(critter.currCellI()).southWall() ){
+                                                    nextDir=Direction.SOUTH;
+                                                    critter.setPos(critter.getNextPos(deltaTns, nextDir, config));
+                                                    critter.setDirection(nextDir);
+                                                }
+                                                else if ( !config.getCell(critter.currCellI()).westWall() ){
+                                                    nextDir=Direction.WEST;
+                                                    critter.setPos(critter.getNextPos(deltaTns, nextDir, config));
+                                                    critter.setDirection(nextDir);
+                                                }
+                                                else{
+                                                    nextDir = critter.getNextDir();
+                                                    critter.setPos(critter.getNextPos(deltaTns, nextDir, config));
+                                                    critter.setDirection(nextDir);
+                                                }
+                                            }
+                                        }
+                                    }
+                                    
                                 }
                         }
 
