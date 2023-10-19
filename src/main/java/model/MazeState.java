@@ -96,6 +96,84 @@ public final class MazeState {
                 critter.setPos(critter.getNextPos(deltaTns, nextDir, this.config));
                 critter.setDirection(nextDir);
             }
+
+            if ( PacMan.INSTANCE.isEnergized() ){ // Si pacman est en mode energizer (DEBUT)
+
+                
+                
+                if ( PacMan.INSTANCE.getPos().x()==critter.getPos().x() ){ //Si pacman et un fantome sont sur un meme axe vertical
+                    if (PacMan.INSTANCE.getPos().y() > critter.getPos().y() 
+                        && PacMan.INSTANCE.getDirection()==Direction.NORTH ){
+                            nextDir = PacMan.INSTANCE.getNextDir();
+                            critter.setPos(critter.getNextPos(deltaTns, nextDir, config));
+                            critter.setDirection(nextDir);
+
+                    }
+                    if (PacMan.INSTANCE.getPos().y() < critter.getPos().y() 
+                        && PacMan.INSTANCE.getDirection()==Direction.SOUTH ){
+                            nextDir = PacMan.INSTANCE.getNextDir();
+                            critter.setPos(critter.getNextPos(deltaTns, nextDir, config));
+                            critter.setDirection(nextDir);
+
+                    }
+                }
+
+                if ( PacMan.INSTANCE.getPos().y()==critter.getPos().y() ){ //Si pacman et un fantome sont sur un meme axe horizental
+                    if (PacMan.INSTANCE.getPos().x() > critter.getPos().x() 
+                        && PacMan.INSTANCE.getDirection()==Direction.WEST ){
+                            nextDir = PacMan.INSTANCE.getNextDir();
+                            critter.setPos(critter.getNextPos(deltaTns, nextDir, config));
+                            critter.setDirection(nextDir);
+
+                    }
+                    if (PacMan.INSTANCE.getPos().x() < critter.getPos().x() 
+                        && PacMan.INSTANCE.getDirection()==Direction.EAST ){
+                            nextDir = PacMan.INSTANCE.getNextDir();
+                            critter.setPos(critter.getNextPos(deltaTns, nextDir, config));
+                            critter.setDirection(nextDir);
+
+                    }
+                }
+                
+                if ( PacMan.INSTANCE.getPos().y()!=critter.getPos().y()
+                        &&  PacMan.INSTANCE.getPos().x()!=critter.getPos().x() ){ /* si pacman et un fantome
+                             ne sont ni sur un meme axe vertical ni sur un meme axe horizental */
+
+                            if ( PacMan.INSTANCE.getPos().y() < critter.getPos().y() 
+                                && PacMan.INSTANCE.getPos().x() < critter.getPos().x() ){ // cas de pac man au dessus d'un fantome a gauche
+                                
+                                if ( PacMan.INSTANCE.getPos().y() - critter.getPos().y() >= -1
+                                    && PacMan.INSTANCE.getPos().x() - critter.getPos().x() >= -1
+                                    && PacMan.INSTANCE.getDirection()==Direction.SOUTH ) {/*si la différence d'ordonnées 
+                                    entre pacman et le ghost est inférieure ou égale à 3 et pacman se dirige vers le sud */
+                                        
+                                        nextDir = PacMan.INSTANCE.getNextDir();
+                                        critter.setPos(critter.getNextPos(deltaTns, nextDir, config));
+                                        critter.setDirection(nextDir);// le ghost se dirige vers le sud aussi
+
+                                        if ( config.getCell(critter.currCellI()).southWall() ){ /* Si le ghost se trouve bloqué
+                                        contre un mur au sud */
+                                            if ( PacMan.INSTANCE.getPos().x() < critter.getPos().x() ){ /*Si pacman 
+                                            est toujours à gauche du ghost */
+                                                if ( !config.getCell(critter.currCellI()).eastWall() ) { /*si le ghost n'est pas 
+                                                        bloque a droite */
+                                                    nextDir = Direction.EAST;
+                                                    critter.setPos(critter.getNextPos(deltaTns, nextDir, config));
+                                                    critter.setDirection(nextDir);
+                                                }
+                                                else { /*sinon il se dirige vers le nord */
+                                                    nextDir = Direction.NORTH;
+                                                    critter.setPos(critter.getNextPos(deltaTns, nextDir, config));
+                                                    critter.setDirection(nextDir);
+                                                }
+                                            }
+                                        }
+                                    }
+                            }
+                        }
+
+
+            }
         }
 
         // FIXME Pac-Man rules should somehow be in Pacman class

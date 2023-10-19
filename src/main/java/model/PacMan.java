@@ -23,9 +23,9 @@ public final class PacMan implements Critter {
     private Direction direction = Direction.NONE;
     private Direction nextDir = Direction.NONE;
     //private final double speed = 2.;
-    private boolean energized;
+    private boolean energized=true; //FIXME : remettre a false
 
-    static final double TPINTERVAL = 0.035;
+    static final double TPINTERVAL = 0.02;
 
     private PacMan() {
     }
@@ -43,7 +43,7 @@ public final class PacMan implements Critter {
 
     @Override
     public double getSpeed() {
-        return isEnergized() ? 3.5 : 3.;
+        return isEnergized() ? 2.0 : 3.;
     }
 
     public void setPos(RealCoordinates pos) {
@@ -63,7 +63,7 @@ public final class PacMan implements Critter {
         Timer t = new Timer();
         TimerTask task = new TimerTask() {
             public void run() {
-                pacman.energized = false;
+                pacman.energized = true;//FIXME: remettre a false
                 t.cancel();
             }
         };

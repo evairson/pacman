@@ -120,12 +120,8 @@ cellsStates = {(i,j) : -1 for i in range(lines) for j in range(columns)}
 
 
 #Initializes the window
-<<<<<<< HEAD
-window = sg.Window("Test", main_layout,background_color="black")
-=======
 column = [[sg.Column(main_layout,scrollable=True,size=(1280,720))]] #TODO la taille s'adapte aux proportions de l'écran
 window = sg.Window("Test", column,background_color="black",default_element_size=sz)
->>>>>>> origin/develop
 
 #Initializes the second window
 def exportWindow():
