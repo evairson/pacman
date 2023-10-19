@@ -1,90 +1,76 @@
 package geometry;
 
+import config.MazeConfig;
+
 import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.List;
+import java.util.LinkedList;
 import java.util.PriorityQueue;
-import java.util.Set;
+import java.util.Comparator;
 
 public class AStar {
-    public static List<Cell> findShortestPath(MazeConfig maze, RealCoordinates start, RealCoordinates goal) {
-        // Initialisation des listes ouvertes et fermées
-        Set<Cell> closedSet = new HashSet<>();
-        PriorityQueue<Cell> openSet = new PriorityQueue<>(Comparator.comparingDouble(cell -> cell.getF()));
 
-        // Recherche des cellules correspondant aux coordonnées réelles de départ et d'arrêt
-        Cell startCell = maze.getCellAt(start.round());
-        Cell goalCell = maze.getCellAt(goal.round());
-
-        // Mettre la cellule de départ dans la liste ouverte
-        openSet.add(startCell);
-
-        // Initialiser les valeurs G et H de la cellule de départ
-        startCell.setG(0);
-        startCell.setH(heuristic(startCell, goalCell));
-
-        while (!openSet.isEmpty()) {
-            // Sélectionner la cellule avec le coût F le plus bas depuis la liste ouverte
-            Cell current = openSet.poll();
-
-            // Si nous avons atteint la cellule d'objectif, reconstruire le chemin et le retourner
-            if (current.equals(goalCell)) {
-                return reconstructPath(current);
+    static Comparator<Noeud> comparator = new Comparator<Noeud>() {
+        @Override
+        public int compare(Noeud n1, Noeud n2){
+            if(n1.getHeuristique() == n2.getHeuristique()){
+                return 0;
+            } else {
+                return n1.getHeuristique() < n2.getHeuristique() ? -1 : 1;
             }
+        }
+    };
 
-            // Déplacer la cellule courante de la liste ouverte vers la liste fermée
-            closedSet.add(current);
+    public static ArrayList<IntCoordinates> convertToArray(Noeud current, Noeud goal, ArrayList<IntCoordinates> acc){
+        if((current.getCoordinates().equals(goal.getCoordinates())) || current.getParent() == null){
+            return acc;
+        } else {
+            acc.add(current.getCoordinates());
+            return convertToArray(current.getParent(), goal, acc);
+        }
+    }
 
-            // Parcourir les voisins de la cellule courante
-            for (Cell neighbor : getNeighbors(maze, current)) {
-                // Si le voisin est dans la liste fermée, ignorer
-                if (closedSet.contains(neighbor)) {
-                    continue;
-                }
+    public static boolean queueContains(LinkedList<Noeud> queue, Noeud node){
+        for(Noeud n : queue){
+            if(n.getCoordinates().equals(node.getCoordinates())){
+                return true;
+            }
+        }
+        return false;
+    }
 
-                // Calculer le coût G pour le voisin
-                double tentativeG = current.getG() + 1;  // Coût de déplacement égal à 1 (pour un déplacement vers un voisin)
-
-                // Si le voisin n'est pas dans la liste ouverte ou si le nouveau coût G est inférieur
-                if (!openSet.contains(neighbor) || tentativeG < neighbor.getG()) {
-                    // Mettre à jour les valeurs G, H et parent du voisin
-                    neighbor.setG(tentativeG);
-                    neighbor.setH(heuristic(neighbor, goalCell));
-                    neighbor.setParent(current);
-
-                    // Ajouter le voisin à la liste ouverte
-                    openSet.add(neighbor);
+    public static boolean queueContainsAndSmaller(PriorityQueue<Noeud> queue, Noeud node){
+        for(Noeud n : queue){
+            if(n.getCoordinates().equals(node.getCoordinates())){
+                if(n.compareParHeuristique(node) > 0){
+                    return true;
                 }
             }
         }
-
-        // Aucun chemin trouvé, retourner une liste vide
-        return new ArrayList<>();
+        return false;
     }
 
-    private static List<Cell> reconstructPath(Cell current) {
-        List<Cell> path = new ArrayList<>();
-        while (current != null) {
-            path.add(current);
-            current = current.getParent();
+    public static ArrayList<IntCoordinates> shortestPath(Noeud start, Noeud goal, MazeConfig config){
+        LinkedList<Noeud> closedList = new LinkedList<>();
+        PriorityQueue<Noeud> openList = new PriorityQueue<Noeud>(comparator);
+
+        openList.add(start);
+
+        while(!openList.isEmpty()){
+            Noeud u = openList.poll();
+            if(u.getCoordinates().equals(goal.getCoordinates())){
+                return convertToArray(u, start, new ArrayList<IntCoordinates>());
+            }
+            for(Noeud v : u.getVoisins(config)){
+                if(!(queueContains(closedList, v) || queueContainsAndSmaller(openList, v))){
+                    v.setCout(u.getCout() + 1);
+                    v.setHeuristique(v.getCout() + v.manhattanDistance(goal));
+                    openList.add(v);
+                }
+            }
+            System.out.println("derchos " + u);
+            closedList.add(u);
         }
-        return path;
-    }
-
-    private static double heuristic(Cell a, Cell b) {
-        // Utilisez une heuristique simple, par exemple, la distance de Manhattan
-        return Math.abs(a.getX() - b.getX()) + Math.abs(a.getY() - b.getY());
-    }
-
-    private static List<Cell> getNeighbors(MazeConfig maze, Cell cell) {
-        List<Cell> neighbors = new ArrayList<>();
-        int x = cell.getX();
-        int y = cell.getY();
-
-        // Ajoutez ici la logique pour obtenir les voisins de la cellule dans votre configuration de labyrinthe
-        // En fonction de vos murs et de vos coordonnées, vous devrez ajuster cette partie.
-
-        return neighbors;
+        return null;
     }
 }
+
