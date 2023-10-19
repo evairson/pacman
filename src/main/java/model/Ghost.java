@@ -9,7 +9,7 @@ package model;
  *
  */
 
-import GhostsAI.ClydeAI;
+import GhostsAI.*;
 import config.MazeConfig;
 import geometry.IntCoordinates;
 import geometry.RealCoordinates;
@@ -162,7 +162,7 @@ public enum Ghost implements Critter {
     }
     */
 
-    public Direction getNextDir(MazeConfig config){
+    public Direction getNextDir(MazeConfig config, IntCoordinates pacPos){
         switch(this){
             case CLYDE :
                 if(this.isCentered()){
@@ -170,6 +170,13 @@ public enum Ghost implements Critter {
                 } else {
                     return this.direction;
                 }
+            case BLINKY :
+                if (this.isCentered()){
+                    return BlinkyAI.getDirection(config, pacPos, this.currCellI());
+                } else {
+                    return this.direction;
+                }
+
             default : return Direction.NONE;
         }
     }

@@ -49,7 +49,9 @@ public class AStar {
         return false;
     }
 
-    public static ArrayList<IntCoordinates> shortestPath(Noeud start, Noeud goal, MazeConfig config){
+    public static ArrayList<IntCoordinates> shortestPath(IntCoordinates startC, IntCoordinates goalC, MazeConfig config){
+        Noeud start = new Noeud(startC, null);
+        Noeud goal = new Noeud(goalC, null);
         LinkedList<Noeud> closedList = new LinkedList<>();
         PriorityQueue<Noeud> openList = new PriorityQueue<Noeud>(comparator);
 
