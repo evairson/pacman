@@ -182,6 +182,12 @@ public enum Ghost implements Critter {
                 } else {
                     return this.direction;
                 }
+            case INKY :
+                if (this.isCentered()){
+                    return InkyAI.getDirection(config, pacPos, this.currCellI(), pacDir);
+                } else {
+                    return this.direction;
+                }
             default : return Direction.NONE;
         }
     }
