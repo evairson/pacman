@@ -56,6 +56,10 @@ public class PinkyAI {
 
     public static Direction getDirection(MazeConfig config, IntCoordinates pacPos, IntCoordinates ghostPos, Direction pacDir){
         IntCoordinates targetPos = getFrontCell(pacPos, pacDir, config);
-        return BlinkyAI.getDirection(config, targetPos, ghostPos);
+        if(((Math.abs(pacPos.x() - ghostPos.x()) <= 2) && (pacPos.y() == ghostPos.y())) || ((Math.abs(pacPos.y() - ghostPos.y()) <= 2) && (pacPos.x() == ghostPos.x()))) {
+            return BlinkyAI.getDirection(config, pacPos, ghostPos);
+        } else {
+            return BlinkyAI.getDirection(config, targetPos, ghostPos);
+        }
     }
 }
