@@ -58,7 +58,7 @@ public final class PacMan implements Critter {
         return energized;
     }
 
-    public Timer setEnergized() {
+    public void setEnergized() {
         PacMan pacman = this;
         Timer t = new Timer();
         TimerTask task = new TimerTask() {
@@ -69,6 +69,5 @@ public final class PacMan implements Critter {
         };
         this.energized = true;
         t.schedule(task, 10000L);
-        return t;
     }
 }
