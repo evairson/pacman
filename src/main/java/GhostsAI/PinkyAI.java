@@ -6,7 +6,6 @@ import model.Direction;
 
 
 public class PinkyAI {
-
     public static IntCoordinates getFrontCell(IntCoordinates coordinates, Direction dir, MazeConfig config){
         Cell currCell = config.getCell(coordinates);
         switch(dir){

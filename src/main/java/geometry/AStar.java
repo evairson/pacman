@@ -69,7 +69,7 @@ public class AStar {
                     openList.add(v);
                 }
             }
-            System.out.println("derchos " + u);
+            //System.out.println("derchos " + u);
             closedList.add(u);
         }
         return null;
