@@ -21,7 +21,7 @@ import model.PacMan;
 
 public final class CritterGraphicsFactory {
     private final double scale;
-    private final double offsetX = 0.1; //FIXME : très moche lol
+    private final double offsetX = 0.01; //FIXME : très moche lol
     private final double offsetY = 0.05;
 
     public CritterGraphicsFactory(double scale) {
@@ -29,7 +29,7 @@ public final class CritterGraphicsFactory {
     }
     // Méthode qui crée la représentation graphique d'une créature.
     public GraphicsUpdater makeGraphics(Critter critter) {
-        var size = 0.7; // facteur d'echelle de l'image
+        var size = 0.6; // facteur d'echelle de l'image
         var url = (critter instanceof PacMan) ? "pacman.png" :
                 switch ((Ghost) critter) {
                     case BLINKY -> "ghost_blinky.png";

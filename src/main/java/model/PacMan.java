@@ -5,6 +5,7 @@ import geometry.IntCoordinates;
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
+import config.Cell;
 
 import geometry.RealCoordinates;
 
@@ -24,7 +25,7 @@ public final class PacMan implements Critter {
     //private final double speed = 2.;
     private boolean energized;
 
-    static final double TPINTERVAL = 0.03;
+    static final double TPINTERVAL = 0.035;
 
     private PacMan() {
     }
@@ -42,7 +43,7 @@ public final class PacMan implements Critter {
 
     @Override
     public double getSpeed() {
-        return isEnergized() ? 2.5 : 2.1;
+        return isEnergized() ? 3.5 : 3.;
     }
 
     public void setPos(RealCoordinates pos) {
@@ -166,6 +167,18 @@ public final class PacMan implements Critter {
             return this.getPos();
         }
     }
+
+    public boolean canSetDirection(Direction dir, MazeConfig config){
+        Cell currCell = config.getCell(this.currCellI());
+        return switch (dir) {
+            case NORTH -> !currCell.northWall();
+            case SOUTH -> !currCell.southWall();
+            case EAST -> !currCell.eastWall();
+            case WEST -> !currCell.westWall();
+            default -> false;
+        };
+    }
+
 
     public void setNextDir(Direction dir){
         this.nextDir = dir;

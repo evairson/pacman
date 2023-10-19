@@ -82,64 +82,20 @@ public final class MazeState {
          * 3. déléguer certaines repsonsabilités à d'autres méthodes ?
          */
 
-        for (var critter: critters) {
-
+        for (var critter: critters){
             critter.tpToCenter();
             var nextDir = critter.getNextDir();
-            critter.setPos(critter.getNextPos(deltaTns, nextDir, config));
-            critter.setDirection(nextDir);
-            
-            if (PacMan.INSTANCE.isEnergized()) {
-
-                if (PacMan.INSTANCE.getPos().x()==critter.getPos().x()){
-                    if (PacMan.INSTANCE.getPos().y() < critter.getPos().y() 
-                            && PacMan.INSTANCE.getNextDir()==Direction.SOUTH){
-
-                            nextDir = PacMan.INSTANCE.getNextDir();
-                            critter.setPos(critter.getNextPos(deltaTns, nextDir, config));
-                            critter.setDirection(nextDir);
-                        
-                        
-                    }
-                    if (PacMan.INSTANCE.getPos().y() > critter.getPos().y() 
-                        && PacMan.INSTANCE.getNextDir()==Direction.NORTH){
-                            nextDir = PacMan.INSTANCE.getNextDir();
-                            critter.setPos(critter.getNextPos(deltaTns, nextDir, config));
-                            critter.setDirection(nextDir);
-                    }
-            }
-
-
-            if (PacMan.INSTANCE.getPos().y()==critter.getPos().y()){
-
-                if (PacMan.INSTANCE.getPos().x() < critter.getPos().x() 
-                            && PacMan.INSTANCE.getNextDir()==Direction.EAST){
-
-                            nextDir = PacMan.INSTANCE.getNextDir();
-                            critter.setPos(critter.getNextPos(deltaTns, nextDir, config));
-                            critter.setDirection(nextDir);
-                        
-                        
+            if(critter == PacMan.INSTANCE){
+                if(PacMan.INSTANCE.canSetDirection(nextDir, this.config)){
+                    critter.setPos(critter.getNextPos(deltaTns, nextDir, this.config));
+                    critter.setDirection(nextDir);
+                } else {
+                    critter.setPos(critter.getNextPos(deltaTns, critter.getDirection(), this.config));
                 }
-                if (PacMan.INSTANCE.getPos().x() > critter.getPos().x() 
-                        && PacMan.INSTANCE.getNextDir()==Direction.WEST){
-                            nextDir = PacMan.INSTANCE.getNextDir();
-                            critter.setPos(critter.getNextPos(deltaTns, nextDir, config));
-                            critter.setDirection(nextDir);
-                }
+            } else {
+                //critter.setPos(critter.getNextPos(deltaTns, nextDir, this.config));
+                critter.setDirection(nextDir);
             }
-
-        }
-            
-        else {
-
-            critter.tpToCenter();
-            nextDir = critter.getNextDir();
-            critter.setPos(critter.getNextPos(deltaTns, nextDir, config));
-            critter.setDirection(nextDir);
-
-        }
-               
         }
 
         // FIXME Pac-Man rules should somehow be in Pacman class
