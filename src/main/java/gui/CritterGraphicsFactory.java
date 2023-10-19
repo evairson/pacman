@@ -70,13 +70,10 @@ public final class CritterGraphicsFactory {
 
     private String setimgPacman(Critter critter){
         String url;
-        System.out.println("ok");
         if(critter.getDirection()==Direction.NONE || etatPacman=="rond"){
-            System.out.println("rond");
             url = "pacman/pacman-rond.png";
         }
         else{
-            System.out.println("pas rond");
             url = "pacman/"+setimgPacmanMov(critter)+"-"+etatPacman+".png";
         }
         return url;
