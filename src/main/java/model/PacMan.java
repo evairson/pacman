@@ -56,20 +56,21 @@ public final class PacMan implements Critter {
 
     public boolean isEnergized() {
         return energized;
-    } //TODO : handle timeout !
+    } 
 
     public void setEnergized() {
-
         PacMan pacman = this;
         Timer t = new Timer();
         TimerTask task = new TimerTask() {
             public void run() {
                 pacman.energized = false;
+                Ghost.energized = false;
                 t.cancel();
             }
         };
         this.energized = true;
-        t.schedule(task, 10000L);
+        Ghost.energized = true;
+        t.schedule(task, 10000);
     }
 
     //Methods

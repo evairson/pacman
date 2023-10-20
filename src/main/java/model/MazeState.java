@@ -93,7 +93,7 @@ public final class MazeState {
                     critter.setPos(critter.getNextPos(deltaTns, critter.getDirection(), this.config));
                 }
             } else {
-                //critter.setPos(critter.getNextPos(deltaTns, nextDir, this.config));
+                critter.setPos(critter.getNextPos(deltaTns, nextDir, this.config));
                 critter.setDirection(nextDir);
             }
         }

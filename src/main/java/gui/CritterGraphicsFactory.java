@@ -1,14 +1,5 @@
 package gui;
-
-
-import java.beans.EventHandler;
-import javax.swing.plaf.basic.BasicSplitPaneUI.KeyboardUpLeftHandler;
-
 import geometry.RealCoordinates;
-import javafx.util.Duration;
-import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
-import javafx.animation.Timeline;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -35,7 +26,6 @@ import java.util.TimerTask;
 public final class CritterGraphicsFactory {
     private final double scale;
 
-    private String imgPacMan;
     private String etatPacman;
     private int[] etatghost;
     private RealCoordinates pos;
@@ -46,7 +36,6 @@ public final class CritterGraphicsFactory {
 
     public CritterGraphicsFactory(double scale) {
         this.scale = scale;
-        this.imgPacMan = "pacman-droite";
         etatPacman = "rond";
         etatghost = new int[4];
         for(int i =0;i<4;i++){etatghost[i]=1; }
@@ -55,17 +44,9 @@ public final class CritterGraphicsFactory {
     }
 
 
-
     // Choix de l'image de pacman
     private String setimgPacmanMov(Critter critter){
-        imgPacMan = switch(critter.getDirection()){
-            case EAST -> "pacman-droite";
-            case WEST -> "pacman-gauche";
-            case NORTH -> "pacman-haut";
-            case SOUTH -> "pacman-bas";
-            default -> imgPacMan;
-        };
-        return imgPacMan;
+        return "pacman-"+getDirectionString(critter);
     }
 
     private String setimgPacman(Critter critter){
@@ -79,16 +60,34 @@ public final class CritterGraphicsFactory {
         return url;
     }
 
-
-
-    private String setimgghost(Critter critter){
-        String ghost = switch ((Ghost) critter) {
-            case BLINKY -> "ghost-blinky/ghost-blinky-droite";
-            case CLYDE -> "ghost-clyde/ghost-clyde-droite";
-            case INKY -> "ghost-inky/ghost-inky-droite";
-            case PINKY -> "ghost-pinky/ghost-pinky-droite";
+    private String getDirectionString(Critter critter){
+        String direction = switch(critter.getDirection()){
+            case EAST -> "droite";
+            case WEST -> "gauche";
+            case NORTH -> "haut";
+            case SOUTH -> "bas";
+            default -> "droite";
         };
-        return ghost;
+        return direction;
+    }
+
+
+    private String setimgghostNE(Critter critter){
+        String ghost = switch ((Ghost) critter) {
+            case BLINKY -> "ghost-blinky/ghost-blinky-";
+            case CLYDE -> "ghost-clyde/ghost-clyde-";
+            case INKY -> "ghost-inky/ghost-inky-";
+            case PINKY -> "ghost-pinky/ghost-pinky-";
+        };
+        return ghost+getDirectionString(critter);
+    }
+
+    private String setimgghost(Ghost critter, int numghost, String setimgghostNE){
+        if(!critter.isEnergized()) 
+        return setimgghostNE+etatghost[numghost]+".png";
+        else {
+            return "ghost-blue"+etatghost[numghost]+".png";
+        }
     }
 
     private int getnumghost(Critter critter){
@@ -104,14 +103,26 @@ public final class CritterGraphicsFactory {
 
     // Méthode qui crée la représentation graphique d'une créature.
     public GraphicsUpdater makeGraphics(Critter critter) {
+
+        int numghost;
+        String setimgghostNE;
+
+        if(critter instanceof Ghost) {
+            numghost = getnumghost(critter);
+            setimgghostNE = setimgghostNE(critter);}
+        else {
+            numghost = 0; 
+            setimgghostNE = "";
+        }
         
         var size = 0.5; // facteur d'echelle de l'image
+        double taille = scale * size;
         
         var url = (critter instanceof PacMan) ? setimgPacman(critter) :
-                setimgghost(critter)+etatghost[getnumghost(critter)]+".png";
+                setimgghost((Ghost)critter,numghost,setimgghostNE);
         
         // chargement de l'image à partir du fichier url
-        var image = new ImageView(new Image(url, scale * size, scale * size, true, true));
+        var image = new ImageView(new Image(url, taille, taille, false, false));
         return new GraphicsUpdater() {
             @Override
             public void update() {
@@ -134,7 +145,7 @@ public final class CritterGraphicsFactory {
                         };
                         pos = critter.getPos();
                     }
-                    image.setImage(new Image(setimgPacman(critter), scale * size, scale * size, true, true));
+                    image.setImage(new Image(setimgPacman(critter), taille, taille, false, false));
                 }
 
                 if((critter instanceof Ghost) && etatTimeur[getnumghost(critter)]==0){
@@ -144,7 +155,7 @@ public final class CritterGraphicsFactory {
                         public void run() {
                             if(etatghost[getnumghost(critter)] == 1) {etatghost[getnumghost(critter)] = 2; }
                             else { etatghost[getnumghost(critter)] = 1; }
-                            image.setImage(new Image(setimgghost(critter)+etatghost[getnumghost(critter)]+".png", scale * size, scale * size, true, true));
+                            image.setImage(new Image(setimgghost((Ghost)critter,numghost,setimgghostNE), taille, taille, false, false));
                             etatTimeur[getnumghost(critter)]=0;
                             t.cancel();
                             }
