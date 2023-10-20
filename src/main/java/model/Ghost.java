@@ -22,7 +22,7 @@ public enum Ghost implements Critter {
 
     private RealCoordinates pos;
     private Direction direction;
-    private final double speed = 1.35;
+    private final double speed = 1.70;
     private boolean energized;
 
     private static final double TPINTERVAL = 0.04;
