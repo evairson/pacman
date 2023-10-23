@@ -276,7 +276,10 @@ for i in range(lines):
                 if wallsStates[i,j,o]:
                     output[i][j][o] = "|"
                 else:
-                    output[i][j][o] = " "
+                    if j == columns - 1:
+                        output[i][j][o] = "  "
+                    else:
+                        output[i][j][o] = " "
             if o == 3:
                 if wallsStates[i,j,o]:
                     output[i][j][o] = "| "
@@ -288,7 +291,7 @@ for i in range(lines):
     for j in range(columns):
         outstr += "+" + output[i][j][0]
     outstr += "+"
-    outstr += "\n"
+    outstr += "*\n"
     for j in range(columns):
         outstr += output[i][j][3]
         if cellsStates[i,j] == 0:
@@ -298,11 +301,11 @@ for i in range(lines):
         else:
             outstr += "  "
         outstr += output[i][j][2]
-    outstr += "\n"
+    outstr += "*\n"
     if i == lines-1:
         for j in range(columns):
             outstr+= "+" + output[i][j][1]
-        outstr+="+"
+        outstr+="+*"
 
 newstr = outstr.replace("||","|")
 newstr += "\n"
