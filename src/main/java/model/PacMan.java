@@ -27,7 +27,7 @@ public final class PacMan implements Critter {
 
     static final double TPINTERVAL = 0.035;
 
-    private PacMan() {
+    public PacMan() {
     }
 
     public static final PacMan INSTANCE = new PacMan();
