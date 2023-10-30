@@ -27,9 +27,9 @@ public final class CritterGraphicsFactory {
     private final double scale;
 
     private String etatPacman;
-    private int[] etatghost;
+    private static int etatghost;
     private RealCoordinates pos;
-    private int[] etatTimeur;
+    private static long time;
     private final double offsetX = 0.01; //FIXME : très moche lol
     private final double offsetY = 0.05;
 
@@ -38,17 +38,16 @@ public final class CritterGraphicsFactory {
     }
 
     public void setEtatghost(int i, int n){
-        etatghost[n] = i;
+        etatghost = i;
     }
 
 
     public CritterGraphicsFactory(double scale) { // constructeur
         this.scale = scale;
         etatPacman = "rond";
-        etatghost = new int[4];
-        for(int i =0;i<4;i++){etatghost[i]=1; }
+        etatghost = 1;
         pos = new RealCoordinates(0, 0);
-        etatTimeur = new int[4];
+        time = System.currentTimeMillis();
     }
 
 
@@ -94,11 +93,11 @@ public final class CritterGraphicsFactory {
     // Choix de l'image des fantômes
     public String setimgghost(Ghost critter, int numghost, String setimgghostNE){
         if(!critter.isEnergized()) {
-            return setimgghostNE+etatghost[numghost]+".png";
+            return setimgghostNE+etatghost+".png";
         }
 
         else {
-            return "ghost-blue"+etatghost[numghost]+".png";
+            return "ghost-blue"+etatghost+".png";
         }
         
     }
@@ -163,20 +162,15 @@ public final class CritterGraphicsFactory {
                 }
 
                 //changer image fantôme
-                if((critter instanceof Ghost) && etatTimeur[getnumghost(critter)]==0){
-                    Timer t = new Timer();
-                    etatTimeur[getnumghost(critter)] = 1;
-                    TimerTask task = new TimerTask() {
-                        public void run() {
-                            if(etatghost[getnumghost(critter)] == 1) {etatghost[getnumghost(critter)] = 2; }
-                            else { etatghost[getnumghost(critter)] = 1; }
-                            image.setImage(new Image(setimgghost((Ghost)critter,numghost,setimgghostNE), taille, taille, false, false));
-                            etatTimeur[getnumghost(critter)]=0;
-                            t.cancel();
-                            }
-                    };
-                    t.schedule(task, 500);
+                if((critter instanceof Ghost)){
+                    if(critter==Ghost.BLINKY && System.currentTimeMillis()-time>500){
+                        time = System.currentTimeMillis(); 
+                        if(etatghost == 1) {etatghost = 2; }
+                        else { etatghost = 1; }
                     }
+                    image.setImage(new Image(setimgghost((Ghost)critter,numghost,setimgghostNE), taille, taille, false, false));
+                        
+                }
             }
 
             @Override
