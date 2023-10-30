@@ -8,8 +8,7 @@ import model.Ghost;
 import model.PacMan;
 import model.Direction;
 import java.lang.Math;
-import java.util.Timer;
-import java.util.TimerTask;
+
 
 /**
  * Classe qui crée la représentation graphique de Pac-Man et des fantômes.
@@ -84,20 +83,19 @@ public final class CritterGraphicsFactory {
             case PINKY -> "ghost-pinky/ghost-pinky-";
         };
         return ghost;
+
     }
 
     public String setimgghostNE(Critter critter){ //avec direction
         return setimgghostNEb(critter)+getDirectionString(critter);
     }
 
-    // Choix de l'image des fantômes
-    public String setimgghost(Ghost critter, int numghost, String setimgghostNE){
-        if(!critter.isEnergized()) {
-            return setimgghostNE+etatghost+".png";
-        }
-
+    private String setimgghost(Ghost critter, int numghost, String setimgghostNE){
+        if(!critter.isEnergized()) 
+        return setimgghostNE+etatghost+".png";
         else {
             return "ghost-blue"+etatghost+".png";
+
         }
         
     }
@@ -161,7 +159,9 @@ public final class CritterGraphicsFactory {
                     image.setImage(new Image(setimgPacman(critter), taille, taille, false, false));
                 }
 
-                //changer image fantôme
+
+                 //changer image fantôme
+
                 if((critter instanceof Ghost)){
                     if(critter==Ghost.BLINKY && System.currentTimeMillis()-time>500){
                         time = System.currentTimeMillis(); 
