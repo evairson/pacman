@@ -25,7 +25,7 @@ public final class PacMan implements Critter {
     private final double speed = 2.;
     private boolean energized; //FIXME : remettre a false
 
-    static final double TPINTERVAL = 0.02;
+    static final double TPINTERVAL = 0.1;
 
     private PacMan() {
     }
@@ -108,6 +108,7 @@ public final class PacMan implements Critter {
         RealCoordinates currCell = this.currCellR();
         if (this.isGoingToCenter() && this.getPos().dist(currCell) < TPINTERVAL) {
             this.setPos(currCell);
+            System.out.println(this.currCellR());
         }
     }
 
