@@ -90,7 +90,7 @@ public final class CritterGraphicsFactory {
         return setimgghostNEb(critter)+getDirectionString(critter);
     }
 
-    private String setimgghost(Ghost critter, int numghost, String setimgghostNE){
+    public String setimgghost(Ghost critter, int numghost, String setimgghostNE){
         if(!critter.isEnergized()) 
         return setimgghostNE+etatghost+".png";
         else {
