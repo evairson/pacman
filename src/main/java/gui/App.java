@@ -70,21 +70,21 @@ public class App extends Application {
 
         gameScene.setOnKeyPressed(pacmanController::keyPressedHandler);
         gameScene.setOnKeyReleased(pacmanController::keyReleasedHandler);
+
         var maze = new MazeState(MazeConfig.makeExampleTxt());
 
         //Récupère la taille de l'écran
         Rectangle2D screenBounds = Screen.getPrimary().getBounds();
 
-
         //Adapte la taille de l'écran en fonction du nombre de lignes et de colonnes, ainsi que de la taille de l'écran
         double widthScale = Math.floor(screenBounds.getWidth() / maze.getWidth())/10.0;
         double heightScale = Math.floor(screenBounds.getHeight() / maze.getHeight())/10.0;
-        double scale = Math.min((int)widthScale,(int)heightScale) * 10.0 - 3;
-
-
-
+        double scale = Math.min((int)widthScale,(int)heightScale) * 10.0 - 5;
 
         var gameView = new GameView(maze, root, scale);
+
+        var animationController = new AnimationController(gameView.createAnimationTimer());
+        pacmanController.setAnimationController(animationController);
 
         /**
          * Ces 3 dernières lignes permette
@@ -98,7 +98,6 @@ public class App extends Application {
         //Empeche de resize la fenetre
         primaryStage.setResizable(false);
 
-
         //Permet d'enlever la barre du haut (à voir pour la suite n'ayant pas fait de menu d'options in game ça m'a l'air complexe à rajouter de suite)
         primaryStage.initStyle(StageStyle.UNDECORATED);
 
@@ -106,8 +105,6 @@ public class App extends Application {
         var mainMenu = new MainMenu();
         primaryStage.setScene(mainMenu.startMenu(primaryStage,screenBounds.getWidth(),screenBounds.getHeight(),gameScene));
         primaryStage.show();
-//        primaryStage.setScene(gameScene);
-//        primaryStage.show();
-        gameView.animate();
+        animationController.getAnimationTimer().start();
     }
 }

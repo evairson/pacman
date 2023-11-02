@@ -38,13 +38,18 @@ public class MainMenu {
         startButton.setWrapText(true);
         startButton.setStyle("-fx-font-size: 2em;-fx-border-color: black");
         startButton.setOnAction(event -> {
-            primaryStage.setScene(gameScene); //TODO doit être mis au milieu de l'écran en non plein écran
+            primaryStage.setScene(gameScene);
+
+            //Permet de centrer la fenêtre de jeu dynamiquement par rapport à la taille de l'écran et la taille de la fenêtre de jeu
+            primaryStage.setX((width - primaryStage.getWidth()) / 2);
+            primaryStage.setY((height - primaryStage.getHeight()) / 2);
+
             primaryStage.show();
         });
 
         Button stopButton = new Button("Quitter");
         stopButton.setWrapText(true);
-        stopButton.setStyle("-fx-font-size: 2em;-fx-border-color: black"); //TODO rendre plus joli le code en factorisant
+        stopButton.setStyle("-fx-font-size: 2em;-fx-border-color: black");
         stopButton.setOnAction(event -> System.exit(0));
 
 
@@ -56,7 +61,7 @@ public class MainMenu {
         VBox vbox = new VBox();
         vbox.setSpacing(20);
         vbox.getChildren().addAll(startButton,stopButton);
-        vbox.setAlignment(Pos.TOP_CENTER); //TODO rendre les 2 vbox plus belles en les fusionnant
+        vbox.setAlignment(Pos.TOP_CENTER);
 
         VBox vbox2 = new VBox();
         vbox2.getChildren().add(logo);

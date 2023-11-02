@@ -58,8 +58,8 @@ public class GameView {
         for (var critter : maze.getCritters()) addGraphics(critterFactory.makeGraphics(critter));
     }
     // Méthode pour démarrer l'animation
-    public void animate() {
-        new AnimationTimer() {
+    public AnimationTimer createAnimationTimer() {
+        return new AnimationTimer() {
             long last = 0;
 
             @Override
@@ -75,6 +75,6 @@ public class GameView {
                 }
                 last = now;
             }
-        }.start();
+        };
     }
 }
