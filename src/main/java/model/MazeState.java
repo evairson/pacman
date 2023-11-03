@@ -13,8 +13,10 @@ package model;
 import geometry.*;
 import config.MazeConfig;
 import config.Cell.Content;
+import GhostsAI.*;
 
 import java.sql.SQLOutput;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -95,9 +97,31 @@ public final class MazeState {
                     critter.setPos(critter.getNextPos(deltaTns, critter.getDirection(), this.config));
                 }
             } else {
-                var nextDir = ((Ghost) critter).getNextDir(this.config, PacMan.INSTANCE.currCellI(), PacMan.INSTANCE.getDirection());
-                critter.setPos(critter.getNextPos(deltaTns, nextDir, this.config));
-                critter.setDirection(nextDir);
+
+                if ( PacMan.INSTANCE.isEnergized() ){
+                    ArrayList<IntCoordinates> cheminDeFuite=RunAwayAI.fuirDePacMan(critter.currCellI(), PacMan.INSTANCE.getPos().round(), config);
+                    if(cheminDeFuite!=null && !cheminDeFuite.isEmpty()){
+                        IntCoordinates prochaineEtape=cheminDeFuite.get(0);
+
+                        var nextDir=RunAwayAI.decideDirection(critter.currCellI(), prochaineEtape);
+                        critter.setPos(critter.getNextPos(deltaTns, nextDir, this.config));
+                        critter.setDirection(nextDir);
+
+                        cheminDeFuite.remove(0);
+
+                    }
+                    
+                    
+                }
+                else{
+                
+                    var nextDir = ((Ghost) critter).getNextDir(this.config, PacMan.INSTANCE.currCellI(), PacMan.INSTANCE.getDirection());
+                    critter.setPos(critter.getNextPos(deltaTns, nextDir, this.config));
+                    critter.setDirection(nextDir);
+                }
+
+                
+                
             }
 
             
