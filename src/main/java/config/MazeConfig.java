@@ -80,7 +80,7 @@ public class MazeConfig {
     public static MazeConfig txtToMaze(String filePath) throws IOException {
         List<String> lines = Files.readAllLines(Paths.get(filePath));
         int height = lines.size()-5; // les 5 dernières lignes du .txt servent aux positions des personnages
-        int width = 2 * (lines.get(0).length()/4) + 1; // les cases du tableau sont alternativement de largeur 1 et 3
+        int width = 2 * ((lines.get(0).length()-1)/4) + 1; // les cases du tableau sont alternativement de largeur 1 et 3
         String[] linesArray = lines.toArray(new String[0]);
 
         String[][] lab = new String[height][width]; // on parse les lignes en tableau de String
@@ -131,15 +131,15 @@ public class MazeConfig {
      *  1. Définir une structure de fichier texte qui représente le labyrinthe, et des caractères pour représenter les
      *     différents types de cellules. Par exemple, le fichier suivant pourrait représenter un labyrinthe :
      *     <pre>
-     *         +---+---+---+---+---+---+
-     *         | .   .   . | .   .   . |
-     *         +---+---+   +   +---+   +
-     *         | .   . | .   . | . | . |
-     *         +   +   +   +   +   +   + 
-     *         | .   .   . | . | .   . |
-     *         +   +   +   +   +   +   +
-     *         | . | .   . | .   . | . |
-     *         +---+---+---+---+---+---+
+     *         +---+---+---+---+---+---+*
+     *         | .   .   . | .   .   . |*
+     *         +---+---+   +   +---+   +*
+     *         | .   . | .   . | . | . |*
+     *         +   +   +   +   +   +   +*
+     *         | .   .   . | . | .   . |*
+     *         +   +   +   +   +   +   +*
+     *         | . | .   . | .   . | . |*
+     *         +---+---+---+---+---+---+*
      *         PAC0,0
      *         BLK0,1
      *         PIK2,2
@@ -154,6 +154,7 @@ public class MazeConfig {
      *             <li> ' . ' pour les points </li>
      *             <li> '   ' pour les cases vides </li>
      *             <li> ' E ' le Xanax de Pacman (pour ceux qui ont la réf xd) </li>
+     *             <li> '*' indique la fin d'une ligne du labyrinthe </li>
      *          </ul>
      *          En dessous du labyrinthe sont indiquées les coordonnées de départ de :
      *          <ul>
