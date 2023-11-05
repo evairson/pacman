@@ -47,9 +47,9 @@ public final class MazeState {
                 PINKY, config.getPinkyPos().toRealCoordinates(1.0)
         );
         resetCritters();
-        System.out.println(config.getCell(new IntCoordinates(0, 0)).eastWall());
-        System.out.println(new Noeud(new IntCoordinates(0, 0), null).getVoisins(config));
-        System.out.println(AStar.shortestPath(new IntCoordinates(0, 0), new IntCoordinates(9, 6), config));
+//        System.out.println(config.getCell(new IntCoordinates(0, 0)).eastWall());
+//        System.out.println(new Noeud(new IntCoordinates(0, 0), null).getVoisins(config));
+//        System.out.println(AStar.shortestPath(new IntCoordinates(0, 0), new IntCoordinates(9, 6), config));
     }
 
     public List<Critter> getCritters() {
@@ -95,7 +95,7 @@ public final class MazeState {
                     critter.setPos(critter.getNextPos(deltaTns, critter.getDirection(), this.config));
                 }
             } else {
-                var nextDir = ((Ghost) critter).getNextDir(this.config, PacMan.INSTANCE.currCellI(), PacMan.INSTANCE.getDirection());
+                var nextDir = ((Ghost) critter).getNextDir(this.config, PacMan.INSTANCE.currCellI(), PacMan.INSTANCE.getDirection(), PacMan.INSTANCE.isEnergized());
                 critter.setPos(critter.getNextPos(deltaTns, nextDir, this.config));
                 critter.setDirection(nextDir);
             }
