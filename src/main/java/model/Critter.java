@@ -25,6 +25,7 @@ public interface Critter {
     void setPos(RealCoordinates realCoordinates);
 
     void setDirection(Direction direction);
+    
 
     //Methods
 

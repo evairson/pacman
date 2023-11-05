@@ -27,7 +27,7 @@ public final class PacMan implements Critter {
 
     static final double TPINTERVAL = 0.1;
 
-    private PacMan() {
+    public PacMan() {
     }
 
     public static final PacMan INSTANCE = new PacMan();
@@ -56,20 +56,21 @@ public final class PacMan implements Critter {
 
     public boolean isEnergized() {
         return energized;
-    } //TODO : handle timeout !
+    } 
 
-    public Timer setEnergized() {
+    public void setEnergized() {
         PacMan pacman = this;
         Timer t = new Timer();
         TimerTask task = new TimerTask() {
             public void run() {
                 pacman.energized = false;
+                Ghost.energized = false;
                 t.cancel();
             }
         };
         this.energized = true;
-        t.schedule(task, 10000L);
-        return t;
+        Ghost.energized = true;
+        t.schedule(task, 10000);
     }
 
     //Methods

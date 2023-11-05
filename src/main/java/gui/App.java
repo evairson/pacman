@@ -81,6 +81,7 @@ public class App extends Application {
         double widthScale = Math.floor(screenBounds.getWidth() / maze.getWidth())/10.0;
         double heightScale = Math.floor(screenBounds.getHeight() / maze.getHeight())/10.0;
         double scale = Math.min((int)widthScale,(int)heightScale) * 10.0 - 3;
+        System.out.println(scale);
 
         var gameView = new GameView(maze, root, scale);
 

@@ -43,6 +43,10 @@ public enum Ghost implements Critter {
         return this.speed;
     }
 
+    public boolean isEnergized() {
+        return energized;
+    }
+
     @Override
     public void setPos(RealCoordinates pos) { this.pos = pos; }
 
@@ -142,25 +146,6 @@ public enum Ghost implements Critter {
             return this.pos;
         }
     }
-
-    /*
-    //TODO : faire en sorte que le choix de direction soit cohérent avec la case sur laquelle le ghost se situe.
-    // L'implémentation de getNextDir doit évidemment changer selon le ghost concerné et appellera les classes IA quand elles seront définies.
-    public Direction getNextDir(){ // test implementation
-        if(this.isCentered()){
-            Random rd = new Random();
-            int n = rd.nextInt(4);
-            return switch (n) {
-                case 0 -> Direction.SOUTH;
-                case 1 -> Direction.NORTH;
-                case 2 -> Direction.EAST;
-                default -> Direction.WEST;
-            };
-        } else {
-            return this.direction;
-        }
-    }
-    */
 
     public Direction getNextDir(MazeConfig config, IntCoordinates pacPos, Direction pacDir, Boolean energized){
         if (energized){
