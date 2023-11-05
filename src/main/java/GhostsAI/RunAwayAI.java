@@ -59,11 +59,11 @@ public class RunAwayAI {
     }
 
     public static Direction getDirection(MazeConfig config, IntCoordinates pacPos, IntCoordinates ghostPos){
-        ArrayList<IntCoordinates> path = voisins_plus_proches_des_plus_loins(ghostPos, pacPos, config);
+        ArrayList<IntCoordinates> path = voisins_plus_proches_des_plus_loins(pacPos, ghostPos, config);
         int pathLen = path.size();
         IntCoordinates nextPos = path.get(pathLen-1);
         return BlinkyAI.whichDir(ghostPos, nextPos);
     }
-    
+
     
 }
