@@ -9,7 +9,7 @@ import GhostsAI.BlinkyAI;
 public class RunAwayAI {
 
     public static ArrayList<IntCoordinates> voisins_les_plus_loins(IntCoordinates PacmanPos , IntCoordinates GhostPos 
-    , MazeConfig config ){
+    , MazeConfig config ){//on choisit parmi les 4 cases voisines du ghost , celles qui sont les plus éloignées du pacman 
 
         ArrayList<IntCoordinates> voisins_plus_loins = new ArrayList<>();
         
@@ -36,6 +36,8 @@ public class RunAwayAI {
 
     public static ArrayList<IntCoordinates> voisins_plus_proches_des_plus_loins(IntCoordinates PacmanPos , 
     IntCoordinates GhostPos , MazeConfig config){
+        //parmi les cases les plus éloignées du pacman ,on choisit celles qui sont les plus proches du ghost
+
         ArrayList<IntCoordinates> voisins_plus_loins=voisins_les_plus_loins(PacmanPos, GhostPos, config);
 
         int min = Integer.MAX_VALUE;
@@ -59,6 +61,7 @@ public class RunAwayAI {
     }
 
     public static Direction getDirection(MazeConfig config, IntCoordinates pacPos, IntCoordinates ghostPos){
+        //on choisit la direction adéquate selon la position à suivre
         ArrayList<IntCoordinates> path = voisins_plus_proches_des_plus_loins(pacPos, ghostPos, config);
         int pathLen = path.size();
         IntCoordinates nextPos = path.get(pathLen-1);
