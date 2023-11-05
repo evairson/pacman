@@ -108,7 +108,7 @@ public final class PacMan implements Critter {
         RealCoordinates currCell = this.currCellR();
         if (this.isGoingToCenter() && this.getPos().dist(currCell) < TPINTERVAL) {
             this.setPos(currCell);
-            System.out.println(this.currCellR());
+//            System.out.println(this.currCellR());
         }
     }
 

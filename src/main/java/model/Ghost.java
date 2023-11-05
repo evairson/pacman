@@ -162,33 +162,42 @@ public enum Ghost implements Critter {
     }
     */
 
-    public Direction getNextDir(MazeConfig config, IntCoordinates pacPos, Direction pacDir){
-        switch(this){
-            case CLYDE :
-                if(this.isCentered()){
-                    return ClydeAI.getDirection(config, this.currCellI(), this.direction);
-                } else {
-                    return this.direction;
-                }
-            case BLINKY :
-                if (this.isCentered()){
-                    return BlinkyAI.getDirection(config, pacPos, this.currCellI());
-                } else {
-                    return this.direction;
-                }
-            case PINKY :
-                if (this.isCentered()){
-                    return PinkyAI.getDirection(config, pacPos, this.currCellI(), pacDir);
-                } else {
-                    return this.direction;
-                }
-            case INKY :
-                if (this.isCentered()){
-                    return InkyAI.getDirection(config, pacPos, this.currCellI(), pacDir);
-                } else {
-                    return this.direction;
-                }
-            default : return Direction.NONE;
+    public Direction getNextDir(MazeConfig config, IntCoordinates pacPos, Direction pacDir, Boolean energized){
+        if (energized){
+            if (this.isCentered()) {
+                return RunAwayAI.getDirection(config, pacPos, this.currCellI());
+            } else {
+                return this.direction;
+            }
+        } else {
+            switch (this) {
+                case CLYDE:
+                    if (this.isCentered()) {
+                        return ClydeAI.getDirection(config, this.currCellI(), this.direction);
+                    } else {
+                        return this.direction;
+                    }
+                case BLINKY:
+                    if (this.isCentered()) {
+                        return BlinkyAI.getDirection(config, pacPos, this.currCellI());
+                    } else {
+                        return this.direction;
+                    }
+                case PINKY:
+                    if (this.isCentered()) {
+                        return PinkyAI.getDirection(config, pacPos, this.currCellI(), pacDir);
+                    } else {
+                        return this.direction;
+                    }
+                case INKY:
+                    if (this.isCentered()) {
+                        return InkyAI.getDirection(config, pacPos, this.currCellI(), pacDir);
+                    } else {
+                        return this.direction;
+                    }
+                default:
+                    return Direction.NONE;
+            }
         }
     }
 }
