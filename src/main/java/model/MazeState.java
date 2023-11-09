@@ -10,10 +10,9 @@ package model;
  * - la position initiale de chaque élément du labyrinthe
  */
 
+import geometry.*;
 import config.MazeConfig;
 import config.Cell.Content;
-import geometry.IntCoordinates;
-import geometry.RealCoordinates;
 
 import java.sql.SQLOutput;
 import java.util.List;
@@ -84,8 +83,8 @@ public final class MazeState {
 
         for (var critter: critters){
             critter.tpToCenter();
-            var nextDir = critter.getNextDir();
             if(critter == PacMan.INSTANCE){
+                var nextDir = ((PacMan) critter).getNextDir();
                 if(PacMan.INSTANCE.canSetDirection(nextDir, this.config)){
                     critter.setPos(critter.getNextPos(deltaTns, nextDir, this.config));
                     critter.setDirection(nextDir);
@@ -93,6 +92,7 @@ public final class MazeState {
                     critter.setPos(critter.getNextPos(deltaTns, critter.getDirection(), this.config));
                 }
             } else {
+                var nextDir = ((Ghost) critter).getNextDir(this.config, PacMan.INSTANCE.currCellI(), PacMan.INSTANCE.getDirection(), PacMan.INSTANCE.isEnergized());
                 critter.setPos(critter.getNextPos(deltaTns, nextDir, this.config));
                 critter.setDirection(nextDir);
             }

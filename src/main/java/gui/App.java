@@ -37,6 +37,8 @@ public class App extends Application {
         var root = new Pane();
         // Scene est un objet qui contient tous les éléments graphiques (ça correspond à la fenêtre qui sera affichée)
         var gameScene = new Scene(root);
+        var config = MazeConfig.makeExampleTxt();
+
         // PacmanController est un listener d'événements clavier (ça récupère les touches promptées par l'user)
         var pacmanController = new PacmanController();
 
@@ -80,9 +82,6 @@ public class App extends Application {
         double heightScale = Math.floor(screenBounds.getHeight() / maze.getHeight())/10.0;
         double scale = Math.min((int)widthScale,(int)heightScale) * 10.0 - 3;
         System.out.println(scale);
-
-
-
 
         var gameView = new GameView(maze, root, scale);
 

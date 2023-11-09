@@ -9,6 +9,7 @@ package model;
  *
  */
 
+import GhostsAI.*;
 import config.MazeConfig;
 import geometry.IntCoordinates;
 import geometry.RealCoordinates;
@@ -146,20 +147,42 @@ public enum Ghost implements Critter {
         }
     }
 
-    //TODO : faire en sorte que le choix de direction soit cohérent avec la case sur laquelle le ghost se situe.
-    // L'implémentation de getNextDir doit évidemment changer selon le ghost concerné et appellera les classes IA quand elles seront définies.
-    public Direction getNextDir(){ // test implementation
-        if(this.isCentered()){
-            Random rd = new Random();
-            int n = rd.nextInt(4);
-            return switch (n) {
-                case 0 -> Direction.SOUTH;
-                case 1 -> Direction.NORTH;
-                case 2 -> Direction.EAST;
-                default -> Direction.WEST;
-            };
+    public Direction getNextDir(MazeConfig config, IntCoordinates pacPos, Direction pacDir, Boolean energized){
+        if (energized){
+            if (this.isCentered()) {
+                return RunAwayAI.getDirection(config, pacPos, this.currCellI());
+            } else {
+                return this.direction;
+            }
         } else {
-            return this.direction;
+            switch (this) {
+                case CLYDE:
+                    if (this.isCentered()) {
+                        return ClydeAI.getDirection(config, this.currCellI(), this.direction);
+                    } else {
+                        return this.direction;
+                    }
+                case BLINKY:
+                    if (this.isCentered()) {
+                        return BlinkyAI.getDirection(config, pacPos, this.currCellI());
+                    } else {
+                        return this.direction;
+                    }
+                case PINKY:
+                    if (this.isCentered()) {
+                        return PinkyAI.getDirection(config, pacPos, this.currCellI(), pacDir);
+                    } else {
+                        return this.direction;
+                    }
+                case INKY:
+                    if (this.isCentered()) {
+                        return InkyAI.getDirection(config, pacPos, this.currCellI(), pacDir);
+                    } else {
+                        return this.direction;
+                    }
+                default:
+                    return Direction.NONE;
+            }
         }
     }
 }
