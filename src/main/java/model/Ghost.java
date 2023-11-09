@@ -24,8 +24,19 @@ public enum Ghost implements Critter {
     private Direction direction;
     private final double speed = 1.3;
     public static boolean energized;
+    private RealCoordinates ghostHouse;
+    private boolean alive = true;
 
     private static final double TPINTERVAL = 0.02;
+
+    public boolean goToHome(PacMan p){
+        RealCoordinates ghost = this.getPos();
+        if (ghost.x() >= p.getPos().x()-0.25 && ghost.x() <= p.getPos().x()+0.25 && ghost.y() >=p.getPos().y()-0.25 && ghost.y() <=p.getPos().y()+0.25 && p.isEnergized()){
+            this.alive = false;
+            return true;
+        }
+        return false;
+    }
 
     // Getters/Setters
     @Override
@@ -107,43 +118,49 @@ public enum Ghost implements Critter {
 
 
     public RealCoordinates getNextPos(long deltaTns, Direction dir, MazeConfig config){
-        if(this.isCenteredDir(dir)){
-            RealCoordinates nextPos = // Calcul de la position suivante
-                    getPos().plus((switch(dir){
-                        case NONE -> RealCoordinates.ZERO;
-                        case NORTH -> RealCoordinates.NORTH_UNIT;
-                        case EAST -> RealCoordinates.EAST_UNIT;
-                        case SOUTH -> RealCoordinates.SOUTH_UNIT;
-                        case WEST -> RealCoordinates.WEST_UNIT;}).times(this.getSpeed() * deltaTns * 1E-9));
-            switch(dir){ // Ajustement en fonction des murs, on ne veut pas dépasser un mur
-                case WEST :
-                    if(config.getCell(this.currCellI()).westWall()){
-                        return new RealCoordinates(Math.max(nextPos.x(), Math.floor(this.pos.x())), this.pos.y());
-                    } else {
-                        return nextPos;
-                    }
-                case EAST :
-                    if(config.getCell(this.currCellI()).eastWall()){
-                        return new RealCoordinates(Math.min(nextPos.x(), Math.ceil(this.pos.x())), this.pos.y());
-                    } else {
-                        return nextPos;
-                    }
-                case NORTH :
-                    if(config.getCell(this.currCellI()).northWall()){
-                        return new RealCoordinates(this.pos.x(), Math.max(nextPos.y(), Math.floor(this.pos.y())));
-                    } else {
-                        return nextPos;
-                    }
-                case SOUTH :
-                    if(config.getCell(this.currCellI()).southWall()){
-                        return new RealCoordinates(this.pos.x(), Math.min(nextPos.y(), Math.ceil(this.pos.y())));
-                    } else {
-                        return nextPos;
-                    }
-                default : return this.pos;
+        if (goToHome(PacMan.INSTANCE)) {
+            return new RealCoordinates(0,0);
+        }else {
+            if (this.isCenteredDir(dir)) {
+                RealCoordinates nextPos = // Calcul de la position suivante
+                        getPos().plus((switch (dir) {
+                            case NONE -> RealCoordinates.ZERO;
+                            case NORTH -> RealCoordinates.NORTH_UNIT;
+                            case EAST -> RealCoordinates.EAST_UNIT;
+                            case SOUTH -> RealCoordinates.SOUTH_UNIT;
+                            case WEST -> RealCoordinates.WEST_UNIT;
+                        }).times(this.getSpeed() * deltaTns * 1E-9));
+                switch (dir) { // Ajustement en fonction des murs, on ne veut pas dépasser un mur
+                    case WEST:
+                        if (config.getCell(this.currCellI()).westWall()) {
+                            return new RealCoordinates(Math.max(nextPos.x(), Math.floor(this.pos.x())), this.pos.y());
+                        } else {
+                            return nextPos;
+                        }
+                    case EAST:
+                        if (config.getCell(this.currCellI()).eastWall()) {
+                            return new RealCoordinates(Math.min(nextPos.x(), Math.ceil(this.pos.x())), this.pos.y());
+                        } else {
+                            return nextPos;
+                        }
+                    case NORTH:
+                        if (config.getCell(this.currCellI()).northWall()) {
+                            return new RealCoordinates(this.pos.x(), Math.max(nextPos.y(), Math.floor(this.pos.y())));
+                        } else {
+                            return nextPos;
+                        }
+                    case SOUTH:
+                        if (config.getCell(this.currCellI()).southWall()) {
+                            return new RealCoordinates(this.pos.x(), Math.min(nextPos.y(), Math.ceil(this.pos.y())));
+                        } else {
+                            return nextPos;
+                        }
+                    default:
+                        return this.pos;
+                }
+            } else {
+                return this.pos;
             }
-        } else {
-            return this.pos;
         }
     }
 
