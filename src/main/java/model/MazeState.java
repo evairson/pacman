@@ -49,9 +49,6 @@ public final class MazeState {
                 PINKY, config.getPinkyPos().toRealCoordinates(1.0)
         );
         resetCritters();
-        System.out.println(config.getCell(new IntCoordinates(0, 0)).eastWall());
-        System.out.println(new Noeud(new IntCoordinates(0, 0), null).getVoisins(config));
-        System.out.println(AStar.shortestPath(new IntCoordinates(0, 0), new IntCoordinates(9, 6), config));
     }
 
     public List<Critter> getCritters() {
@@ -97,31 +94,9 @@ public final class MazeState {
                     critter.setPos(critter.getNextPos(deltaTns, critter.getDirection(), this.config));
                 }
             } else {
-
-                if ( PacMan.INSTANCE.isEnergized() ){
-                    ArrayList<IntCoordinates> cheminDeFuite=RunAwayAI.fuirDePacMan(critter.currCellI(), PacMan.INSTANCE.getPos().round(), config);
-                    if(cheminDeFuite!=null && !cheminDeFuite.isEmpty()){
-                        IntCoordinates prochaineEtape=cheminDeFuite.get(0);
-
-                        var nextDir=RunAwayAI.decideDirection(critter.currCellI(), prochaineEtape);
-                        critter.setPos(critter.getNextPos(deltaTns, nextDir, this.config));
-                        critter.setDirection(nextDir);
-
-                        cheminDeFuite.remove(0);
-
-                    }
-                    
-                    
-                }
-                else{
-                
-                    var nextDir = ((Ghost) critter).getNextDir(this.config, PacMan.INSTANCE.currCellI(), PacMan.INSTANCE.getDirection());
-                    critter.setPos(critter.getNextPos(deltaTns, nextDir, this.config));
-                    critter.setDirection(nextDir);
-                }
-
-                
-                
+                var nextDir = ((Ghost) critter).getNextDir(this.config, PacMan.INSTANCE.currCellI(), PacMan.INSTANCE.getDirection(), PacMan.INSTANCE.isEnergized());
+                critter.setPos(critter.getNextPos(deltaTns, nextDir, this.config));
+                critter.setDirection(nextDir);
             }
 
             

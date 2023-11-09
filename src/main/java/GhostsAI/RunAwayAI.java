@@ -1,84 +1,72 @@
 package GhostsAI;
 
-import model.Critter;
-import model.Ghost;
 import geometry.*;
-import config.*;
-import model.MazeState;
 import model.Direction;
-import GhostsAI.BlinkyAI;
-import java.util.ArrayList;
-import java.util.Collections;
-
 import config.MazeConfig;
-
 import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.PriorityQueue;
-import static java.lang.Math.*;
-
-import javax.naming.NoPermissionException;
-
-import java.util.HashSet;
-import java.util.Comparator;
+import GhostsAI.BlinkyAI;
 
 public class RunAwayAI {
+
+    public static ArrayList<IntCoordinates> voisins_les_plus_loins(IntCoordinates PacmanPos , IntCoordinates GhostPos 
+    , MazeConfig config ){//on choisit parmi les 4 cases voisines du ghost , celles qui sont les plus éloignées du pacman 
+
+        ArrayList<IntCoordinates> voisins_plus_loins = new ArrayList<>();
+        
+        Noeud Pacman_noeud = new Noeud(PacmanPos,null);
+        Noeud noeud_actuel = new Noeud(GhostPos,null);
+
+        ArrayList<Noeud> voisins_noeud_actuel=noeud_actuel.getVoisins(config);
+
+        int max = Integer.MIN_VALUE;
+        for (Noeud noeud : voisins_noeud_actuel){
+            if (noeud.manhattanDistance(Pacman_noeud)>max){
+                max = noeud.manhattanDistance(Pacman_noeud);
+            }
+        }
+
+        for (Noeud noeud : voisins_noeud_actuel){
+            if (noeud.manhattanDistance(Pacman_noeud)==max){
+                voisins_plus_loins.add(noeud.getCoordinates());
+            }
+        }
+
+        return voisins_plus_loins ; 
+    }
+
+    public static ArrayList<IntCoordinates> voisins_plus_proches_des_plus_loins(IntCoordinates PacmanPos , 
+    IntCoordinates GhostPos , MazeConfig config){
+        //parmi les cases les plus éloignées du pacman ,on choisit celles qui sont les plus proches du ghost
+
+        ArrayList<IntCoordinates> voisins_plus_loins=voisins_les_plus_loins(PacmanPos, GhostPos, config);
+
+        int min = Integer.MAX_VALUE;
+        
+        ArrayList<IntCoordinates> voisins_plus_proches = new ArrayList<IntCoordinates>();
+
+        for (IntCoordinates voisin : voisins_plus_loins){
+
+            ArrayList<IntCoordinates> chemin = AStar.shortestPath(GhostPos,voisin,config);
+
+            int longu_chemin = chemin.size();
+
+            if (longu_chemin < min  ){
+                min = longu_chemin;
+                voisins_plus_proches=chemin;
+
+            }
+
+        }
+        return voisins_plus_proches ;
+    }
+
+    public static Direction getDirection(MazeConfig config, IntCoordinates pacPos, IntCoordinates ghostPos){
+        //on choisit la direction adéquate selon la position à suivre
+        ArrayList<IntCoordinates> path = voisins_plus_proches_des_plus_loins(pacPos, ghostPos, config);
+        int pathLen = path.size();
+        IntCoordinates nextPos = path.get(pathLen-1);
+        return BlinkyAI.whichDir(ghostPos, nextPos);
+    }
+
     
-    public static ArrayList<IntCoordinates> fuirDePacMan(IntCoordinates startC, IntCoordinates pacManC, MazeConfig config) {
-    Noeud start = new Noeud(startC, null);
-    Noeud pacMan = new Noeud(pacManC, null);
-    LinkedList<Noeud> closedList = new LinkedList<>();
-    PriorityQueue<Noeud> openList = new PriorityQueue<Noeud>(new Comparator<Noeud>() {
-        @Override
-        public int compare(Noeud n1, Noeud n2) {
-            // Inverser la comparaison pour sélectionner le nœud avec le coût total le plus élevé
-            if (n1.getHeuristique() == n2.getHeuristique()) {
-                return 0;
-            } else {
-                return n1.getHeuristique() > n2.getHeuristique() ? -1 : 1;
-            }
-        }
-    });
-
-    openList.add(start);
-
-    while (!openList.isEmpty()) {
-        Noeud u = openList.poll();
-        if (u.getCoordinates().equals(pacMan.getCoordinates())) {
-            return AStar.buildPath(start, u);
-        }
-        for (Noeud v : u.getVoisins(config)) {
-            if (!(AStar.queueContains(closedList, v) || AStar.queueContainsAndSmaller(openList, v))) {
-                v.setCout(u.getCout() + 1);
-                // Calculer l'heuristique comme la distance de v à Pac-Man
-                v.setHeuristique(v.manhattanDistance(pacMan));
-                openList.add(v);
-            }
-        }
-        closedList.add(u);
-    }
-    return null;
-}
-public static Direction decideDirection(IntCoordinates currentPos, IntCoordinates nextPos) {
-    int dx = nextPos.x() - currentPos.x();
-    int dy = nextPos.y() - currentPos.y();
-
-    if (dx > 0) {
-        return Direction.EAST;
-    } else if (dx < 0) {
-        return Direction.WEST;
-    } else if (dy > 0) {
-        return Direction.SOUTH;
-    } else if (dy < 0) {
-        return Direction.NORTH;
-    } else {
-        // Aucun mouvement nécessaire, les positions sont identiques
-        return Direction.NONE;
-    }
-}
-
-
-
-
-
 }
