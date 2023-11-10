@@ -6,24 +6,55 @@ package gui;
  * keyReleasedHandler : rien à faire ???
  */
 
+import javafx.animation.AnimationTimer;
 import model.Direction;
 import model.PacMan;
 
 import javafx.scene.input.KeyEvent;
 
 public class PacmanController {
+
+    private AnimationController animationController;
+
     public void keyPressedHandler(KeyEvent event) {
-        PacMan.INSTANCE.setNextDir(
-                switch (event.getCode()) {
-                    case LEFT -> Direction.WEST;
-                    case RIGHT -> Direction.EAST;
-                    case UP -> Direction.NORTH;
-                    case DOWN -> Direction.SOUTH;
-                    default -> PacMan.INSTANCE.getDirection(); // do nothing
+
+        switch (event.getCode()){
+            case ESCAPE -> {
+                if(animationController.isPaused()) {
+                    animationController.stopPauseMenu();
+                    animationController.unBlurGame();
+                    animationController.playScheduled = true;
+                    animationController.setPaused(false);
                 }
-        );
+                else{
+                    animationController.startPauseMenu();
+                    animationController.blurGame();
+                    animationController.pauseScheduled = true;
+                    animationController.setPaused(true);
+                }
+            }
+            default -> {
+                PacMan.INSTANCE.setNextDir(
+                        switch (event.getCode()) {
+                            case LEFT -> Direction.WEST;
+                            case RIGHT -> Direction.EAST;
+                            case UP -> Direction.NORTH;
+                            case DOWN -> Direction.SOUTH;
+                            default -> PacMan.INSTANCE.getDirection();
+                        }
+                );
+            }
+        }
     }
     public void keyReleasedHandler(KeyEvent event) {
         // Nothing to do?
+    }
+
+    public AnimationController getAnimationController() {
+        return animationController;
+    }
+
+    public void setAnimationController(AnimationController animationController) {
+        this.animationController = animationController;
     }
 }
