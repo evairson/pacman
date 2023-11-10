@@ -17,6 +17,7 @@ import geometry.IntCoordinates;
 import geometry.RealCoordinates;
 import gui.AnimationController;
 import java.sql.SQLOutput;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.io.File;
@@ -123,7 +124,7 @@ public final class MazeState {
             if(config.getCell(pacPos).initialContent()==Content.ENERGIZER){ /* score energizer */
                 addScore(5); 
                 PacMan.INSTANCE.setEnergized();
-                
+
             }
             else {
                 addScore(1);
@@ -140,6 +141,11 @@ public final class MazeState {
                     return;
                 }
             }
+        }
+        System.out.println(allDotsEaten());
+        if (allDotsEaten()) {
+            System.out.println("You won!");
+            return;
         }
     }
 
@@ -204,5 +210,16 @@ public final class MazeState {
 
     public boolean getGridState(IntCoordinates pos) {
         return gridState[pos.y()][pos.x()];
+    }
+
+    public boolean allDotsEaten() {
+        for (boolean[] row : gridState) {
+            for (boolean cell : row) {
+                if (!cell) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 }
