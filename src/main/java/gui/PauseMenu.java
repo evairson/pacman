@@ -70,9 +70,13 @@ public class PauseMenu implements Menu{
             lives.setFill(Color.WHITE);
             lives.setStyle("-fx-font-size: 50;-fx-font-family: Serif");
 
+            Text highScore = new Text("High Score : " + String.valueOf(maze.getHighScore()));
+            highScore.setFill(Color.WHITE);
+            highScore.setStyle("-fx-font-size: 50;-fx-font-family: Serif");
+
 
             HBox hBox = new HBox();
-            hBox.getChildren().addAll(score,lives);
+            hBox.getChildren().addAll(score,lives, highScore);
             hBox.setSpacing(50);
             hBox.setAlignment(Pos.CENTER);
 

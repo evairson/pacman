@@ -19,6 +19,10 @@ import gui.AnimationController;
 import java.sql.SQLOutput;
 import java.util.List;
 import java.util.Map;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+import java.io.PrintWriter;
 
 import static model.Ghost.*;
 
@@ -139,6 +143,25 @@ public final class MazeState {
         }
     }
 
+    public int getHighScore() {
+        try {
+            var scanner = new Scanner(new File(System.getProperty("user.dir") + "/src/main/resources/highscore.txt"));
+            return scanner.nextInt();
+        } catch (FileNotFoundException e) {
+            return -1;
+        }
+    }
+
+    public void setHighScore(int score) {
+        try {
+            var writer = new PrintWriter(new File(System.getProperty("user.dir") + "/src/main/resources/highscore.txt"));
+            writer.println(score);
+            writer.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
     private void addScore(int increment) {
         score += increment;
         displayScore();
@@ -155,6 +178,10 @@ public final class MazeState {
         lives--;
         if (lives == 0) {
             System.out.println("Game over!");
+            if (score > getHighScore()) {
+                setHighScore(score);
+                System.out.println("New high score: " + score);
+            }
             System.exit(0);
             //animationController.gameOver();
         }
