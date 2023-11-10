@@ -197,7 +197,6 @@ public class MazeConfig {
         String currentDirectory = System.getProperty("user.dir"); // Obtient le répertoire de travail actuel
         String filePath = currentDirectory + "/src/main/resources/testMap.txt"; // Chemin complet vers le fichier
         // on changera ça, à terme, mais pour l'instant ça fonctionne donc nickel
-        System.out.println(filePath);
         return txtToMaze(filePath);
     }
 

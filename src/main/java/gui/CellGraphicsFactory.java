@@ -39,26 +39,29 @@ public class CellGraphicsFactory {
      * 1. Utilisation de constante : scale/15, scale/5, scale/10, scale/2 ou 9 * scale / 10
      *  c'est quand même déguelasse
      * 2. Méthodes distinctes pour chaque élément graphique
-     * 3. Couleurs en paramètre ? comme ça le client choisi la couleur qu'il veut
      * 4. COMPLIQUÉ : Gestion des dimensions dynamiques :
      * pour l'instant les dimensions sont fixes, mais si on veut changer la taille de la fenêtre
      * il faut changer les dimensions de chaque élément graphique
      */
 
-    public GraphicsUpdater makeGraphics(MazeState state, IntCoordinates pos) {
+    public GraphicsUpdater makeGraphics(MazeState state, IntCoordinates pos, Color wallColor) {
         var group = new Group();
-        group.setTranslateX(pos.x()*scale);
-        group.setTranslateY(pos.y()*scale);
+        group.setTranslateX(pos.x() * scale);
+        group.setTranslateY(pos.y() * scale);
         var cell = state.getConfig().getCell(pos);
         var dot = new Circle();
         group.getChildren().add(dot);
-        dot.setRadius(switch (cell.initialContent()) { case DOT -> scale/20; case ENERGIZER -> scale/7; case NOTHING -> 0; });
-        dot.setCenterX(scale/2);
-        dot.setCenterY(scale/2);
+        dot.setRadius(switch (cell.initialContent()) {
+            case DOT -> scale / 20;
+            case ENERGIZER -> scale / 7;
+            case NOTHING -> 0;
+        });
+        dot.setCenterX(scale / 2);
+        dot.setCenterY(scale / 2);
         dot.setFill(Color.WHITE);
 
 
-        if(cell.initialContent()==ENERGIZER){
+        if (cell.initialContent() == ENERGIZER) {
             ScaleTransition blink = new ScaleTransition(Duration.millis(600), dot);
             blink.setFromX(1);
             blink.setFromY(1);
@@ -70,40 +73,20 @@ public class CellGraphicsFactory {
         }
 
         if (cell.northWall()) {
-            var nWall = new Rectangle();
-            nWall.setHeight(scale/10);
-            nWall.setWidth(scale);
-            nWall.setY(0);
-            nWall.setX(0);
-            nWall.setFill(Color.BLUE);
+            var nWall = createWall(scale, scale / 10, wallColor, 0, 0);
             group.getChildren().add(nWall);
         }
         if (cell.eastWall()) {
-            var nWall = new Rectangle();
-            nWall.setHeight(scale);
-            nWall.setWidth(scale/10);
-            nWall.setY(0);
-            nWall.setX(9*scale/10);
-            nWall.setFill(Color.BLUE);
-            group.getChildren().add(nWall);
+            var eWall = createWall(scale / 10, scale, wallColor, 9 * scale / 10, 0);
+            group.getChildren().add(eWall);
         }
         if (cell.southWall()) {
-            var nWall = new Rectangle();
-            nWall.setHeight(scale/10);
-            nWall.setWidth(scale);
-            nWall.setY(9*scale/10);
-            nWall.setX(0);
-            nWall.setFill(Color.BLUE);
-            group.getChildren().add(nWall);
+            var sWall = createWall(scale, scale / 10, wallColor, 0, 9 * scale / 10);
+            group.getChildren().add(sWall);
         }
         if (cell.westWall()) {
-            var nWall = new Rectangle();
-            nWall.setHeight(scale);
-            nWall.setWidth(scale/10);
-            nWall.setY(0);
-            nWall.setX(0);
-            nWall.setFill(Color.BLUE);
-            group.getChildren().add(nWall);
+            var wWall = createWall(scale / 10, scale, wallColor, 0, 0);
+            group.getChildren().add(wWall);
         }
         return new GraphicsUpdater() {
             @Override
@@ -117,4 +100,16 @@ public class CellGraphicsFactory {
             }
         };
     }
+
+    private Rectangle createWall(double width, double height, Color color, double x, double y) {
+            var wall = new Rectangle();
+            wall.setWidth(width);
+            wall.setHeight(height);
+            wall.setX(x);
+            wall.setY(y);
+            wall.setFill(color);
+            return wall;
+        }
+
 }
+
