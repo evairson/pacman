@@ -14,13 +14,15 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
+import model.Ghost;
 import model.MazeState;
-
-import static config.Cell.Content.DOT;
-import static config.Cell.Content.ENERGIZER;;
+import model.PacMan;
+import model.Items.Dot;
+import model.Items.Energizer;
 
 public class CellGraphicsFactory {
     private final double scale;
+
 
     public CellGraphicsFactory(double scale) {
         this.scale = scale;
@@ -45,6 +47,20 @@ public class CellGraphicsFactory {
      * il faut changer les dimensions de chaque élément graphique
      */
 
+    public void setEnergized(Energizer e){
+        
+
+        if(Energizer.isEnergized()){
+            Energizer.frameEnergizer ++;
+        }
+
+        if(Energizer.frameEnergizer>2000){
+            Energizer.setEnergized(false);
+            Ghost.energized = false;
+            PacMan.INSTANCE.setEnergized(false);
+        }
+    }
+
     public GraphicsUpdater makeGraphics(MazeState state, IntCoordinates pos) {
         var group = new Group();
         group.setTranslateX(pos.x()*scale);
@@ -52,13 +68,18 @@ public class CellGraphicsFactory {
         var cell = state.getConfig().getCell(pos);
         var dot = new Circle();
         group.getChildren().add(dot);
-        dot.setRadius(switch (cell.initialContent()) { case DOT -> scale/20; case ENERGIZER -> scale/7; case NOTHING -> 0; });
+
+        double radius =0;
+        if(cell.initialItem().getClass() == Dot.class)  radius = scale/20;
+        if(cell.initialItem() instanceof Energizer)  radius = scale/7;
+
+        dot.setRadius(radius);
         dot.setCenterX(scale/2);
         dot.setCenterY(scale/2);
         dot.setFill(Color.WHITE);
 
 
-        if(cell.initialContent()==ENERGIZER){
+        if(cell.initialItem() instanceof Energizer){
             ScaleTransition blink = new ScaleTransition(Duration.millis(600), dot);
             blink.setFromX(1);
             blink.setFromY(1);
@@ -105,10 +126,19 @@ public class CellGraphicsFactory {
             nWall.setFill(Color.BLUE);
             group.getChildren().add(nWall);
         }
+
+
+
         return new GraphicsUpdater() {
             @Override
             public void update() {
                 dot.setVisible(!state.getGridState(pos));
+
+
+                if (cell.initialItem() instanceof Energizer){
+                    setEnergized((Energizer)cell.initialItem()); 
+                }
+
             }
 
             @Override

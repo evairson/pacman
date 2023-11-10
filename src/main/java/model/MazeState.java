@@ -12,10 +12,12 @@ package model;
 
 import geometry.*;
 import config.MazeConfig;
-import config.Cell.Content;
 import geometry.IntCoordinates;
 import geometry.RealCoordinates;
 import gui.AnimationController;
+import gui.CellGraphicsFactory;
+import model.Items.Energizer;
+
 import java.sql.SQLOutput;
 import java.util.List;
 import java.util.Map;
@@ -115,10 +117,11 @@ public final class MazeState {
 
         // FIXME Pac-Man rules should somehow be in Pacman class
         var pacPos = PacMan.INSTANCE.getPos().round();
+        
         if (!gridState[pacPos.y()][pacPos.x()]) { // Energizer
-            if(config.getCell(pacPos).initialContent()==Content.ENERGIZER){ /* score energizer */
+            if(config.getCell(pacPos).initialItem() instanceof Energizer){ /* score energizer */
                 addScore(5); 
-                PacMan.INSTANCE.setEnergized();
+                Energizer.setEnergized(true);
                 
             }
             else {
