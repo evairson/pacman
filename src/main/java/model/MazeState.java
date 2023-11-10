@@ -155,7 +155,8 @@ public final class MazeState {
         lives--;
         if (lives == 0) {
             System.out.println("Game over!");
-            animationController.gameOver();
+            System.exit(0);
+            //animationController.gameOver();
         }
         System.out.println("Lives: " + lives);
         resetCritters();
