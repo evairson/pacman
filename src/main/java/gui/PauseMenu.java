@@ -47,7 +47,7 @@ public class PauseMenu implements Menu{
             layout.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, CornerRadii.EMPTY, Insets.EMPTY)));
 
             Text pauseMenuText = new Text("PAUSE");
-            pauseMenuText.setFill(Color.WHITE);
+            pauseMenuText.setFill(Color.DARKBLUE);
             pauseMenuText.setStyle("-fx-font-size: 50;-fx-font-family: Serif");
 
             Button exitButton = new Button("EXIT");
@@ -59,15 +59,15 @@ public class PauseMenu implements Menu{
 
 
             Text indication = new Text("Press ESC to resume...");
-            indication.setFill(Color.WHITE);
+            indication.setFill(Color.DARKBLUE);
             indication.setStyle("-fx-font-size: 50;-fx-font-family: Serif");
 
             Text score = new Text("Score : " + String.valueOf(maze.getScore()));
-            score.setFill(Color.WHITE);
+            score.setFill(Color.DARKBLUE);
             score.setStyle("-fx-font-size: 50;-fx-font-family: Serif");
 
             Text lives = new Text("Vies restantes : " + String.valueOf(maze.getLives()));
-            lives.setFill(Color.WHITE);
+            lives.setFill(Color.DARKBLUE);
             lives.setStyle("-fx-font-size: 50;-fx-font-family: Serif");
 
 

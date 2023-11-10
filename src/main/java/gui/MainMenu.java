@@ -43,6 +43,8 @@ public class MainMenu implements Menu {
         startButton.setWrapText(true);
         startButton.setStyle("-fx-font-size: 2em;-fx-border-color: black;-fx-font-family: Serif");
         startButton.setOnAction(event -> {
+            primaryStage.setFullScreen(false);
+
             primaryStage.setScene(gameScene);
 
             primaryStage.centerOnScreen();
