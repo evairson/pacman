@@ -15,16 +15,21 @@ import javafx.scene.input.KeyEvent;
 public class PacmanController {
 
     private AnimationController animationController;
+
     public void keyPressedHandler(KeyEvent event) {
 
         switch (event.getCode()){
             case ESCAPE -> {
                 if(animationController.isPaused()) {
-                    animationController.getAnimationTimer().start();
-                        animationController.setPaused(false);
+                    animationController.stopPauseMenu();
+                    animationController.unBlurGame();
+                    animationController.playScheduled = true;
+                    animationController.setPaused(false);
                 }
                 else{
-                    animationController.getAnimationTimer().stop();
+                    animationController.startPauseMenu();
+                    animationController.blurGame();
+                    animationController.pauseScheduled = true;
                     animationController.setPaused(true);
                 }
             }

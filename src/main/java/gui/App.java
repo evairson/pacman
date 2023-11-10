@@ -8,8 +8,6 @@ package gui;
  */
 
 import javafx.application.Application;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
@@ -83,17 +81,10 @@ public class App extends Application {
 
         var gameView = new GameView(maze, root, scale);
 
-        var animationController = new AnimationController(gameView.createAnimationTimer());
+        var animationController = new AnimationController(gameView.getGraphicsUpdaters(), gameView.getMaze(), primaryStage, pacmanController,gameView);
         pacmanController.setAnimationController(animationController);
 
-        /**
-         * Ces 3 dernières lignes permette
-         * 1. la configuration de la fenêtre avec gameScene comme contenu.
-         * 2. l'affichage de la fenêtre.
-         * 3. le lancement de l'animation du jeu.
-         * c bo
-         * pour l'instant c'est surtout moche en fait xd
-         */
+        maze.setAnimationController(animationController);
 
         //Empeche de resize la fenetre
         primaryStage.setResizable(false);
@@ -103,8 +94,8 @@ public class App extends Application {
 
 
         var mainMenu = new MainMenu();
-        primaryStage.setScene(mainMenu.startMenu(primaryStage,screenBounds.getWidth(),screenBounds.getHeight(),gameScene));
+        primaryStage.setScene(mainMenu.startMenu(primaryStage,gameScene));
         primaryStage.show();
-        animationController.getAnimationTimer().start();
+        animationController.createAnimationTimer().start();
     }
 }

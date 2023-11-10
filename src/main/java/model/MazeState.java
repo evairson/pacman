@@ -14,6 +14,7 @@ import config.MazeConfig;
 import config.Cell.Content;
 import geometry.IntCoordinates;
 import geometry.RealCoordinates;
+import gui.AnimationController;
 
 import java.sql.SQLOutput;
 import java.util.List;
@@ -22,6 +23,8 @@ import java.util.Map;
 import static model.Ghost.*;
 
 public final class MazeState {
+
+    private AnimationController animationController;
     private final MazeConfig config;
     private final int height;
     private final int width;
@@ -60,6 +63,17 @@ public final class MazeState {
 
     public int getHeight() {
         return height;
+    }
+
+    public int getScore() {
+        return score;
+    }
+    public int getLives() {
+        return lives;
+    }
+
+    public void setAnimationController(AnimationController animationController) {
+        this.animationController = animationController;
     }
 
     public void update(long deltaTns) {
@@ -140,7 +154,7 @@ public final class MazeState {
         lives--;
         if (lives == 0) {
             System.out.println("Game over!");
-            System.exit(0);
+            animationController.gameOver();
         }
         System.out.println("Lives: " + lives);
         resetCritters();

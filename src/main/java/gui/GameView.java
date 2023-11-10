@@ -14,7 +14,10 @@ package gui;
 
 import geometry.IntCoordinates;
 import javafx.animation.AnimationTimer;
+import javafx.scene.Node;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 import model.MazeState;
 
 import java.util.ArrayList;
@@ -27,10 +30,16 @@ public class GameView {
 
     private final List<GraphicsUpdater> graphicsUpdaters;
 
+    public Pane getGameRoot() {
+        return gameRoot;
+    }
+
     private void addGraphics(GraphicsUpdater updater) {
         gameRoot.getChildren().add(updater.getNode());
         graphicsUpdaters.add(updater);
     }
+
+
 
     /**
      * @param maze  le "modèle" de cette vue (le labyrinthe et tout ce qui s'y trouve)
@@ -56,25 +65,15 @@ public class GameView {
 
         // Ajouter les créatures à la vue en utilisant CritterGraphicsFactory
         for (var critter : maze.getCritters()) addGraphics(critterFactory.makeGraphics(critter));
-    }
-    // Méthode pour démarrer l'animation
-    public AnimationTimer createAnimationTimer() {
-        return new AnimationTimer() {
-            long last = 0;
 
-            @Override
-            public void handle(long now) {
-                if (last == 0) { // ignore the first tick, just compute the first deltaT
-                    last = now;
-                    return;
-                }
-                var deltaT = now - last;
-                maze.update(deltaT);
-                for (var updater : graphicsUpdaters) {
-                    updater.update();
-                }
-                last = now;
-            }
-        };
+    }
+
+
+    public List<GraphicsUpdater> getGraphicsUpdaters() {
+        return graphicsUpdaters;
+    }
+
+    public MazeState getMaze() {
+        return maze;
     }
 }
