@@ -68,7 +68,6 @@ public class GameView {
 
     }
 
-
     public List<GraphicsUpdater> getGraphicsUpdaters() {
         return graphicsUpdaters;
     }

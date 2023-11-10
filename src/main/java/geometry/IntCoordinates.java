@@ -7,4 +7,10 @@ public record IntCoordinates(int x, int y) {
     public RealCoordinates toRealCoordinates(double scale) {
         return new RealCoordinates(x * scale, y * scale);
     }
+
+    public boolean equals(IntCoordinates coordinates){
+        return (this.x == coordinates.x) && (this.y == coordinates.y);
+    }
 }
+
+

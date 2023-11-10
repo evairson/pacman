@@ -6,14 +6,18 @@ package gui;
 
 
 import geometry.IntCoordinates;
+import javafx.animation.ScaleTransition;
+import javafx.animation.Timeline;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
+import javafx.util.Duration;
 import model.MazeState;
 
 import static config.Cell.Content.DOT;
+import static config.Cell.Content.ENERGIZER;;
 
 public class CellGraphicsFactory {
     private final double scale;
@@ -48,10 +52,23 @@ public class CellGraphicsFactory {
         var cell = state.getConfig().getCell(pos);
         var dot = new Circle();
         group.getChildren().add(dot);
-        dot.setRadius(switch (cell.initialContent()) { case DOT -> scale/20; case ENERGIZER -> scale/5; case NOTHING -> 0; });
+        dot.setRadius(switch (cell.initialContent()) { case DOT -> scale/20; case ENERGIZER -> scale/7; case NOTHING -> 0; });
         dot.setCenterX(scale/2);
         dot.setCenterY(scale/2);
         dot.setFill(Color.WHITE);
+
+
+        if(cell.initialContent()==ENERGIZER){
+            ScaleTransition blink = new ScaleTransition(Duration.millis(600), dot);
+            blink.setFromX(1);
+            blink.setFromY(1);
+            blink.setToX(0.6);
+            blink.setToY(0.6);
+            blink.setAutoReverse(true);
+            blink.setCycleCount(Timeline.INDEFINITE);
+            blink.play();
+        }
+
         if (cell.northWall()) {
             var nWall = new Rectangle();
             nWall.setHeight(scale/10);
