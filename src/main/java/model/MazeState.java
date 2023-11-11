@@ -142,7 +142,6 @@ public final class MazeState {
                 }
             }
         }
-        System.out.println(allDotsEaten());
         if (allDotsEaten()) {
             System.out.println("You won!");
             return;
