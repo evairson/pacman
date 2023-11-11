@@ -47,7 +47,7 @@ public final class MazeState {
         height = config.getHeight();
         width = config.getWidth();
         critters = List.of(PacMan.INSTANCE, Ghost.CLYDE, BLINKY, INKY, PINKY);
-        gridState = new boolean[height][width];
+        gridState = new boolean[height][width]; /** TODO : initialiser le tableau gridState */
         initialPos = Map.of(
                 PacMan.INSTANCE, config.getPacManPos().toRealCoordinates(1.0),
                 BLINKY, config.getBlinkyPos().toRealCoordinates(1.0),
