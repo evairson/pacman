@@ -53,7 +53,7 @@ public final class CritterGraphicsFactory {
     // Choix de l'image de pacman
     public String setimgPacman(Critter critter){
         String url;
-        if(critter.getDirection()==Direction.NONE || etatPacman=="rond"){
+        if(critter.getDirection()==Direction.NONE){
             url = "pacman/pacman-rond.png";
         }
         else{
