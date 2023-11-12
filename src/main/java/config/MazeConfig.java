@@ -1,13 +1,17 @@
 package config;
 
 import geometry.IntCoordinates;
+import javafx.scene.effect.Light.Point;
+import model.Items.Dot;
+import model.Items.Energizer;
+import model.Items.Item;
+
 import java.nio.file.Paths;
 import java.nio.file.Files;
 import java.io.IOException;
 import java.util.List;
 
 import static config.Cell.*;
-import static config.Cell.Content.*;
 
 
 // tutur : la classe MazeConfig
@@ -120,7 +124,7 @@ public class MazeConfig {
         for (int i = 1; i < lab.length; i+=2) {
             for (int j = 1; j < lab[0].length; j+=2) {
                 grid[i/2][j/2] = Cell.create(lab[i-1][j].equals("---"),lab[i][j+1].equals("|"),lab[i+1][j].equals("---"),
-                        lab[i][j-1].equals("|"),(lab[i][j].equals(" . "))? DOT : ((lab[i][j].equals(" E "))? ENERGIZER : NOTHING));
+                        lab[i][j-1].equals("|"),(lab[i][j].equals(" . "))? new Dot() : ((lab[i][j].equals(" E "))? new Energizer() : new Item()));
             }
         }
         return grid;
@@ -175,23 +179,6 @@ public class MazeConfig {
      *  3. Ajout d'une méthode de lecture de fichier dans la classe {@link MazeConfig}
      *
      */
-
-    public static MazeConfig makeExample1() {
-        return new MazeConfig(new Cell[][]{
-                {nTee(ENERGIZER),    hPipe(DOT),     hPipe(DOT),     hPipe(DOT),     hPipe(DOT),     nTee(DOT)},
-                {vPipe(DOT),    seVee(NOTHING), nTee(NOTHING),  nTee(NOTHING),  swVee(NOTHING), vPipe(DOT)},
-                {vPipe(DOT),     wTee(NOTHING),  open(NOTHING),  open(NOTHING),  eTee(NOTHING),  vPipe(DOT)},
-                {vPipe(DOT),    wTee(NOTHING),  open(NOTHING),  open(NOTHING),  eTee(NOTHING),  vPipe(DOT)},
-                {vPipe(DOT),    neVee(NOTHING), sTee(NOTHING),  sTee(NOTHING),   nwVee(NOTHING), vPipe(DOT)},
-                {neVee(DOT),    hPipe(DOT),     hPipe(DOT),     hPipe(DOT),     hPipe(DOT),     nwVee(DOT)}
-        },
-                new IntCoordinates(3, 0),
-                new IntCoordinates(0, 3),
-                new IntCoordinates(3, 5),
-                new IntCoordinates(5, 5),
-                new IntCoordinates(5, 1)
-        );
-    }
 
     public static MazeConfig makeExampleTxt() throws IOException {
         String currentDirectory = System.getProperty("user.dir"); // Obtient le répertoire de travail actuel

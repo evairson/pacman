@@ -96,8 +96,7 @@ public final class CritterGraphicsFactory {
         else {
             return "ghost-blue"+etatghost+".png";
 
-        }
-        
+        }  
     }
 
     // Choix du numéro des fantômes
@@ -158,7 +157,6 @@ public final class CritterGraphicsFactory {
                     }
                     image.setImage(new Image(setimgPacman(critter), taille, taille, false, false));
                 }
-
 
                  //changer image fantôme
 
