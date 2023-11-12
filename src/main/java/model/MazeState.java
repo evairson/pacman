@@ -47,7 +47,7 @@ public final class MazeState {
         height = config.getHeight();
         width = config.getWidth();
         critters = List.of(PacMan.INSTANCE, Ghost.CLYDE, BLINKY, INKY, PINKY);
-        gridState = new boolean[height][width]; /** TODO : initialiser le tableau gridState */
+        gridState = initGridState();
         initialPos = Map.of(
                 PacMan.INSTANCE, config.getPacManPos().toRealCoordinates(1.0),
                 BLINKY, config.getBlinkyPos().toRealCoordinates(1.0),
@@ -143,6 +143,7 @@ public final class MazeState {
             }
         }
         if (allDotsEaten()) {
+            System.out.println(allDotsEaten());
             System.out.println("You won!");
             return;
         }
@@ -194,6 +195,12 @@ public final class MazeState {
         resetCritters();
     }
 
+    private void playerWin() {
+        System.out.println(allDotsEaten());
+        System.out.println("You won!");
+        return;
+    }
+
     private void resetCritter(Critter critter) {
         critter.setDirection(Direction.NONE);
         critter.setPos(initialPos.get(critter));
@@ -220,5 +227,17 @@ public final class MazeState {
             }
         }
         return true;
+    }
+
+    public boolean[][] initGridState() {
+        boolean[][] gridState = new boolean[height][width];
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                if (config.getCell(new IntCoordinates(j, i)).initialContent() == Content.NOTHING) {
+                    gridState[i][j] = true;
+                }
+            }
+        }
+        return gridState;
     }
 }
