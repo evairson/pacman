@@ -75,7 +75,7 @@ public final class CritterGraphicsFactory {
     }
 
     // Choix de l'image en fonction du fantôme (sans la direction)
-    public String setimgghostNEb(Critter critter){
+    public String setimgghostNE(Critter critter){
         String ghost = switch ((Ghost) critter) {
             case BLINKY -> "ghost-blinky/ghost-blinky-";
             case CLYDE -> "ghost-clyde/ghost-clyde-";
@@ -86,13 +86,9 @@ public final class CritterGraphicsFactory {
 
     }
 
-    public String setimgghostNE(Critter critter){ //avec direction
-        return setimgghostNEb(critter)+getDirectionString(critter);
-    }
-
     public String setimgghost(Ghost critter, int numghost, String setimgghostNE){
         if(!critter.isEnergized()) 
-        return setimgghostNE+etatghost+".png";
+        return setimgghostNE+getDirectionString(critter)+etatghost+".png";
         else {
             return "ghost-blue"+etatghost+".png";
 

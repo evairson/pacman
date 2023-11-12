@@ -75,7 +75,7 @@ public class CellGraphicsFactory {
             nWall.setWidth(scale);
             nWall.setY(0);
             nWall.setX(0);
-            nWall.setFill(Color.BLUE);
+            nWall.setFill(Color.WHITE);
             group.getChildren().add(nWall);
         }
         if (cell.eastWall()) {
@@ -84,7 +84,7 @@ public class CellGraphicsFactory {
             nWall.setWidth(scale/10);
             nWall.setY(0);
             nWall.setX(9*scale/10);
-            nWall.setFill(Color.BLUE);
+            nWall.setFill(Color.WHITE);
             group.getChildren().add(nWall);
         }
         if (cell.southWall()) {
@@ -93,7 +93,7 @@ public class CellGraphicsFactory {
             nWall.setWidth(scale);
             nWall.setY(9*scale/10);
             nWall.setX(0);
-            nWall.setFill(Color.BLUE);
+            nWall.setFill(Color.WHITE);
             group.getChildren().add(nWall);
         }
         if (cell.westWall()) {
@@ -102,7 +102,7 @@ public class CellGraphicsFactory {
             nWall.setWidth(scale/10);
             nWall.setY(0);
             nWall.setX(0);
-            nWall.setFill(Color.BLUE);
+            nWall.setFill(Color.WHITE);
             group.getChildren().add(nWall);
         }
         return new GraphicsUpdater() {
