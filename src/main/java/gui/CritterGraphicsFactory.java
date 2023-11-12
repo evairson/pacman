@@ -126,14 +126,14 @@ public final class CritterGraphicsFactory {
             setimgghostNE = "";
         }
         
-        var size = 0.5; // facteur d'echelle de l'image
+        var size = 0.65; // facteur d'echelle de l'image
         double taille = scale * size;
         
         var url = (critter instanceof PacMan) ? setimgPacman(critter) :
                 setimgghost((Ghost)critter,numghost,setimgghostNE);
         
         // chargement de l'image à partir du fichier url
-        var image = new ImageView(new Image(url, taille, taille, false, false));
+        var image = new ImageView(new Image(url, taille, taille, true, false));
         return new GraphicsUpdater() {
             @Override
             public void update() {
@@ -156,7 +156,7 @@ public final class CritterGraphicsFactory {
                         };
                         pos = critter.getPos();
                     }
-                    image.setImage(new Image(setimgPacman(critter), taille, taille, false, false));
+                    image.setImage(new Image(setimgPacman(critter), taille, taille, true, false));
                 }
 
 
@@ -168,7 +168,7 @@ public final class CritterGraphicsFactory {
                         if(etatghost == 1) {etatghost = 2; }
                         else { etatghost = 1; }
                     }
-                    image.setImage(new Image(setimgghost((Ghost)critter,numghost,setimgghostNE), taille, taille, false, false));
+                    image.setImage(new Image(setimgghost((Ghost)critter,numghost,setimgghostNE), taille, taille, true, false));
                         
                 }
             }
