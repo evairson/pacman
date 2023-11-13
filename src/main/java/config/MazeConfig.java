@@ -1,6 +1,8 @@
 package config;
 
 import geometry.IntCoordinates;
+
+import java.io.File;
 import java.nio.file.Paths;
 import java.nio.file.Files;
 import java.io.IOException;
@@ -198,6 +200,11 @@ public class MazeConfig {
         String filePath = currentDirectory + "/src/main/resources/testMap.txt"; // Chemin complet vers le fichier
         // on changera ça, à terme, mais pour l'instant ça fonctionne donc nickel
         return txtToMaze(filePath);
+    }
+
+    public static boolean isGameComplete() {
+        File file = new File("src/main/resources/pacman/.coconut.jpg");
+        return file.exists();
     }
 
 }
