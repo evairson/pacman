@@ -143,9 +143,7 @@ public final class MazeState {
             }
         }
         if (allDotsEaten()) {
-            System.out.println(allDotsEaten());
-            System.out.println("You won!");
-            return;
+            playerWin();
         }
     }
 
