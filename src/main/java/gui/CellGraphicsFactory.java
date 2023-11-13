@@ -10,6 +10,8 @@ import javafx.animation.ScaleTransition;
 import javafx.animation.Timeline;
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
@@ -59,6 +61,7 @@ public class CellGraphicsFactory {
         dot.setCenterX(scale / 2);
         dot.setCenterY(scale / 2);
         dot.setFill(Color.WHITE);
+        double taille = scale;
 
 
         if (cell.initialContent() == ENERGIZER) {
@@ -73,24 +76,34 @@ public class CellGraphicsFactory {
         }
 
         if (cell.northWall()) {
-            var nWall = createWall(scale, scale / 10, wallColor, 0, 0);
-            group.getChildren().add(nWall);
+            ImageView mur = new ImageView(new Image("mur-north.png", taille, taille, true, false));
+            mur.setTranslateX(0);
+            mur.setTranslateY(0);
+            group.getChildren().add(mur);
         }
         if (cell.eastWall()) {
-            var eWall = createWall(scale / 10, scale, wallColor, 9 * scale / 10, 0);
-            group.getChildren().add(eWall);
+            ImageView mur = new ImageView(new Image("mur-east.png", taille, taille, true, false));
+            mur.setTranslateX(9*scale/10);
+            mur.setTranslateY(0);
+            group.getChildren().add(mur);
         }
         if (cell.southWall()) {
-            var sWall = createWall(scale, scale / 10, wallColor, 0, 9 * scale / 10);
-            group.getChildren().add(sWall);
+            ImageView mur = new ImageView(new Image("mur-south.png", taille, taille, true, false));
+            mur.setTranslateX(0);
+            mur.setTranslateY(9*scale/10);
+            group.getChildren().add(mur);
         }
         if (cell.westWall()) {
-            var wWall = createWall(scale / 10, scale, wallColor, 0, 0);
-            group.getChildren().add(wWall);
+            ImageView mur = new ImageView(new Image("mur-west.png", taille, taille, true, false));
+            mur.setTranslateX(0);
+            mur.setTranslateY(0);
+            group.getChildren().add(mur);
         }
+
         return new GraphicsUpdater() {
             @Override
             public void update() {
+
                 dot.setVisible(!state.getGridState(pos));
             }
 
