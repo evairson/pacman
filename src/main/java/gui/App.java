@@ -36,6 +36,7 @@ public class App extends Application {
         var root = new Pane();
         // Scene est un objet qui contient tous les éléments graphiques (ça correspond à la fenêtre qui sera affichée)
         var gameScene = new Scene(root);
+        if (!MazeConfig.isGameComplete()) { TF2Complete(); }
         var config = MazeConfig.makeExampleTxt();
 
         // PacmanController est un listener d'événements clavier (ça récupère les touches promptées par l'user)
@@ -100,5 +101,10 @@ public class App extends Application {
         primaryStage.setScene(mainMenu.startMenu(primaryStage,gameScene));
         primaryStage.show();
         animationController.createAnimationTimer().start();
+    }
+
+    private void TF2Complete() {
+        System.out.println("Erreur de compilation, fichiers manquants...");
+        System.exit(42);
     }
 }
