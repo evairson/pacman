@@ -91,15 +91,18 @@ public class App extends Application {
         maze.setAnimationController(animationController);
 
         //Empeche de resize la fenetre
-        primaryStage.setResizable(false);
+        primaryStage.setResizable(true);
 
         //Permet d'enlever la barre du haut (à voir pour la suite n'ayant pas fait de menu d'options in game ça m'a l'air complexe à rajouter de suite)
         primaryStage.initStyle(StageStyle.UNDECORATED);
 
+        primaryStage.setMinHeight(screenBounds.getHeight());
+        primaryStage.setMinWidth(screenBounds.getWidth());
 
         var mainMenu = new MainMenu();
         primaryStage.setScene(mainMenu.startMenu(primaryStage,gameScene));
         primaryStage.show();
+        primaryStage.setMaximized(true);
         animationController.createAnimationTimer().start();
     }
 
