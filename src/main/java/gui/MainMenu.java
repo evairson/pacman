@@ -15,6 +15,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.scene.text.Text;
@@ -24,6 +25,7 @@ import javafx.scene.text.Text;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 
 
 public class MainMenu implements Menu {
@@ -42,12 +44,17 @@ public class MainMenu implements Menu {
         anchorPane.setMaxHeight(720);
         anchorPane.setMinWidth(655);
         anchorPane.setMinHeight(300);
-
         ImageView imageView = (ImageView) anchorPane.lookup("#imageMENU");
+
+        Font.loadFont(getClass().getResourceAsStream("/fonts/Crackman.otf"), 12);
 
         Text playText = (Text) anchorPane.lookup("#play");
         Text optionsText = (Text) anchorPane.lookup("#options");
         Text quitText = (Text) anchorPane.lookup("#quit");
+
+        playText.setFont(Font.font("Crackman", 77));
+        optionsText.setFont(Font.font("Crackman", 52));
+        quitText.setFont(Font.font("Crackman", 56));
 
         setHoverEffect(playText, "yellow", "black");
         setHoverEffect(optionsText, "blue", "black");
