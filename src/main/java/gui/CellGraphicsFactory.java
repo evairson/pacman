@@ -19,10 +19,36 @@ import javafx.util.Duration;
 import model.MazeState;
 
 import static config.Cell.Content.DOT;
-import static config.Cell.Content.ENERGIZER;;
+import static config.Cell.Content.ENERGIZER;
+
+import config.Cell;;
 
 public class CellGraphicsFactory {
     private final double scale;
+
+    public ImageView ImageMur(String url, double taille, double translateX, double translateY) {
+        ImageView mur = new ImageView(new Image(url, taille, taille, true, false));
+        mur.setTranslateX(translateX);
+        mur.setTranslateY(translateY);
+        return mur;
+    }
+
+    public ImageView choixMur(Cell cell, double taille) {
+        if (cell.northWall()) {
+            return ImageMur("mur-north.png", taille, 0, 0);
+        }
+        if (cell.eastWall()) {
+            return ImageMur("mur-east.png", taille, 9*scale/10, 0);
+        }
+        if (cell.southWall()) {
+            return ImageMur("mur-south.png", taille, 0, 9*scale/10);
+        }
+        if (cell.westWall()) {
+            return ImageMur("mur-west.png", taille, 0, 0);
+        }
+        return new ImageView();
+    }
+
 
     public CellGraphicsFactory(double scale) {
         this.scale = scale;
@@ -59,6 +85,8 @@ public class CellGraphicsFactory {
         dot.setCenterY(scale/2);
         dot.setFill(Color.WHITE);
         double taille = scale;
+        ImageView mur = choixMur(cell, taille);
+        group.getChildren().add(mur);
 
 
         if(cell.initialContent()==ENERGIZER){
@@ -72,34 +100,24 @@ public class CellGraphicsFactory {
             blink.play();
         }
 
-        if (cell.northWall()) {
-            ImageView mur = new ImageView(new Image("mur-north.png", taille, taille, true, false));
-            mur.setTranslateX(0);
-            mur.setTranslateY(0);
-            group.getChildren().add(mur);
-        }
-        if (cell.eastWall()) {
-            ImageView mur = new ImageView(new Image("mur-east.png", taille, taille, true, false));
-            mur.setTranslateX(9*scale/10);
-            mur.setTranslateY(0);
-            group.getChildren().add(mur);
-        }
-        if (cell.southWall()) {
-            ImageView mur = new ImageView(new Image("mur-south.png", taille, taille, true, false));
-            mur.setTranslateX(0);
-            mur.setTranslateY(9*scale/10);
-            group.getChildren().add(mur);
-        }
-        if (cell.westWall()) {
-            ImageView mur = new ImageView(new Image("mur-west.png", taille, taille, true, false));
-            mur.setTranslateX(0);
-            mur.setTranslateY(0);
-            group.getChildren().add(mur);
-        }
+
         return new GraphicsUpdater() {
+            long time = System.currentTimeMillis();
+            int etatmur = 0;
             @Override
             public void update() {
 
+                if(System.currentTimeMillis()-time>500){
+                    if(etatmur==0){
+                        mur.setImage(new Image("mur-west.png", taille, taille, true, false));
+                        etatmur =1;
+                    }
+                    else{
+                        mur.setImage(new Image("mur-south.png", taille, taille, true, false));
+                        etatmur = 0;
+                    }
+                    time = System.currentTimeMillis();
+                    }
                 dot.setVisible(!state.getGridState(pos));
             }
 
