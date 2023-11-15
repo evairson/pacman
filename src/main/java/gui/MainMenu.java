@@ -37,7 +37,7 @@ public class MainMenu implements Menu {
 
         primaryStage.setFullScreenExitHint("");
 
-        FXMLLoader loader =  new FXMLLoader(getClass().getResource("/sample.fxml"));
+        FXMLLoader loader =  new FXMLLoader(getClass().getResource("/fxml/sample.fxml"));
         AnchorPane anchorPane = loader.load();
 
         anchorPane.setMaxWidth(1280);

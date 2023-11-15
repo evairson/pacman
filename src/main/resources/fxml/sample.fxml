@@ -11,7 +11,7 @@
    <children>
       <ImageView fx:id="imageMENU">
          <image>
-            <Image url="@imageMenu.png" />
+            <Image url="@../imageMenu.png" />
          </image>
       </ImageView>
       <Text id="play" fx:id="play" layoutX="558.0" layoutY="626.6080017089844" rotate="-1.0" strokeType="OUTSIDE" strokeWidth="0.0" text="PLAY" wrappingWidth="191.53350830078125" AnchorPane.bottomAnchor="422.0" AnchorPane.leftAnchor="558.0" AnchorPane.rightAnchor="1171.0" AnchorPane.topAnchor="557.0">
