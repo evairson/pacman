@@ -24,6 +24,7 @@ public final class PacMan implements Critter {
     private Direction nextDir = Direction.NONE;
     //private final double speed = 2.;
     private boolean energized;
+    public boolean Fake_energized;
     public int frameEnergizer;
 
     static final double TPINTERVAL = 0.1;
@@ -51,6 +52,10 @@ public final class PacMan implements Critter {
         energized = b;
     }
 
+    public void setFakeEnergized(boolean b){
+        Fake_energized=b;
+    }
+
     public void setPos(RealCoordinates pos) {
         this.pos = pos;
     }
@@ -62,6 +67,9 @@ public final class PacMan implements Critter {
     public boolean isEnergized() {
         return energized;
     } 
+    public boolean isFakeEnergized(){
+        return Fake_energized;
+    }
 
     //Methods
     public RealCoordinates currCellR() {

@@ -19,6 +19,7 @@ import model.MazeState;
 import model.PacMan;
 import model.Items.Dot;
 import model.Items.Energizer;
+import model.Items.FakeEnergizer;
 
 public class CellGraphicsFactory {
     private final double scale;
@@ -61,6 +62,20 @@ public class CellGraphicsFactory {
         }
     }
 
+    public void setFakeEnergized(FakeEnergizer e){
+        
+
+        if(FakeEnergizer.isFakeEnergized()){
+            FakeEnergizer.frameEnergizer ++;
+        }
+
+        if(FakeEnergizer.frameEnergizer>750){
+            FakeEnergizer.setFakeEnergized(false);
+            //Ghost.energized = false;
+            PacMan.INSTANCE.setFakeEnergized(false);
+        }
+    }
+
     public GraphicsUpdater makeGraphics(MazeState state, IntCoordinates pos) {
         var group = new Group();
         group.setTranslateX(pos.x()*scale);
@@ -71,7 +86,7 @@ public class CellGraphicsFactory {
 
         double radius =0;
         if(cell.initialItem().getClass() == Dot.class)  radius = scale/20;
-        if(cell.initialItem() instanceof Energizer)  radius = scale/7;
+        if(cell.initialItem() instanceof Energizer || cell.initialItem() instanceof FakeEnergizer )  radius = scale/7;
 
         dot.setRadius(radius);
         dot.setCenterX(scale/2);
@@ -79,8 +94,21 @@ public class CellGraphicsFactory {
         dot.setFill(Color.WHITE);
 
 
-        if(cell.initialItem() instanceof Energizer){
+        if(cell.initialItem() instanceof Energizer  ){
+            
             ScaleTransition blink = new ScaleTransition(Duration.millis(600), dot);
+            blink.setFromX(1);
+            blink.setFromY(1);
+            blink.setToX(0.6);
+            blink.setToY(0.6);
+            blink.setAutoReverse(true);
+            blink.setCycleCount(Timeline.INDEFINITE);
+            blink.play();
+        }
+        else if (cell.initialItem() instanceof FakeEnergizer){
+            var dot1=dot;
+            dot.setFill(Color.RED);
+            ScaleTransition blink = new ScaleTransition(Duration.millis(600), dot1);
             blink.setFromX(1);
             blink.setFromY(1);
             blink.setToX(0.6);
@@ -137,6 +165,9 @@ public class CellGraphicsFactory {
 
                 if (cell.initialItem() instanceof Energizer){
                     setEnergized((Energizer)cell.initialItem()); 
+                }
+                else if (cell.initialItem() instanceof FakeEnergizer){
+                    setFakeEnergized((FakeEnergizer)cell.initialItem());
                 }
 
             }

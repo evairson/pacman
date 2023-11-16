@@ -53,14 +53,38 @@ public final class CritterGraphicsFactory {
     // Choix de l'image de pacman
     public String setimgPacman(Critter critter){
         String url;
-        if(critter.getDirection()==Direction.NONE || etatPacman=="rond"){
-            url = "pacman/pacman-rond.png";
-        }
-        else{
-            url = "pacman/pacman-"+getDirectionString(critter)+"-"+etatPacman+".png";
-        }
-        return url;
+        
+            if ( critter.isFakeEnergized() ){
+                url = "FakeGhost.jpg";
+                return url;
+            }
+            else {
+                if(critter.getDirection()==Direction.NONE || etatPacman=="rond"){
+                    url = "pacman/pacman-rond.png";
+                    return url;
+                }
+                else{
+                    url = "pacman/pacman-"+getDirectionString(critter)+"-"+etatPacman+".png";
+                    return url;
+                } 
+            }
+            
     }
+
+        
+    
+
+    //choix de l'image de pacman lorsqu'il est fakely energizé A REVOIR !!!!!!!!!!!
+    /*public String setimgPacmanF(Critter critter){
+        
+        String url;
+        
+        url = "ghost-blue1.png";
+        
+        
+        return url;
+
+    }*/
 
     // Trouve la direction des critters
     private String getDirectionString(Critter critter){

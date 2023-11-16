@@ -17,6 +17,7 @@ import geometry.RealCoordinates;
 import gui.AnimationController;
 import gui.CellGraphicsFactory;
 import model.Items.Energizer;
+import model.Items.FakeEnergizer;
 
 import java.sql.SQLOutput;
 import java.util.List;
@@ -109,7 +110,7 @@ public final class MazeState {
                     critter.setPos(critter.getNextPos(deltaTns, critter.getDirection(), this.config));
                 }
             } else {
-                var nextDir = ((Ghost) critter).getNextDir(this.config, PacMan.INSTANCE.currCellI(), PacMan.INSTANCE.getDirection(), PacMan.INSTANCE.isEnergized());
+                var nextDir = ((Ghost) critter).getNextDir(this.config, PacMan.INSTANCE.currCellI(), PacMan.INSTANCE.getDirection(), PacMan.INSTANCE.isEnergized(),PacMan.INSTANCE.isFakeEnergized());
                 critter.setPos(critter.getNextPos(deltaTns, nextDir, this.config));
                 critter.setDirection(nextDir);
             }
@@ -123,6 +124,10 @@ public final class MazeState {
                 addScore(5); 
                 Energizer.setEnergized(true);
                 
+            }
+            else if (config.getCell(pacPos).initialItem() instanceof FakeEnergizer){
+                addScore(5);
+                FakeEnergizer.setFakeEnergized(true); 
             }
             else {
                 addScore(1);

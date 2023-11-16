@@ -101,9 +101,25 @@ public enum Ghost implements Critter {
         };
     }
 
+    public boolean isFakeEnergized(){
+        return false;
+    }
+
     public boolean isCentered(){
         return (Math.round(this.pos.x()) == this.pos.x()) && (Math.round(this.pos.y()) == this.pos.y());
     }
+
+    public static Direction getRandomDirection(){
+        Random rd = new Random();
+        int dir = rd.nextInt(4);
+        return switch (dir) {
+            case 0 -> Direction.SOUTH;
+            case 1 -> Direction.NORTH;
+            case 2 -> Direction.EAST;
+            default -> Direction.WEST;
+        };
+    }
+
 
 
     public RealCoordinates getNextPos(long deltaTns, Direction dir, MazeConfig config){
@@ -147,8 +163,16 @@ public enum Ghost implements Critter {
         }
     }
 
-    public Direction getNextDir(MazeConfig config, IntCoordinates pacPos, Direction pacDir, Boolean energized){
-        if (energized){
+    public Direction getNextDir(MazeConfig config, IntCoordinates pacPos, Direction pacDir, Boolean energized,boolean FakeEnergized){
+        if (FakeEnergized){
+            if (this.isCentered()){
+                return getRandomDirection();
+            }
+            else{
+                return this.direction;
+            }
+        }
+        else if (energized){
             if (this.isCentered()) {
                 return RunAwayAI.getDirection(config, pacPos, this.currCellI());
             } else {
