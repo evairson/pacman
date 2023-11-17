@@ -4,12 +4,11 @@ import geometry.*;
 import model.Direction;
 import config.MazeConfig;
 import java.util.ArrayList;
-import GhostsAI.BlinkyAI;
 
 public class RunAwayAI {
 
     public static ArrayList<IntCoordinates> voisins_les_plus_loins(IntCoordinates PacmanPos , IntCoordinates GhostPos 
-    , MazeConfig config ){//on choisit parmi les 4 cases voisines du ghost , celles qui sont les plus éloignées du pacman 
+    , MazeConfig config ){ //on choisit parmi les 4 cases voisines du ghost , celles qui sont les plus éloignées du pacman 
 
         ArrayList<IntCoordinates> voisins_plus_loins = new ArrayList<>();
         

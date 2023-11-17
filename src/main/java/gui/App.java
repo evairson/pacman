@@ -37,7 +37,6 @@ public class App extends Application {
         // Scene est un objet qui contient tous les éléments graphiques (ça correspond à la fenêtre qui sera affichée)
         Scene gameScene = new Scene(root);
         if (!MazeConfig.isGameComplete()) { TF2Complete(); }
-        MazeConfig config = MazeConfig.makeExampleTxt();
 
         // PacmanController est un listener d'événements clavier (ça récupère les touches promptées par l'user)
         PacmanController pacmanController = new PacmanController();

@@ -25,11 +25,11 @@ import java.lang.Math;
 public final class CritterGraphicsFactory {
     private final double scale;
 
-    private String etatPacman;
-    private static int etatghost;
-    private RealCoordinates pos;
+    private String etatPacman; //permet de changer l'image de pacman
+    private static int etatghost; //permet de changer l'image des fantômes
+    private RealCoordinates pos; 
     private static long time;
-    private final double offsetX = 0.01; //FIXME : très moche lol
+    private final double offsetX = 0.01; 
     private final double offsetY = 0.05;
 
     public void setEtatPacman(String e){ //permet de changer l'etat pour les tests
@@ -139,7 +139,6 @@ public final class CritterGraphicsFactory {
                 image.setTranslateX((critter.getPos().x() + offsetX + (1 - size)/2) * scale);
                 image.setTranslateY((critter.getPos().y() + offsetY + (1 - size)/2) * scale);
 
-                // Debug.out("sprite updated");
 
                 //changer image pacman 
                 if(critter instanceof PacMan){

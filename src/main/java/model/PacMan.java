@@ -21,7 +21,6 @@ public final class PacMan implements Critter {
     private RealCoordinates pos;
     private Direction direction = Direction.NONE;
     private Direction nextDir = Direction.NONE;
-    //private final double speed = 2.;
     private boolean energized;
 
     static final double TPINTERVAL = 0.1;
@@ -57,7 +56,7 @@ public final class PacMan implements Critter {
         return energized;
     } 
 
-    public void setEnergized() {
+    public void setEnergized() { //active l'energizer pour un temps limité
         PacMan pacman = this;
         Timer t = new Timer();
         TimerTask task = new TimerTask() {
@@ -108,7 +107,6 @@ public final class PacMan implements Critter {
         RealCoordinates currCell = this.currCellR();
         if (this.isGoingToCenter() && this.getPos().dist(currCell) < TPINTERVAL) {
             this.setPos(currCell);
-//            System.out.println(this.currCellR());
         }
     }
 
