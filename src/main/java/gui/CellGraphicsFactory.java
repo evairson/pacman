@@ -107,7 +107,7 @@ public class CellGraphicsFactory {
             @Override
             public void update() {
 
-                if(System.currentTimeMillis()-time>500){
+                /*if(System.currentTimeMillis()-time>500){
                     if(etatmur==0){
                         mur.setImage(new Image("mur-west.png", taille, taille, true, false));
                         etatmur =1;
@@ -117,7 +117,7 @@ public class CellGraphicsFactory {
                         etatmur = 0;
                     }
                     time = System.currentTimeMillis();
-                    }
+                    }*/
                 dot.setVisible(!state.getGridState(pos));
             }
 
