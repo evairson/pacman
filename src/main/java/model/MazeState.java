@@ -96,10 +96,10 @@ public final class MazeState {
          * 3. déléguer certaines repsonsabilités à d'autres méthodes ?
          */
 
-        for (var critter: critters){
+        for (Critter critter: critters){
             critter.tpToCenter();
             if(critter == PacMan.INSTANCE){
-                var nextDir = ((PacMan) critter).getNextDir();
+                Direction nextDir = ((PacMan) critter).getNextDir();
                 if(PacMan.INSTANCE.canSetDirection(nextDir, this.config)){
                     critter.setPos(critter.getNextPos(deltaTns, nextDir, this.config));
                     critter.setDirection(nextDir);
@@ -107,14 +107,13 @@ public final class MazeState {
                     critter.setPos(critter.getNextPos(deltaTns, critter.getDirection(), this.config));
                 }
             } else {
-                var nextDir = ((Ghost) critter).getNextDir(this.config, PacMan.INSTANCE.currCellI(), PacMan.INSTANCE.getDirection(), PacMan.INSTANCE.isEnergized());
+                Direction nextDir = ((Ghost) critter).getNextDir(this.config, PacMan.INSTANCE.currCellI(), PacMan.INSTANCE.getDirection(), PacMan.INSTANCE.isEnergized());
                 critter.setPos(critter.getNextPos(deltaTns, nextDir, this.config));
                 critter.setDirection(nextDir);
             }
         }
 
-        // FIXME Pac-Man rules should somehow be in Pacman class
-        var pacPos = PacMan.INSTANCE.getPos().round();
+        IntCoordinates pacPos = PacMan.INSTANCE.getPos().round();
         if (!gridState[pacPos.y()][pacPos.x()]) { // Energizer
             if(config.getCell(pacPos).initialContent()==Content.ENERGIZER){ /* score energizer */
                 addScore(5); 
@@ -126,7 +125,7 @@ public final class MazeState {
             }
             gridState[pacPos.y()][pacPos.x()] = true;
         }
-        for (var critter : critters) { // Collision PacMan Ghosts
+        for (Critter critter : critters) { // Collision PacMan Ghosts
             if (critter instanceof Ghost && critter.getPos().round().equals(pacPos)) {
                 if (PacMan.INSTANCE.isEnergized()) {
                     addScore(10);
@@ -168,7 +167,7 @@ public final class MazeState {
     }
 
     private void resetCritters() {
-        for (var critter: critters) resetCritter(critter);
+        for (Critter critter: critters) resetCritter(critter);
     }
 
     public MazeConfig getConfig() {

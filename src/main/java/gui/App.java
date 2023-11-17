@@ -33,14 +33,14 @@ public class App extends Application {
      */
     public void start(Stage primaryStage) throws IOException {
         // Pane est un conteneur qui peut contenir des éléments graphiques
-        var root = new Pane();
+        Pane root = new Pane();
         // Scene est un objet qui contient tous les éléments graphiques (ça correspond à la fenêtre qui sera affichée)
-        var gameScene = new Scene(root);
+        Scene gameScene = new Scene(root);
         if (!MazeConfig.isGameComplete()) { TF2Complete(); }
-        var config = MazeConfig.makeExampleTxt();
+        MazeConfig config = MazeConfig.makeExampleTxt();
 
         // PacmanController est un listener d'événements clavier (ça récupère les touches promptées par l'user)
-        var pacmanController = new PacmanController();
+        PacmanController pacmanController = new PacmanController();
 
         /** gameScene est un objet de type Scene
          *
@@ -72,7 +72,7 @@ public class App extends Application {
         gameScene.setOnKeyPressed(pacmanController::keyPressedHandler);
         gameScene.setOnKeyReleased(pacmanController::keyReleasedHandler);
 
-        var maze = new MazeState(MazeConfig.makeExampleTxt());
+        MazeState maze = new MazeState(MazeConfig.makeExampleTxt());
 
         //Récupère la taille de l'écran
         Rectangle2D screenBounds = Screen.getPrimary().getBounds();
@@ -83,9 +83,9 @@ public class App extends Application {
 
         double scale = Math.min((int)widthScale,(int)heightScale) * 10.0 - 5;
 
-        var gameView = new GameView(maze, root, scale);
+        GameView gameView = new GameView(maze, root, scale);
 
-        var animationController = new AnimationController(gameView.getGraphicsUpdaters(), gameView.getMaze(), primaryStage, pacmanController,gameView);
+        AnimationController animationController = new AnimationController(gameView.getGraphicsUpdaters(), gameView.getMaze(), primaryStage, pacmanController,gameView);
         pacmanController.setAnimationController(animationController);
 
         maze.setAnimationController(animationController);
@@ -97,7 +97,7 @@ public class App extends Application {
         primaryStage.initStyle(StageStyle.UNDECORATED);
 
 
-        var mainMenu = new MainMenu();
+        MainMenu mainMenu = new MainMenu();
         primaryStage.setScene(mainMenu.startMenu(primaryStage,gameScene));
         primaryStage.show();
         animationController.createAnimationTimer().start();

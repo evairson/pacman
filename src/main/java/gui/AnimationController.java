@@ -142,10 +142,10 @@ public class AnimationController {
                         animationStart = now;
                         return;
                     }
-                    var deltaT = now - animationStart;
+                    long deltaT = now - animationStart;
                     deltaT = now - animationStart;
                     maze.update(deltaT);
-                    for (var updater : graphicsUpdaters) {
+                    for (GraphicsUpdater updater : graphicsUpdaters) {
                         updater.update();
                     }
                     animationStart = now;

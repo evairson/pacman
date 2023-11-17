@@ -122,14 +122,14 @@ public final class CritterGraphicsFactory {
             setimgghostNE = "";
         }
         
-        var size = 0.65; // facteur d'echelle de l'image
+        Double size = 0.65; // facteur d'echelle de l'image
         double taille = scale * size;
         
-        var url = (critter instanceof PacMan) ? setimgPacman(critter) :
+        String url = (critter instanceof PacMan) ? setimgPacman(critter) :
                 setimgghost((Ghost)critter,numghost,setimgghostNE);
         
         // chargement de l'image à partir du fichier url
-        var image = new ImageView(new Image(url, taille, taille, true, false));
+        ImageView image = new ImageView(new Image(url, taille, taille, true, false));
         return new GraphicsUpdater() {
             @Override
             public void update() {
