@@ -15,10 +15,13 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import model.Ghost;
+import model.Items.Item;
+import model.Items.ItemTest;
 import model.MazeState;
 import model.PacMan;
 import model.Items.Dot;
 import model.Items.Energizer;
+import model.Items.ItemTest;
 
 public class CellGraphicsFactory {
     private final double scale;
@@ -48,7 +51,6 @@ public class CellGraphicsFactory {
      */
 
     public void setEnergized(Energizer e){
-        
 
         if(Energizer.isEnergized()){
             Energizer.frameEnergizer ++;
@@ -58,6 +60,16 @@ public class CellGraphicsFactory {
             Energizer.setEnergized(false);
             Ghost.energized = false;
             PacMan.INSTANCE.setEnergized(false);
+        }
+    }
+
+    public void setActiveItemTest(ItemTest t){
+        if(ItemTest.active){
+            ItemTest.frameActivity++;
+        }
+
+        if(ItemTest.frameActivity>500){
+            ItemTest.setActive(false);
         }
     }
 
@@ -71,15 +83,15 @@ public class CellGraphicsFactory {
 
         double radius =0;
         if(cell.initialItem().getClass() == Dot.class)  radius = scale/20;
-        if(cell.initialItem() instanceof Energizer)  radius = scale/7;
+        if((cell.initialItem() instanceof Energizer) || (cell.initialItem() instanceof ItemTest)) radius = scale/7;
 
         dot.setRadius(radius);
         dot.setCenterX(scale/2);
         dot.setCenterY(scale/2);
-        dot.setFill(Color.WHITE);
+        if(cell.initialItem() instanceof ItemTest) { dot.setFill(Color.RED); } else { dot.setFill(Color.WHITE); }
 
 
-        if(cell.initialItem() instanceof Energizer){
+        if((cell.initialItem() instanceof Energizer) || (cell.initialItem() instanceof ItemTest)){
             ScaleTransition blink = new ScaleTransition(Duration.millis(600), dot);
             blink.setFromX(1);
             blink.setFromY(1);
@@ -92,7 +104,7 @@ public class CellGraphicsFactory {
 
         if (cell.northWall()) {
             var nWall = new Rectangle();
-            nWall.setHeight(scale/10);
+            nWall.setHeight(scale / 10);
             nWall.setWidth(scale);
             nWall.setY(0);
             nWall.setX(0);
@@ -102,17 +114,17 @@ public class CellGraphicsFactory {
         if (cell.eastWall()) {
             var nWall = new Rectangle();
             nWall.setHeight(scale);
-            nWall.setWidth(scale/10);
+            nWall.setWidth(scale / 10);
             nWall.setY(0);
-            nWall.setX(9*scale/10);
+            nWall.setX(9 * scale / 10);
             nWall.setFill(Color.BLUE);
             group.getChildren().add(nWall);
         }
         if (cell.southWall()) {
             var nWall = new Rectangle();
-            nWall.setHeight(scale/10);
+            nWall.setHeight(scale / 10);
             nWall.setWidth(scale);
-            nWall.setY(9*scale/10);
+            nWall.setY(9 * scale / 10);
             nWall.setX(0);
             nWall.setFill(Color.BLUE);
             group.getChildren().add(nWall);
@@ -120,7 +132,7 @@ public class CellGraphicsFactory {
         if (cell.westWall()) {
             var nWall = new Rectangle();
             nWall.setHeight(scale);
-            nWall.setWidth(scale/10);
+            nWall.setWidth(scale / 10);
             nWall.setY(0);
             nWall.setX(0);
             nWall.setFill(Color.BLUE);
@@ -128,17 +140,21 @@ public class CellGraphicsFactory {
         }
 
 
-
         return new GraphicsUpdater() {
             @Override
             public void update() {
-                dot.setVisible(!state.getGridState(pos));
+                for (Node n : group.getChildren()){
+                    n.setVisible(!ItemTest.active);
+                }
 
+                dot.setVisible(!state.getGridState(pos));
 
                 if (cell.initialItem() instanceof Energizer){
                     setEnergized((Energizer)cell.initialItem()); 
                 }
-
+                if(cell.initialItem() instanceof ItemTest){
+                    setActiveItemTest((ItemTest)cell.initialItem());
+                }
             }
 
             @Override

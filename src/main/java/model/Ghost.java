@@ -40,7 +40,11 @@ public enum Ghost implements Critter {
 
     @Override
     public double getSpeed(){
-        return this.speed;
+        if(PacMan.INSTANCE.isEnergized()){
+            return this.speed * 1.5;
+        } else {
+            return this.speed;
+        }
     }
 
     public boolean isEnergized() {

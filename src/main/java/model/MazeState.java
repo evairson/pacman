@@ -17,6 +17,7 @@ import geometry.RealCoordinates;
 import gui.AnimationController;
 import gui.CellGraphicsFactory;
 import model.Items.Energizer;
+import model.Items.ItemTest;
 
 import java.sql.SQLOutput;
 import java.util.List;
@@ -123,6 +124,9 @@ public final class MazeState {
                 addScore(5); 
                 Energizer.setEnergized(true);
                 
+            } else if(config.getCell(pacPos).initialItem() instanceof ItemTest){
+                addScore(10);
+                ItemTest.setActive(true);
             }
             else {
                 addScore(1);
