@@ -3,6 +3,9 @@ package GhostsAI;
 import geometry.*;
 import config.*;
 import model.Direction;
+import model.Ghost;
+
+import java.util.ArrayList;
 
 
 public class PinkyAI {
@@ -54,11 +57,22 @@ public class PinkyAI {
     }
 
     public static Direction getDirection(MazeConfig config, IntCoordinates pacPos, IntCoordinates ghostPos, Direction pacDir){
-        IntCoordinates targetPos = getFrontCell(pacPos, pacDir, config);
-        if(((Math.abs(pacPos.x() - ghostPos.x()) <= 2) && (pacPos.y() == ghostPos.y())) || ((Math.abs(pacPos.y() - ghostPos.y()) <= 2) && (pacPos.x() == ghostPos.x()))) {
-            return BlinkyAI.getDirection(config, pacPos, ghostPos);
-        } else {
-            return BlinkyAI.getDirection(config, targetPos, ghostPos);
+        if (!Ghost.PINKY.isAlive()) {
+            if (ghostPos.equals(config.getGhostHousePos())){
+                return Direction.NONE;
+            }else{
+                ArrayList<IntCoordinates> path = AStar.shortestPath(ghostPos, config.getGhostHousePos(), config);
+                int pathlen = path.size();
+                IntCoordinates nextPos = path.get(pathlen-1);
+                return BlinkyAI.whichDir(ghostPos, nextPos);
+            }
+        }else {
+            IntCoordinates targetPos = getFrontCell(pacPos, pacDir, config);
+            if (((Math.abs(pacPos.x() - ghostPos.x()) <= 2) && (pacPos.y() == ghostPos.y())) || ((Math.abs(pacPos.y() - ghostPos.y()) <= 2) && (pacPos.x() == ghostPos.x()))) {
+                return BlinkyAI.getDirection(config, pacPos, ghostPos);
+            } else {
+                return BlinkyAI.getDirection(config, targetPos, ghostPos);
+            }
         }
     }
 }

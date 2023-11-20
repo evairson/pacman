@@ -14,7 +14,7 @@ import static config.Cell.Content.*;
 public class MazeConfig {
 
     private final Cell[][] grid;
-    private final IntCoordinates pacManPos, blinkyPos, pinkyPos, inkyPos, clydePos;
+    private final IntCoordinates pacManPos, blinkyPos, pinkyPos, inkyPos, clydePos, ghostHouse = new IntCoordinates(0,0);
     public MazeConfig(Cell[][] grid, IntCoordinates pacManPos, IntCoordinates blinkyPos, IntCoordinates pinkyPos,
                       IntCoordinates inkyPos, IntCoordinates clydePos) {
         this.grid = new Cell[grid.length][];
@@ -50,6 +50,8 @@ public class MazeConfig {
     public IntCoordinates getClydePos() {
         return clydePos;
     }
+    public IntCoordinates getGhostHousePos(){ return this.ghostHouse;}
+
 
     public int getWidth() {
         return grid[0].length;

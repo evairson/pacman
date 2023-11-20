@@ -11,6 +11,8 @@ import java.util.List;
 public class CritterGraphicsFactoryTest{
     
     @Test
+
+
     public void setimgPacmanTest(){
         for(double i = 50; i <300;i+=0.5){
             CritterGraphicsFactory facto = new CritterGraphicsFactory(i);

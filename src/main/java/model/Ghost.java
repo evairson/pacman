@@ -13,6 +13,8 @@ import GhostsAI.*;
 import config.MazeConfig;
 import geometry.IntCoordinates;
 import geometry.RealCoordinates;
+
+import java.nio.ReadOnlyBufferException;
 import java.util.Random;
 
 public enum Ghost implements Critter {
@@ -24,18 +26,15 @@ public enum Ghost implements Critter {
     private Direction direction;
     private final double speed = 1.3;
     public static boolean energized;
-    private RealCoordinates ghostHouse;
     private boolean alive = true;
 
     private static final double TPINTERVAL = 0.02;
 
-    public boolean goToHome(PacMan p){
-        RealCoordinates ghost = this.getPos();
-        if (ghost.x() >= p.getPos().x()-0.25 && ghost.x() <= p.getPos().x()+0.25 && ghost.y() >=p.getPos().y()-0.25 && ghost.y() <=p.getPos().y()+0.25 && p.isEnergized()){
-            this.alive = false;
-            return true;
-        }
-        return false;
+    public boolean isAlive(){
+        return alive;
+    }
+    public void setIsAlive(boolean alive){
+        this.alive = alive;
     }
 
     // Getters/Setters
@@ -118,9 +117,6 @@ public enum Ghost implements Critter {
 
 
     public RealCoordinates getNextPos(long deltaTns, Direction dir, MazeConfig config){
-        if (goToHome(PacMan.INSTANCE)) {
-            return new RealCoordinates(0,0);
-        }else {
             if (this.isCenteredDir(dir)) {
                 RealCoordinates nextPos = // Calcul de la position suivante
                         getPos().plus((switch (dir) {
@@ -161,11 +157,11 @@ public enum Ghost implements Critter {
             } else {
                 return this.pos;
             }
-        }
+        
     }
 
     public Direction getNextDir(MazeConfig config, IntCoordinates pacPos, Direction pacDir, Boolean energized){
-        if (energized){
+        if (energized && this.isAlive()){
             if (this.isCentered()) {
                 return RunAwayAI.getDirection(config, pacPos, this.currCellI());
             } else {
@@ -175,7 +171,7 @@ public enum Ghost implements Critter {
             switch (this) {
                 case CLYDE:
                     if (this.isCentered()) {
-                        return ClydeAI.getDirection(config, this.currCellI(), this.direction);
+                        return ClydeAI.getDirection(config, this.currCellI(), this.direction,this.currCellI());
                     } else {
                         return this.direction;
                     }
