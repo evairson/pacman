@@ -11,12 +11,12 @@ import model.MazeState;
 
 public class PauseMenu implements Menu{
 
-    private final Pane root;
+    private final StackPane root;
     private final MazeState maze;
     private Pane pauseLayout;
     private VBox vBox;
 
-    public PauseMenu(MazeState maze, Pane root) {
+    public PauseMenu(MazeState maze, StackPane root) {
         this.maze = maze;
         this.root  = root;
     }
@@ -77,8 +77,7 @@ public class PauseMenu implements Menu{
             pauseLayout = layout;
             this.vBox = vBox;
 
-            root.getChildren().addAll(layout);
-
+            root.getChildren().add(layout);
 
         }
         catch (Exception e){
