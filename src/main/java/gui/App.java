@@ -33,7 +33,10 @@ public class App extends Application {
      */
     public void start(Stage primaryStage) throws IOException {
         // Pane est un conteneur qui peut contenir des éléments graphiques
+        // root est le conteneur principal du jeu (il contient tous les autres conteneurs
         var root = new Pane();
+        // gamePane est le conteneur de l'écran de jeu
+        var gamePane = new Pane();
         // Scene est un objet qui contient tous les éléments graphiques (ça correspond à la fenêtre qui sera affichée)
         var gameScene = new Scene(root);
         if (!MazeConfig.isGameComplete()) { TF2Complete(); }
@@ -83,7 +86,9 @@ public class App extends Application {
 
         double scale = Math.min((int)widthScale,(int)heightScale) * 10.0 - 5;
 
-        var gameView = new GameView(maze, root, scale, );
+        var gameView = new GameView(maze, gamePane, scale);
+
+        root.getChildren().add(gamePane);
 
         var animationController = new AnimationController(gameView.getGraphicsUpdaters(), gameView.getMaze(), primaryStage, pacmanController,gameView, root);
         pacmanController.setAnimationController(animationController);
