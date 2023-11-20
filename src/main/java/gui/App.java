@@ -83,9 +83,9 @@ public class App extends Application {
 
         double scale = Math.min((int)widthScale,(int)heightScale) * 10.0 - 5;
 
-        var gameView = new GameView(maze, root, scale);
+        var gameView = new GameView(maze, root, scale, );
 
-        var animationController = new AnimationController(gameView.getGraphicsUpdaters(), gameView.getMaze(), primaryStage, pacmanController,gameView);
+        var animationController = new AnimationController(gameView.getGraphicsUpdaters(), gameView.getMaze(), primaryStage, pacmanController,gameView, root);
         pacmanController.setAnimationController(animationController);
 
         maze.setAnimationController(animationController);

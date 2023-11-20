@@ -34,9 +34,6 @@ public class MainMenu implements Menu {
 
     public Scene startMenu(Stage primaryStage, Scene gameScene) throws IOException {
 
-
-        primaryStage.setFullScreenExitHint("");
-
         FXMLLoader loader =  new FXMLLoader(getClass().getResource("/fxml/sample.fxml"));
         AnchorPane anchorPane = loader.load();
 
@@ -71,8 +68,6 @@ public class MainMenu implements Menu {
         imageView.fitWidthProperty().bind(anchorPane.widthProperty());
 
         imageView.setPreserveRatio(true);
-
-        primaryStage.setFullScreen(true);
 
         Scene scene = new Scene(anchorPane);
         return scene;

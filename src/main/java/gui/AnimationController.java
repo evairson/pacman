@@ -8,10 +8,7 @@ import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.effect.GaussianBlur;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -34,17 +31,19 @@ public class AnimationController {
     private PauseMenu pauseMenu;
 
     private GameView gameView;
+    private final Pane root;
     private boolean isPaused = false;
 
 
 
-    public AnimationController(List<GraphicsUpdater> graphicsUpdaters, MazeState maze, Stage primaryStage, PacmanController pacmanController, GameView gameView) {
+    public AnimationController(List<GraphicsUpdater> graphicsUpdaters, MazeState maze, Stage primaryStage, PacmanController pacmanController, GameView gameView, Pane root) {
         this.graphicsUpdaters = graphicsUpdaters;
         this.maze = maze;
         this.primaryStage = primaryStage;
         this.pacmanController = pacmanController;
         this.gameView = gameView;
-        pauseMenu = new PauseMenu(pacmanController,gameView.getMaze());
+        this.root = root;
+        pauseMenu = new PauseMenu(gameView.getMaze(), root);
     }
 
     public void setPaused(boolean paused) {
@@ -80,7 +79,7 @@ public class AnimationController {
             this.blurGame();
             this.pauseScheduled = true;
             this.setPaused(true);
-            pauseMenu.getStage().hide();
+//            pauseMenu.getStage().hide();
 
             //Affiche le game over
             Stage stage = new Stage();
