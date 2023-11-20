@@ -8,9 +8,12 @@ package gui;
  */
 
 import javafx.application.Application;
+import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import config.MazeConfig;
@@ -34,7 +37,7 @@ public class App extends Application {
     public void start(Stage primaryStage) throws IOException {
         // Pane est un conteneur qui peut contenir des éléments graphiques
         // root est le conteneur principal du jeu (il contient tous les autres conteneurs
-        var root = new Pane();
+        var root = new BorderPane();
         // gamePane est le conteneur de l'écran de jeu
         var gamePane = new Pane();
         // Scene est un objet qui contient tous les éléments graphiques (ça correspond à la fenêtre qui sera affichée)
@@ -86,29 +89,35 @@ public class App extends Application {
 
         double scale = Math.min((int)widthScale,(int)heightScale) * 10.0 - 5;
 
+        //Conteneur de tout ce qui est la vue du jeu (jeu, menu de pause, etc)
+        StackPane gameComponents = new StackPane();
+
+        //Vue du jeu
         var gameView = new GameView(maze, gamePane, scale);
 
-        root.getChildren().add(gamePane);
+        gameComponents.getChildren().add(gamePane);
+        StackPane.setAlignment(gamePane,Pos.CENTER);
 
-        var animationController = new AnimationController(gameView.getGraphicsUpdaters(), gameView.getMaze(), primaryStage, pacmanController,gameView, root);
+        root.setCenter(gameComponents);
+
+        var animationController = new AnimationController(gameView.getGraphicsUpdaters(), gameView.getMaze(), primaryStage, pacmanController,gameView, gameComponents);
         pacmanController.setAnimationController(animationController);
 
         maze.setAnimationController(animationController);
 
-        //Empeche de resize la fenetre
-        primaryStage.setResizable(true);
 
-        //Permet d'enlever la barre du haut (à voir pour la suite n'ayant pas fait de menu d'options in game ça m'a l'air complexe à rajouter de suite)
+        //Empeche de resize la fenetre
+        primaryStage.setResizable(false);
+
+        //Permet d'enlever la barre du haut
         primaryStage.initStyle(StageStyle.UNDECORATED);
 
-        primaryStage.setMinHeight(screenBounds.getHeight());
-        primaryStage.setMinWidth(screenBounds.getWidth());
 
         var mainMenu = new MainMenu();
-        primaryStage.setScene(mainMenu.startMenu(primaryStage,gameScene));
+        primaryStage.setScene(mainMenu.startMenu(primaryStage,gameScene,animationController));
         primaryStage.show();
-        primaryStage.setMaximized(true);
-        animationController.createAnimationTimer().start();
+//        primaryStage.setMaximized(true);
+
     }
 
     private void TF2Complete() {
