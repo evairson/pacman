@@ -10,6 +10,8 @@ import javafx.animation.ScaleTransition;
 import javafx.animation.Timeline;
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
@@ -25,7 +27,6 @@ import model.Items.ItemTest;
 
 public class CellGraphicsFactory {
     private final double scale;
-
 
     public CellGraphicsFactory(double scale) {
         this.scale = scale;
@@ -82,11 +83,12 @@ public class CellGraphicsFactory {
         double radius =0;
         if(cell.initialItem().getClass() == Dot.class)  radius = scale/20;
         if((cell.initialItem() instanceof Energizer) || (cell.initialItem() instanceof ItemTest)) radius = scale/7;
-
         dot.setRadius(radius);
+
         dot.setCenterX(scale/2);
         dot.setCenterY(scale/2);
         if(cell.initialItem() instanceof ItemTest) { dot.setFill(Color.RED); } else { dot.setFill(Color.WHITE); }
+        double taille = scale;
 
 
         if((cell.initialItem() instanceof Energizer) || (cell.initialItem() instanceof ItemTest)){
@@ -101,40 +103,28 @@ public class CellGraphicsFactory {
         }
 
         if (cell.northWall()) {
-            var nWall = new Rectangle();
-            nWall.setHeight(scale / 10);
-            nWall.setWidth(scale);
-            nWall.setY(0);
-            nWall.setX(0);
-            nWall.setFill(Color.BLUE);
-            group.getChildren().add(nWall);
+            ImageView mur = new ImageView(new Image("mur-north.png", taille, taille, true, false));
+            mur.setTranslateX(0);
+            mur.setTranslateY(0);
+            group.getChildren().add(mur);
         }
         if (cell.eastWall()) {
-            var nWall = new Rectangle();
-            nWall.setHeight(scale);
-            nWall.setWidth(scale / 10);
-            nWall.setY(0);
-            nWall.setX(9 * scale / 10);
-            nWall.setFill(Color.BLUE);
-            group.getChildren().add(nWall);
+            ImageView mur = new ImageView(new Image("mur-east.png", taille, taille, true, false));
+            mur.setTranslateX(9*scale/10);
+            mur.setTranslateY(0);
+            group.getChildren().add(mur);
         }
         if (cell.southWall()) {
-            var nWall = new Rectangle();
-            nWall.setHeight(scale / 10);
-            nWall.setWidth(scale);
-            nWall.setY(9 * scale / 10);
-            nWall.setX(0);
-            nWall.setFill(Color.BLUE);
-            group.getChildren().add(nWall);
+            ImageView mur = new ImageView(new Image("mur-south.png", taille, taille, true, false));
+            mur.setTranslateX(0);
+            mur.setTranslateY(9*scale/10);
+            group.getChildren().add(mur);
         }
         if (cell.westWall()) {
-            var nWall = new Rectangle();
-            nWall.setHeight(scale);
-            nWall.setWidth(scale / 10);
-            nWall.setY(0);
-            nWall.setX(0);
-            nWall.setFill(Color.BLUE);
-            group.getChildren().add(nWall);
+            ImageView mur = new ImageView(new Image("mur-west.png", taille, taille, true, false));
+            mur.setTranslateX(0);
+            mur.setTranslateY(0);
+            group.getChildren().add(mur);
         }
 
 

@@ -46,15 +46,15 @@ public class CritterGraphicsFactoryTest{
             for(int j =0; j<2; j++){
                 facto.setEtatghost(j, numGhost);
                 critter.setDirection(Direction.NORTH);
-                assertEquals(facto.setimgghost(critter,numGhost,facto.setimgghostNE(critter)),facto.setimgghostNEb(critter)+"haut"+j+".png");
+                assertEquals(facto.setimgghost(critter,numGhost,facto.setimgghostNE(critter)),facto.setimgghostNE(critter)+"haut"+j+".png");
                 critter.setDirection(Direction.SOUTH);
-                assertEquals(facto.setimgghost(critter,numGhost,facto.setimgghostNE(critter)),facto.setimgghostNEb(critter)+"bas"+j+".png");
+                assertEquals(facto.setimgghost(critter,numGhost,facto.setimgghostNE(critter)),facto.setimgghostNE(critter)+"bas"+j+".png");
                 critter.setDirection(Direction.WEST);
-                assertEquals(facto.setimgghost(critter,numGhost,facto.setimgghostNE(critter)),facto.setimgghostNEb(critter)+"gauche"+j+".png");
+                assertEquals(facto.setimgghost(critter,numGhost,facto.setimgghostNE(critter)),facto.setimgghostNE(critter)+"gauche"+j+".png");
                 critter.setDirection(Direction.EAST);
-                assertEquals(facto.setimgghost(critter,numGhost,facto.setimgghostNE(critter)),facto.setimgghostNEb(critter)+"droite"+j+".png");
+                assertEquals(facto.setimgghost(critter,numGhost,facto.setimgghostNE(critter)),facto.setimgghostNE(critter)+"droite"+j+".png");
                 critter.setDirection(Direction.NONE);
-                assertEquals(facto.setimgghost(critter,numGhost,facto.setimgghostNE(critter)),facto.setimgghostNEb(critter)+"droite"+j+".png");
+                assertEquals(facto.setimgghost(critter,numGhost,facto.setimgghostNE(critter)),facto.setimgghostNE(critter)+"droite"+j+".png");
             }
         }    
     }
