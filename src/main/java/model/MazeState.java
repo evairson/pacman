@@ -120,19 +120,34 @@ public final class MazeState {
         var pacPos = PacMan.INSTANCE.getPos().round();
         
         if (!gridState[pacPos.y()][pacPos.x()]) { // Energizer
-            if(config.getCell(pacPos).initialItem() instanceof Energizer){ /* score energizer */
+            if(config.getCell(pacPos).initialItem().isCollectable()){
+                if(!PacMan.INSTANCE.getInventory().isFull()){
+                    PacMan.INSTANCE.getInventory().add(config.getCell(pacPos).initialItem());
+                    addScore(10);
+                    gridState[pacPos.y()][pacPos.x()] = true;
+                }
+            } else {
+                config.getCell(pacPos).initialItem().setActive(true);
+                addScore(1);
+                gridState[pacPos.y()][pacPos.x()] = true;
+            }
+            /*if(config.getCell(pacPos).initialItem() instanceof Energizer){
                 addScore(5); 
                 Energizer.setEnergized(true);
-                
+                gridState[pacPos.y()][pacPos.x()] = true;
             } else if(config.getCell(pacPos).initialItem() instanceof ItemTest){
-                addScore(10);
-                ItemTest.setActive(true);
-            }
-            else {
+                if(!PacMan.INSTANCE.getInventory().isFull()){
+                    addScore(10);
+                    PacMan.INSTANCE.getInventory().add(config.getCell(pacPos).initialItem());
+                    //ItemTest.setActive(true);
+                    gridState[pacPos.y()][pacPos.x()] = true;
+                    System.out.println(PacMan.INSTANCE.getInventory());
+                }
+            } else {
                 addScore(1);
-            }
-            gridState[pacPos.y()][pacPos.x()] = true;
-        }
+                gridState[pacPos.y()][pacPos.x()] = true;
+            }*/
+        } // TODO: Faire une fonction dans item qui fait tout bien (le ramssage) pour chaque item (pour éviter d'écrire 'if ... instanceof ...') et qui ne met pas grid true si l'item n'est pas ramassé...
         for (var critter : critters) { // Collision PacMan Ghosts
             if (critter instanceof Ghost && critter.getPos().round().equals(pacPos)) {
                 if (PacMan.INSTANCE.isEnergized()) {

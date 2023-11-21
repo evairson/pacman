@@ -1,23 +1,35 @@
 package model.Items;
 
+import model.Critter;
 import model.Ghost;
 import model.PacMan;
 
+import java.util.ArrayList;
+
 public class Energizer extends Item {
 
-    private static boolean energized;
-    public static int frameEnergizer;
+    public int frameActivity;
+    private static final ArrayList<Energizer> itemList = new ArrayList<>();
 
-
-
-    public static boolean isEnergized(){
-        return energized;
+    public Energizer(){
+        super.setCollectable(false);
+        this.frameActivity = 0;
+        itemList.add(this);
     }
 
-    public static void setEnergized(boolean b){
-        energized = b;
-        frameEnergizer = 0;
-        PacMan.INSTANCE.setEnergized(true);
-        Ghost.energized = true;
+    public static boolean isOneActive(){
+        for(Energizer e : itemList){
+            if(e != null){
+                if(e.isActive()){ return true; }
+            }
+        }
+        return false;
+    }
+
+    public /*static*/ void setActive(boolean b){
+        super.setActive(b);
+        this.frameActivity = 0;
+        PacMan.INSTANCE.setEnergized(Energizer.isOneActive());
+        Ghost.energized = Energizer.isOneActive();
     }
 }

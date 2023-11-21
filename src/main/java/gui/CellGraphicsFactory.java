@@ -52,24 +52,22 @@ public class CellGraphicsFactory {
 
     public void setEnergized(Energizer e){
 
-        if(Energizer.isEnergized()){
-            Energizer.frameEnergizer ++;
-        }
-
-        if(Energizer.frameEnergizer>2000){
-            Energizer.setEnergized(false);
-            Ghost.energized = false;
-            PacMan.INSTANCE.setEnergized(false);
+        if(e.isActive()){
+            e.frameActivity ++;
+            if(e.frameActivity>500){
+                e.setActive(false);
+                Ghost.energized = Energizer.isOneActive();
+                PacMan.INSTANCE.setEnergized(Energizer.isOneActive());
+            }
         }
     }
 
     public void setActiveItemTest(ItemTest t){
-        if(ItemTest.active){
-            ItemTest.frameActivity++;
-        }
-
-        if(ItemTest.frameActivity>500){
-            ItemTest.setActive(false);
+        if(t.isActive()) {
+            t.frameActivity++;
+            if (t.frameActivity > 500) {
+                t.setActive(false);
+            }
         }
     }
 
@@ -143,18 +141,19 @@ public class CellGraphicsFactory {
         return new GraphicsUpdater() {
             @Override
             public void update() {
-                for (Node n : group.getChildren()){
-                    n.setVisible(!ItemTest.active);
-                }
-
-                dot.setVisible(!state.getGridState(pos));
-
                 if (cell.initialItem() instanceof Energizer){
-                    setEnergized((Energizer)cell.initialItem()); 
+                    setEnergized((Energizer)cell.initialItem());
                 }
                 if(cell.initialItem() instanceof ItemTest){
                     setActiveItemTest((ItemTest)cell.initialItem());
+                    System.out.println((cell.initialItem()).isActive());
                 }
+
+                for (Node n : group.getChildren()){
+                    n.setVisible(!ItemTest.isOneActive());
+                }
+
+                dot.setVisible(!state.getGridState(pos));
             }
 
             @Override
