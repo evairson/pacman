@@ -25,11 +25,11 @@ import java.lang.Math;
 public final class CritterGraphicsFactory {
     private final double scale;
 
-    private String etatPacman;
-    private static int etatghost;
-    private RealCoordinates pos;
+    private String etatPacman; //permet de changer l'image de pacman
+    private static int etatghost; //permet de changer l'image des fantômes
+    private RealCoordinates pos; 
     private static long time;
-    private final double offsetX = 0.01; //FIXME : très moche lol
+    private final double offsetX = 0.01; 
     private final double offsetY = 0.05;
 
     public void setEtatPacman(String e){ //permet de changer l'etat pour les tests
@@ -122,14 +122,14 @@ public final class CritterGraphicsFactory {
             setimgghostNE = "";
         }
         
-        var size = 0.65; // facteur d'echelle de l'image
+        Double size = 0.65; // facteur d'echelle de l'image
         double taille = scale * size;
         
-        var url = (critter instanceof PacMan) ? setimgPacman(critter) :
+        String url = (critter instanceof PacMan) ? setimgPacman(critter) :
                 setimgghost((Ghost)critter,numghost,setimgghostNE);
         
         // chargement de l'image à partir du fichier url
-        var image = new ImageView(new Image(url, taille, taille, true, false));
+        ImageView image = new ImageView(new Image(url, taille, taille, true, false));
         return new GraphicsUpdater() {
             @Override
             public void update() {
@@ -139,7 +139,6 @@ public final class CritterGraphicsFactory {
                 image.setTranslateX((critter.getPos().x() + offsetX + (1 - size)/2) * scale);
                 image.setTranslateY((critter.getPos().y() + offsetY + (1 - size)/2) * scale);
 
-                // Debug.out("sprite updated");
 
                 //changer image pacman 
                 if(critter instanceof PacMan){

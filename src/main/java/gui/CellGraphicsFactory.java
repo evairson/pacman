@@ -14,12 +14,12 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import model.MazeState;
 
-import static config.Cell.Content.DOT;
-import static config.Cell.Content.ENERGIZER;;
+import static config.Cell.Content.ENERGIZER;
+
+import config.Cell;;
 
 public class CellGraphicsFactory {
     private final double scale;
@@ -48,11 +48,13 @@ public class CellGraphicsFactory {
      */
 
     public GraphicsUpdater makeGraphics(MazeState state, IntCoordinates pos) {
-        var group = new Group();
+        Group group = new Group(); // permet de mettre dans groupe tous les node à afficher (mur + dot)
         group.setTranslateX(pos.x()*scale);
         group.setTranslateY(pos.y()*scale);
-        var cell = state.getConfig().getCell(pos);
-        var dot = new Circle();
+        Cell cell = state.getConfig().getCell(pos);
+
+        // creer les dots
+        Circle dot = new Circle();
         group.getChildren().add(dot);
         dot.setRadius(switch (cell.initialContent()) { case DOT -> scale/20; case ENERGIZER -> scale/7; case NOTHING -> 0; });
         dot.setCenterX(scale/2);
@@ -61,7 +63,8 @@ public class CellGraphicsFactory {
         double taille = scale;
 
 
-        if(cell.initialContent()==ENERGIZER){
+        //animation de l'energizer
+        if(cell.initialContent()==ENERGIZER){ 
             ScaleTransition blink = new ScaleTransition(Duration.millis(600), dot);
             blink.setFromX(1);
             blink.setFromY(1);
@@ -72,6 +75,7 @@ public class CellGraphicsFactory {
             blink.play();
         }
 
+        //rajout des murs pour chaque case
         if (cell.northWall()) {
             ImageView mur = new ImageView(new Image("mur-north.png", taille, taille, true, false));
             mur.setTranslateX(0);
@@ -96,10 +100,13 @@ public class CellGraphicsFactory {
             mur.setTranslateY(0);
             group.getChildren().add(mur);
         }
+
+
         return new GraphicsUpdater() {
+
             @Override
             public void update() {
-
+                //afficher les points si pacman pas passé dessus
                 dot.setVisible(!state.getGridState(pos));
             }
 
