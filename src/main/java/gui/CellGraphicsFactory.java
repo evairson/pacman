@@ -135,7 +135,7 @@ public class CellGraphicsFactory {
                 }
                 if(cell.initialItem() instanceof ItemTest){
                     setActiveItemTest((ItemTest)cell.initialItem());
-                    System.out.println((cell.initialItem()).isActive());
+                    //System.out.println((cell.initialItem()).isActive());
                 }
 
                 for (Node n : group.getChildren()){

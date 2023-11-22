@@ -83,32 +83,38 @@ public class App extends Application {
         //Récupère la taille de l'écran
         Rectangle2D screenBounds = Screen.getPrimary().getBounds();
 
-        //Adapte la taille de l'écran en fonction du nombre de lignes et de colonnes, ainsi que de la taille de l'écran
-        double widthScale = Math.floor(screenBounds.getWidth() / maze.getWidth())/10.0;
-        double heightScale = Math.floor(screenBounds.getHeight() / maze.getHeight())/10.0;
+        //Adapte la taille de la fenêtre de la partie (sans le hud) en fonction du nombre de lignes et de colonnes, ainsi que de la taille de l'écran
+        double widthScale = Math.floor(screenBounds.getWidth() / maze.getWidth());///10.0;
+        double heightScale = Math.floor(screenBounds.getHeight() / maze.getHeight());///10.0;
 
-        double scale = Math.min((int)widthScale,(int)heightScale) * 10.0 - 5;
+        double scale = Math.min((int)widthScale,(int)heightScale);// * 10.0 - 5;
 
         //Conteneur de tout ce qui est la vue du jeu (jeu, menu de pause, etc)
         StackPane gameComponents = new StackPane();
 
-        //Vue du jeu
-        var gameView = new GameView(maze, gamePane, scale);
+        //Vue de la partie (sans le hud)
+        var gameView = new GameView(maze, gamePane, 0.9*scale);
 
         gameComponents.getChildren().add(gamePane);
         StackPane.setAlignment(gamePane,Pos.CENTER);
 
+        //--HUD--
+        Pane hudPane = new Pane();
+        hudPane.setStyle("-fx-background-color: black;");
+        hudPane.setMinHeight(screenBounds.getHeight() - 0.9*scale*maze.getHeight());
+
         root.setCenter(gameComponents);
-        //root.setBottom();
+        root.setBottom(hudPane);
 
-        var animationController = new AnimationController(gameView.getGraphicsUpdaters(), gameView.getMaze(), primaryStage, pacmanController,gameView, gameComponents);
+        //--AnimationController--
+        var animationController = new AnimationController(gameView.getGraphicsUpdaters(), gameView.getMaze(), primaryStage, pacmanController, gameView, gameComponents);
         pacmanController.setAnimationController(animationController);
-
         maze.setAnimationController(animationController);
 
 
         //Empeche de resize la fenetre
         primaryStage.setResizable(false);
+
 
         //Permet d'enlever la barre du haut
         primaryStage.initStyle(StageStyle.UNDECORATED);
@@ -117,8 +123,7 @@ public class App extends Application {
         var mainMenu = new MainMenu();
         primaryStage.setScene(mainMenu.startMenu(primaryStage,gameScene,animationController));
         primaryStage.show();
-//        primaryStage.setMaximized(true);
-
+        //primaryStage.setMaximized(true);
     }
 
     private void TF2Complete() {
