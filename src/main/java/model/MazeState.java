@@ -187,7 +187,7 @@ public final class MazeState {
                 System.out.println("New high score: " + score);
             }
             System.exit(0);
-            //animationController.gameOver();
+            animationController.gameOver();
         }
         System.out.println("Lives: " + lives);
         resetCritters();
