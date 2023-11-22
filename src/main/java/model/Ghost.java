@@ -24,7 +24,7 @@ public enum Ghost implements Critter {
 
     private RealCoordinates pos;
     private Direction direction;
-    private final double speed = 1.3;
+    private double speed = 1.3;
     public static boolean energized;
     private boolean alive = true;
 
@@ -51,6 +51,9 @@ public enum Ghost implements Critter {
     @Override
     public double getSpeed(){
         return this.speed;
+    }
+    public void setSpeed(double speed){
+        this.speed=speed;
     }
 
     public boolean isEnergized() {

@@ -129,11 +129,13 @@ public final class MazeState {
                             @Override
                             public void run() {
                                 ((Ghost) critter).setIsAlive(true);
+                                ((Ghost) critter).setSpeed(critter.getSpeed()/1.5);
                                 timer.cancel();
                             }
                         };
                         ((Ghost) critter).setIsAlive(false);
-                        timer.schedule(comeBackToLife,30000);
+                        ((Ghost) critter).setSpeed(critter.getSpeed()*1.5);
+                        timer.schedule(comeBackToLife,20000);
                     }else {
                         ((Ghost) critter).setIsAlive(false);
                     }

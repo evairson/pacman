@@ -37,7 +37,8 @@ public class ClydeAI{
                 ArrayList<IntCoordinates> path = AStar.shortestPath(ghostPos, config.getGhostHousePos(), config);
                 int pathlen = path.size();
                 IntCoordinates nextPos = path.get(pathlen-1);
-                return BlinkyAI.whichDir(ghostPos, nextPos);
+                return BlinkyAI.whichDir(ghostPos
+                        , nextPos);
 
 
             }

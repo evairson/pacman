@@ -14,9 +14,9 @@ import static config.Cell.Content.*;
 public class MazeConfig {
 
     private final Cell[][] grid;
-    private final IntCoordinates pacManPos, blinkyPos, pinkyPos, inkyPos, clydePos, ghostHouse = new IntCoordinates(0,0);
+    private final IntCoordinates pacManPos, blinkyPos, pinkyPos, inkyPos, clydePos, ghostHouse;
     public MazeConfig(Cell[][] grid, IntCoordinates pacManPos, IntCoordinates blinkyPos, IntCoordinates pinkyPos,
-                      IntCoordinates inkyPos, IntCoordinates clydePos) {
+                      IntCoordinates inkyPos, IntCoordinates clydePos, IntCoordinates ghostHousePos) {
         this.grid = new Cell[grid.length][];
         for (int i = 0; i < grid.length; i++) {
             this.grid[i] = new Cell[grid[i].length];
@@ -29,6 +29,7 @@ public class MazeConfig {
         this.inkyPos = inkyPos;
         this.pinkyPos = pinkyPos;
         this.clydePos = clydePos;
+        this.ghostHouse=ghostHousePos;
     }
 
     public IntCoordinates getPacManPos() {
@@ -81,7 +82,7 @@ public class MazeConfig {
 
     public static MazeConfig txtToMaze(String filePath) throws IOException {
         List<String> lines = Files.readAllLines(Paths.get(filePath));
-        int height = lines.size()-5; // les 5 dernières lignes du .txt servent aux positions des personnages
+        int height = lines.size()-6; // les 5 dernières lignes du .txt servent aux positions des personnages
         int width = 2 * ((lines.get(0).length()-1)/4) + 1; // les cases du tableau sont alternativement de largeur 1 et 3
         String[] linesArray = lines.toArray(new String[0]);
 
@@ -96,13 +97,13 @@ public class MazeConfig {
                 }
             }
         }
-        IntCoordinates[] pos = new IntCoordinates[5];
+        IntCoordinates[] pos = new IntCoordinates[6];
         String[] split;
-        for (int i = 0; i < 5; i++) { // on crée les IntCoordinates des 5 persos à partir des 5 dernières lignes
+        for (int i = 0; i < 6; i++) { // on crée les IntCoordinates des 5 persos à partir des 5 dernières lignes
             split = linesArray[i+height].split(",");
             pos[i] = new IntCoordinates(Integer.parseInt(split[0].substring(3)),Integer.parseInt(split[1]));
         }
-        return new MazeConfig(stringToCell(lab),pos[0],pos[1],pos[2],pos[3],pos[4]);
+        return new MazeConfig(stringToCell(lab),pos[0],pos[1],pos[2],pos[3],pos[4],pos[5]);
     }
 
     /** stringToCell prend en entrée un tableau de String "lab" contenant les données des murs et contenus d'un labyrinthe
