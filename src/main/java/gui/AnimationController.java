@@ -19,6 +19,7 @@ import javafx.stage.StageStyle;
 import javafx.util.Duration;
 import model.MazeState;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -135,7 +136,11 @@ public class AnimationController {
             TimerTask task = new TimerTask() { //Infâme mais fonctionnel (voir comment utiliser Timeline)
                 @Override
                 public void run() {
-                    System.exit(0);
+                    try {
+                        transitionLvl();
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
             };
 
@@ -187,4 +192,11 @@ public class AnimationController {
         };
 
     }
+
+    public void transitionLvl() throws IOException {
+        maze.resetTransition();
+        unBlurGame();
+        setPaused(false);
+    }
+
 }

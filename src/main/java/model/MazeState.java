@@ -16,6 +16,8 @@ import config.Cell.Content;
 import geometry.IntCoordinates;
 import geometry.RealCoordinates;
 import gui.AnimationController;
+
+import java.io.IOException;
 import java.sql.SQLOutput;
 import java.util.Arrays;
 import java.util.List;
@@ -30,15 +32,16 @@ import static model.Ghost.*;
 public final class MazeState {
 
     private AnimationController animationController;
-    private final MazeConfig config;
+    private MazeConfig config;
     private final int height;
     private final int width;
 
-    private final boolean[][] gridState;
+    private boolean[][] gridState;
 
     private final List<Critter> critters;
     private int score;
 
+    private int level;
     private final Map<Critter, RealCoordinates> initialPos;
     private int lives = 3;
 
@@ -75,6 +78,16 @@ public final class MazeState {
     }
     public int getLives() {
         return lives;
+    }
+    public int getLevel() {
+        return level;
+    }
+    public void setLevel(int level) {
+        this.level = level;
+    }
+
+    public void setConfig(MazeConfig config){
+        this.config = config;
     }
 
     public void setAnimationController(AnimationController animationController) {
@@ -143,7 +156,7 @@ public final class MazeState {
             }
         }
         if (allDotsEaten()) {
-            playerWin();
+            animationController.win();
         }
     }
 
@@ -237,5 +250,11 @@ public final class MazeState {
             }
         }
         return gridState;
+    }
+
+    public void resetTransition() throws IOException {
+        setConfig(MazeConfig.makeExampleTxt1());
+        this.gridState = initGridState();
+        setLevel(this.level + 1);
     }
 }
