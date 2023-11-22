@@ -178,7 +178,7 @@ public class MazeConfig {
      *
      */
 
-    public static MazeConfig makeExample1() {
+    /*public static MazeConfig makeExample1() {
         return new MazeConfig(new Cell[][]{
                 {nTee(ENERGIZER),    hPipe(DOT),     hPipe(DOT),     hPipe(DOT),     hPipe(DOT),     nTee(DOT)},
                 {vPipe(DOT),    seVee(NOTHING), nTee(NOTHING),  nTee(NOTHING),  swVee(NOTHING), vPipe(DOT)},
@@ -193,7 +193,7 @@ public class MazeConfig {
                 new IntCoordinates(5, 5),
                 new IntCoordinates(5, 1)
         );
-    }
+    }*/
 
     public static MazeConfig makeExampleTxt() throws IOException {
         String currentDirectory = System.getProperty("user.dir"); // Obtient le répertoire de travail actuel

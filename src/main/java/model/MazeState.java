@@ -17,6 +17,8 @@ import config.Cell.Content;
 import java.sql.SQLOutput;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import static model.Ghost.*;
 
@@ -121,7 +123,20 @@ public final class MazeState {
                     //
                     //
                     // resetCritter(critter);
-                    ((Ghost) critter).setIsAlive(false);
+                    if (((Ghost) critter).isAlive()){
+                        Timer timer = new Timer();
+                        TimerTask comeBackToLife = new TimerTask() {
+                            @Override
+                            public void run() {
+                                ((Ghost) critter).setIsAlive(true);
+                                timer.cancel();
+                            }
+                        };
+                        ((Ghost) critter).setIsAlive(false);
+                        timer.schedule(comeBackToLife,30000);
+                    }else {
+                        ((Ghost) critter).setIsAlive(false);
+                    }
                 } else {
                     playerLost(); //FIXME : UNCOMMENT ME !!!
                     return;
