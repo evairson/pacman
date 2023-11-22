@@ -52,7 +52,6 @@ public class CellGraphicsFactory {
      */
 
     public void setEnergized(Energizer e){
-
         if(e.isActive()){
             e.frameActivity ++;
             if(e.frameActivity>500){
