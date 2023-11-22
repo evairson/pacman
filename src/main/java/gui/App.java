@@ -100,7 +100,7 @@ public class App extends Application {
 
         root.setCenter(gameComponents);
 
-        var animationController = new AnimationController(gameView.getGraphicsUpdaters(), gameView.getMaze(), primaryStage, pacmanController,gameView, gameComponents);
+        var animationController = new AnimationController(gameView.getGraphicsUpdaters(), gameView.getMaze(), primaryStage, pacmanController,gameView, gameComponents, scale);
         pacmanController.setAnimationController(animationController);
 
         maze.setAnimationController(animationController);

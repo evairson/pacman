@@ -1,6 +1,7 @@
 package gui;
 
 
+import javafx.animation.AnimationTimer;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -54,7 +55,10 @@ public class MainMenu implements Menu {
         setHoverEffect(quitText, "red", "black");
         playText.setOnMouseClicked(event -> {
             primaryStage.setScene(gameScene);
-            animationController.createAnimationTimer().start();
+            AnimationTimer animationTimer = animationController.createAnimationTimer();
+            animationController.setCurAnimationTimer(animationTimer);
+            animationController.getCurAnimationTimer().start();
+
         });
         quitText.setOnMouseClicked(event -> {
             System.exit(0);

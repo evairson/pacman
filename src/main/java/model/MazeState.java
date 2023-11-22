@@ -73,6 +73,10 @@ public final class MazeState {
         return height;
     }
 
+    public void setScore(int score) {
+        this.score = score;
+    }
+
     public int getScore() {
         return score;
     }
@@ -250,11 +254,5 @@ public final class MazeState {
             }
         }
         return gridState;
-    }
-
-    public void resetTransition() throws IOException {
-        setConfig(MazeConfig.makeExampleTxt1());
-        this.gridState = initGridState();
-        setLevel(this.level + 1);
     }
 }

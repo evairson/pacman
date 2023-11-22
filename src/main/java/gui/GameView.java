@@ -12,6 +12,7 @@ package gui;
  *
  */
 
+
 import geometry.IntCoordinates;
 import javafx.animation.AnimationTimer;
 import javafx.scene.Node;
@@ -25,13 +26,17 @@ import java.util.List;
 
 public class GameView {
     // class parameters
-    private final MazeState maze;
+    private MazeState maze;
     private final Pane gameRoot; // main node of the game
 
     private final List<GraphicsUpdater> graphicsUpdaters;
 
     public Pane getGameRoot() {
         return gameRoot;
+    }
+
+    public void setMaze(MazeState maze) {
+        this.maze = maze;
     }
 
     private void addGraphics(GraphicsUpdater updater) {

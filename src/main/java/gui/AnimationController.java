@@ -1,9 +1,7 @@
 package gui;
 
-import javafx.animation.AnimationTimer;
-import javafx.animation.KeyFrame;
-import javafx.animation.PauseTransition;
-import javafx.animation.Timeline;
+import config.MazeConfig;
+import javafx.animation.*;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -20,6 +18,7 @@ import javafx.util.Duration;
 import model.MazeState;
 
 import java.io.IOException;
+import java.sql.Time;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -28,8 +27,8 @@ import java.util.TimerTask;
  * Cette classe est responsable de la gestion des événements durant l'animation et de l'animation elle-même.
  */
 public class AnimationController {
-    private final List<GraphicsUpdater> graphicsUpdaters;
-    private final MazeState maze;
+    private List<GraphicsUpdater> graphicsUpdaters;
+    private MazeState maze;
     private final Stage primaryStage;
 
     private final PacmanController pacmanController;
@@ -40,20 +39,33 @@ public class AnimationController {
     private final StackPane gameComponents;
     private boolean isPaused = false;
 
+    private double AppScale;
+
+    private AnimationTimer curAnimationTimer;
 
 
-    public AnimationController(List<GraphicsUpdater> graphicsUpdaters, MazeState maze, Stage primaryStage, PacmanController pacmanController, GameView gameView, StackPane root) {
+
+    public AnimationController(List<GraphicsUpdater> graphicsUpdaters, MazeState maze, Stage primaryStage, PacmanController pacmanController, GameView gameView, StackPane root, double AppScale) {
         this.graphicsUpdaters = graphicsUpdaters;
         this.maze = maze;
         this.primaryStage = primaryStage;
         this.pacmanController = pacmanController;
         this.gameView = gameView;
         this.gameComponents = root;
+        this.AppScale = AppScale;
         pauseMenu = new PauseMenu(gameView.getMaze(), root);
     }
 
     public void setPaused(boolean paused) {
         isPaused = paused;
+    }
+
+    public void setCurAnimationTimer(AnimationTimer curAnimationTimer) {
+        this.curAnimationTimer = curAnimationTimer;
+    }
+
+    public AnimationTimer getCurAnimationTimer() {
+        return curAnimationTimer;
     }
 
     public boolean isPaused() {
@@ -132,19 +144,17 @@ public class AnimationController {
             gameComponents.getChildren().add(layout);
 
             //Ferme le programme 5s après le game over
-            Timer timer = new Timer();
-            TimerTask task = new TimerTask() { //Infâme mais fonctionnel (voir comment utiliser Timeline)
-                @Override
-                public void run() {
-                    try {
-                        transitionLvl();
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
+            Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
+                try {
+                    gameComponents.getChildren().remove(layout);
+                    unBlurGame();
+                    transitionLvl();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
                 }
-            };
-
-            timer.schedule(task,3000);
+            }));
+            timeline.setCycleCount(Animation.INDEFINITE);
+            timeline.play();
         }
         catch (Exception e){
             e.printStackTrace();
@@ -194,8 +204,18 @@ public class AnimationController {
     }
 
     public void transitionLvl() throws IOException {
-        maze.resetTransition();
-        unBlurGame();
+        MazeState maze = new MazeState(MazeConfig.makeExampleTxt1());
+        maze.setLevel(this.maze.getLevel() + 1);
+        maze.setScore(this.maze.getScore());
+        GameView gameView1 = new GameView(maze, gameView.getGameRoot(), AppScale);
+        this.gameView = gameView1;
+        this.graphicsUpdaters = gameView1.getGraphicsUpdaters();
+        // ajout vies
+        curAnimationTimer.stop();
+        curAnimationTimer = this.createAnimationTimer();
+        curAnimationTimer.start();
+
+
         setPaused(false);
     }
 
