@@ -8,6 +8,8 @@ import model.Ghost;
 import model.PacMan;
 import model.Direction;
 import java.lang.Math;
+import gui.App;
+
 
 
 /**
@@ -31,6 +33,7 @@ public final class CritterGraphicsFactory {
     private static long time;
     private final double offsetX = 0.01; //FIXME : très moche lol
     private final double offsetY = 0.05;
+        
 
     public void setEtatPacman(String e){ //permet de changer l'etat pour les tests
         etatPacman = e;
@@ -54,7 +57,9 @@ public final class CritterGraphicsFactory {
     public String setimgPacman(Critter critter){
         String url;
         
-            if ( critter.isFakeEnergized() ){
+            //primaryStage.addKeyListener(new EspaceClickListener());
+        
+            if ( critter.isFakeEnergized() /*&& clickListener.isEspaceClique()*/ ){
                 url = "FakeGhost.jpg";
                 return url;
             }
