@@ -5,7 +5,9 @@ package config;
 // tutur : ici essentiellement on a la liste des cellules :  le nom donne la forme et le content donne ce qui se trouve dedans (soit un
 // point, soit un energizer (le super boost), soit du vide)
 
-public record Cell(boolean northWall, boolean eastWall, boolean southWall, boolean westWall, Cell.Content initialContent) {
+public record
+
+Cell(boolean northWall, boolean eastWall, boolean southWall, boolean westWall, Cell.Content initialContent) {
 
 
     public enum Content { NOTHING, DOT, ENERGIZER }
