@@ -107,7 +107,7 @@ public class CellGraphicsFactory {
         }
         else if (cell.initialItem() instanceof FakeEnergizer){
             var dot1=dot;
-            dot.setFill(Color.RED);
+            dot.setFill(Color.GREEN);
             ScaleTransition blink = new ScaleTransition(Duration.millis(600), dot1);
             blink.setFromX(1);
             blink.setFromY(1);
