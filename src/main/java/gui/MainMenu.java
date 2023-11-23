@@ -2,81 +2,89 @@ package gui;
 
 
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import javafx.scene.text.Text;
+
 
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-
+import java.io.IOException;
+import java.io.InputStream;
 
 
 public class MainMenu implements Menu {
 
-    public Scene startMenu(Stage primaryStage, Scene gameScene) throws FileNotFoundException {
+    public AnchorPane imageAnchor;
 
-        primaryStage.setFullScreen(true);
+    public Scene startMenu(Stage primaryStage, Scene gameScene) throws IOException {
+
+
         primaryStage.setFullScreenExitHint("");
 
-        BorderPane layout = new BorderPane();
+        FXMLLoader loader =  new FXMLLoader(getClass().getResource("/fxml/sample.fxml"));
+        AnchorPane anchorPane = loader.load();
 
-        double width = this.getWidth();
-        double height = this.getHeight();
+        anchorPane.setMaxWidth(1280);
+        anchorPane.setMaxHeight(720);
+        anchorPane.setMinWidth(655);
+        anchorPane.setMinHeight(300);
+        ImageView imageView = (ImageView) anchorPane.lookup("#imageMENU");
 
-        layout.setMinWidth(width);
-        layout.setMinHeight(height);
-        layout.setMaxWidth(width);
-        layout.setMaxHeight(height);
-        layout.setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
+        Font.loadFont(getClass().getResourceAsStream("/fonts/Crackman.otf"), 12);
 
-        Button startButton = new Button("Commencer une nouvelle partie");
-        startButton.setWrapText(true);
-        startButton.setStyle("-fx-font-size: 2em;-fx-border-color: black;-fx-font-family: Serif");
-        startButton.setOnAction(event -> {
-            primaryStage.setFullScreen(false);
+        Text playText = (Text) anchorPane.lookup("#play");
+        Text optionsText = (Text) anchorPane.lookup("#options");
+        Text quitText = (Text) anchorPane.lookup("#quit");
 
+        playText.setFont(Font.font("Crackman", 77));
+        optionsText.setFont(Font.font("Crackman", 52));
+        quitText.setFont(Font.font("Crackman", 56));
+
+        setHoverEffect(playText, "yellow", "black");
+        setHoverEffect(optionsText, "blue", "black");
+        setHoverEffect(quitText, "red", "black");
+        playText.setOnMouseClicked(event -> {
             primaryStage.setScene(gameScene);
-
-            primaryStage.centerOnScreen();
-
-            primaryStage.show();
+        });
+        quitText.setOnMouseClicked(event -> {
+            System.exit(0);
         });
 
-        Button stopButton = new Button("Quitter");
-        stopButton.setWrapText(true);
-        stopButton.setStyle("-fx-font-size: 2em;-fx-border-color: black;-fx-font-family: Serif");
-        stopButton.setOnAction(event -> System.exit(0));
 
+        imageView.fitHeightProperty().bind(anchorPane.heightProperty());
+        imageView.fitWidthProperty().bind(anchorPane.widthProperty());
 
-        Image logoIMG = new Image(new FileInputStream("src/main/resources/logo.png"),width/4,height/4,true,true);
-        ImageView logo = new ImageView(logoIMG);
-        logo.setPreserveRatio(true);
+        imageView.setPreserveRatio(true);
 
+        primaryStage.setFullScreen(true);
 
-        VBox vbox = new VBox();
-        vbox.setSpacing(20);
-        vbox.getChildren().addAll(startButton,stopButton);
-        vbox.setAlignment(Pos.TOP_CENTER);
-
-        VBox vbox2 = new VBox();
-        vbox2.getChildren().add(logo);
-        vbox2.getChildren().add(vbox);
-        vbox2.setPadding(new Insets(250));
-        vbox2.setAlignment(Pos.TOP_CENTER);
-
-        layout.setCenter(vbox2);
-
-
-        return new Scene(layout);
+        Scene scene = new Scene(anchorPane);
+        return scene;
     }
+    private void setHoverEffect(Text textNode, String color1, String color2) {
+        textNode.setOnMouseEntered(event -> {
+            textNode.setStyle("-fx-fill: " + color1);
+        });
+
+        textNode.setOnMouseExited(event -> {
+            textNode.setStyle("-fx-fill: " + color2);
+        });
+    }
+
 }
