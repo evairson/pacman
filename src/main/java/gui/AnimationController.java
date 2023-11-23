@@ -69,7 +69,7 @@ public class AnimationController {
 
     public void blurGame(){
         ColorAdjust adj = new ColorAdjust(0, -0.9, -0.5, 0);
-        GaussianBlur blur = new GaussianBlur(55);
+        GaussianBlur blur = new GaussianBlur(10);
         adj.setInput(blur);
         gameView.getGameRoot().setEffect(adj);
     }
@@ -80,7 +80,7 @@ public class AnimationController {
     public void gameOver(){
         try {
             //Démarre une pause
-            this.blurGame();
+            //this.blurGame(); //Ne pas appeler blur car pc pas assez puissant => crash
             this.pauseScheduled = true;
             this.setPaused(true);
 
@@ -114,7 +114,7 @@ public class AnimationController {
     public void win(){
         try {
             //Démarre une pause
-            this.blurGame();
+            //this.blurGame(); //Ne pas appeler blur car pc pas assez puissant => crash
             this.pauseScheduled = true;
             this.setPaused(true);
 
@@ -158,7 +158,6 @@ public class AnimationController {
 
             long animationStart = 0;
 
-
             @Override
             public void handle(long now) { //La fonction handle est celle appelée à chaque frame du jeu
                 if(pauseScheduled){
@@ -185,6 +184,5 @@ public class AnimationController {
                 }
             }
         };
-
     }
 }
