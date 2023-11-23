@@ -41,7 +41,7 @@ public class AnimationController {
 
     private double AppScale;
 
-    private AnimationTimer curAnimationTimer;
+    private boolean hasntAlreadyWon = true; //Aide à gérer les transitions de niveau
 
 
 
@@ -60,25 +60,36 @@ public class AnimationController {
         isPaused = paused;
     }
 
-    public void setCurAnimationTimer(AnimationTimer curAnimationTimer) {
-        this.curAnimationTimer = curAnimationTimer;
-    }
-
-    public AnimationTimer getCurAnimationTimer() {
-        return curAnimationTimer;
-    }
-
     public boolean isPaused() {
         return isPaused;
     }
 
     public void startPauseMenu(){
         pauseMenu.startMenu();
+        this.startPause();
     }
     public void stopPauseMenu(){
         pauseMenu.stopMenu();
+        this.stopPause();
+    }
+    public void startPause(){
+        this.blurGame();
+        this.pauseScheduled = true;
+        this.setPaused(true);
+    }
+    public void stopPause(){
+        this.unBlurGame();
+        this.playScheduled = true;
+        this.setPaused(false);
     }
 
+    public boolean hasntAlreadyWon() {
+        return hasntAlreadyWon;
+    }
+
+    public void setHasntAlreadyWon(boolean hasntAlreadyWon) {
+        this.hasntAlreadyWon = hasntAlreadyWon;
+    }
 
     public void blurGame(){
         ColorAdjust adj = new ColorAdjust(0, -0.9, -0.5, 0);
@@ -94,8 +105,7 @@ public class AnimationController {
         try {
             //Démarre une pause
             this.blurGame();
-            this.pauseScheduled = true;
-            this.setPaused(true);
+            this.startPause();
 
             //Affiche le game over
             BorderPane layout = new BorderPane();
@@ -127,34 +137,34 @@ public class AnimationController {
     public void win(){
         try {
             //Démarre une pause
-            this.blurGame();
-            this.pauseScheduled = true;
-            this.setPaused(true);
+            this.startPause();
 
             //Affiche le game over
-            BorderPane layout = new BorderPane();
+            BorderPane winScreen = new BorderPane();
 
-            layout.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, CornerRadii.EMPTY, Insets.EMPTY)));
+            winScreen.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, CornerRadii.EMPTY, Insets.EMPTY)));
 
             Text gameOver = new Text("YOU WIN");
             gameOver.setFill(Color.GREEN);
             gameOver.setStyle("-fx-font-size: 50;-fx-font-family: Serif");
 
-            layout.setCenter(gameOver);
-            gameComponents.getChildren().add(layout);
+            winScreen.setCenter(gameOver);
+            gameComponents.getChildren().add(winScreen);
 
             //Ferme le programme 5s après le game over
             Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
+                gameComponents.getChildren().remove(gameView.getGameRoot());
+                this.stopPause();
+                gameComponents.getChildren().remove(winScreen);
                 try {
-                    gameComponents.getChildren().remove(layout);
-                    unBlurGame();
                     transitionLvl();
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
             }));
-            timeline.setCycleCount(Animation.INDEFINITE);
+            timeline.setCycleCount(1);
             timeline.play();
+
         }
         catch (Exception e){
             e.printStackTrace();
@@ -204,18 +214,21 @@ public class AnimationController {
     }
 
     public void transitionLvl() throws IOException {
-        MazeState maze = new MazeState(MazeConfig.makeExampleTxt1());
+
+        MazeState maze = new MazeState(MazeConfig.makeExampleTxt1()); //Crée une nouvelle mazeconfig qui correspond à la nouvelle map
         maze.setLevel(this.maze.getLevel() + 1);
         maze.setScore(this.maze.getScore());
-        GameView gameView1 = new GameView(maze, gameView.getGameRoot(), AppScale);
+        this.maze = maze;
+
+        this.gameView.getGameRoot().getChildren().clear(); //Clear l'ancien panneau de jeu
+
+        GameView gameView1 = new GameView(maze, gameView.getGameRoot(), AppScale);//Crée une nouvelle vue de jeu
         this.gameView = gameView1;
         this.graphicsUpdaters = gameView1.getGraphicsUpdaters();
+        gameComponents.getChildren().add(gameView.getGameRoot()); //Ajoute la nouvelle map à l'affichage
         // ajout vies
-        curAnimationTimer.stop();
-        curAnimationTimer = this.createAnimationTimer();
-        curAnimationTimer.start();
 
-
+        this.hasntAlreadyWon = true; //Remet le paramètre pour la transition de level
         setPaused(false);
     }
 

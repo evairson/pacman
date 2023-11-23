@@ -55,9 +55,7 @@ public class MainMenu implements Menu {
         setHoverEffect(quitText, "red", "black");
         playText.setOnMouseClicked(event -> {
             primaryStage.setScene(gameScene);
-            AnimationTimer animationTimer = animationController.createAnimationTimer();
-            animationController.setCurAnimationTimer(animationTimer);
-            animationController.getCurAnimationTimer().start();
+            animationController.createAnimationTimer().start();
 
         });
         quitText.setOnMouseClicked(event -> {

@@ -22,15 +22,9 @@ public class PacmanController {
             case ESCAPE -> {
                 if(animationController.isPaused()) {
                     animationController.stopPauseMenu();
-                    animationController.unBlurGame();
-                    animationController.playScheduled = true;
-                    animationController.setPaused(false);
                 }
                 else{
                     animationController.startPauseMenu();
-                    animationController.blurGame();
-                    animationController.pauseScheduled = true;
-                    animationController.setPaused(true);
                 }
             }
             default -> {

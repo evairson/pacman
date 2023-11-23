@@ -159,7 +159,9 @@ public final class MazeState {
                 }
             }
         }
-        if (allDotsEaten()) {
+
+        if (allDotsEaten() && animationController.hasntAlreadyWon()) {
+            animationController.setHasntAlreadyWon(false);
             animationController.win();
         }
     }
