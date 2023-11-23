@@ -3,6 +3,7 @@ import geometry.RealCoordinates;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.media.AudioClip;
 import model.Critter;
 import model.Ghost;
 import model.PacMan;
@@ -150,6 +151,8 @@ public final class CritterGraphicsFactory {
                             default -> "ferme";
                         };
                         pos = critter.getPos();
+                        AudioClip waku = new AudioClip(getClass().getResource("/audio/waku.mp3").toExternalForm());
+                        waku.play();
                     }
                     image.setImage(new Image(setimgPacman(critter), taille, taille, true, false));
                 }
