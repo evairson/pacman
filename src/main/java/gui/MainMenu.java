@@ -32,18 +32,11 @@ public class MainMenu implements Menu {
 
     public AnchorPane imageAnchor;
 
-    public Scene startMenu(Stage primaryStage, Scene gameScene) throws IOException {
-
-
-        primaryStage.setFullScreenExitHint("");
+    public Scene startMenu(Stage primaryStage, Scene gameScene, AnimationController animationController) throws IOException {
 
         FXMLLoader loader =  new FXMLLoader(getClass().getResource("/fxml/sample.fxml"));
         AnchorPane anchorPane = loader.load();
 
-        anchorPane.setMaxWidth(1280);
-        anchorPane.setMaxHeight(720);
-        anchorPane.setMinWidth(655);
-        anchorPane.setMinHeight(300);
         ImageView imageView = (ImageView) anchorPane.lookup("#imageMENU");
 
         Font.loadFont(getClass().getResourceAsStream("/fonts/Crackman.otf"), 12);
@@ -61,6 +54,7 @@ public class MainMenu implements Menu {
         setHoverEffect(quitText, "red", "black");
         playText.setOnMouseClicked(event -> {
             primaryStage.setScene(gameScene);
+            animationController.createAnimationTimer().start();
         });
         quitText.setOnMouseClicked(event -> {
             System.exit(0);
@@ -72,9 +66,8 @@ public class MainMenu implements Menu {
 
         imageView.setPreserveRatio(true);
 
-        primaryStage.setFullScreen(true);
-
         Scene scene = new Scene(anchorPane);
+
         return scene;
     }
     private void setHoverEffect(Text textNode, String color1, String color2) {

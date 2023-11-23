@@ -4,14 +4,14 @@ import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
 import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.effect.GaussianBlur;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -20,6 +20,8 @@ import javafx.util.Duration;
 import model.MazeState;
 
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Cette classe est responsable de la gestion des événements durant l'animation et de l'animation elle-même.
@@ -34,17 +36,19 @@ public class AnimationController {
     private PauseMenu pauseMenu;
 
     private GameView gameView;
+    private final StackPane gameComponents;
     private boolean isPaused = false;
 
 
 
-    public AnimationController(List<GraphicsUpdater> graphicsUpdaters, MazeState maze, Stage primaryStage, PacmanController pacmanController, GameView gameView) {
+    public AnimationController(List<GraphicsUpdater> graphicsUpdaters, MazeState maze, Stage primaryStage, PacmanController pacmanController, GameView gameView, StackPane root) {
         this.graphicsUpdaters = graphicsUpdaters;
         this.maze = maze;
         this.primaryStage = primaryStage;
         this.pacmanController = pacmanController;
         this.gameView = gameView;
-        pauseMenu = new PauseMenu(pacmanController,gameView.getMaze());
+        this.gameComponents = root;
+        pauseMenu = new PauseMenu(gameView.getMaze(), root);
     }
 
     public void setPaused(boolean paused) {
@@ -76,20 +80,12 @@ public class AnimationController {
     public void gameOver(){
         try {
             //Démarre une pause
-            this.startPauseMenu();
             this.blurGame();
             this.pauseScheduled = true;
             this.setPaused(true);
-            pauseMenu.getStage().hide();
 
             //Affiche le game over
-            Stage stage = new Stage();
-            stage.initStyle(StageStyle.TRANSPARENT);
             BorderPane layout = new BorderPane();
-            layout.setMinWidth(pauseMenu.getWidth());
-            layout.setMinHeight(pauseMenu.getHeight());
-            layout.setMaxWidth(pauseMenu.getWidth());
-            layout.setMaxHeight(pauseMenu.getHeight());
 
             layout.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, CornerRadii.EMPTY, Insets.EMPTY)));
 
@@ -98,15 +94,52 @@ public class AnimationController {
             gameOver.setStyle("-fx-font-size: 50;-fx-font-family: Serif");
 
             layout.setCenter(gameOver);
+            gameComponents.getChildren().add(layout);
 
-            Scene gameOverScene = new Scene(layout);
-            gameOverScene.setFill(Color.TRANSPARENT);
+            //Ferme le programme 5s après le game over
+            Timer timer = new Timer();
+            TimerTask task = new TimerTask() { //Infâme mais fonctionnel (voir comment utiliser Timeline)
+                @Override
+                public void run() {
+                    System.exit(0);
+                }
+            };
 
-            stage.setScene(gameOverScene);
-            stage.centerOnScreen();
-            stage.setAlwaysOnTop(true);
-            stage.show();
+            timer.schedule(task,3000);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+    public void win(){
+        try {
+            //Démarre une pause
+            this.blurGame();
+            this.pauseScheduled = true;
+            this.setPaused(true);
 
+            //Affiche le game over
+            BorderPane layout = new BorderPane();
+
+            layout.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, CornerRadii.EMPTY, Insets.EMPTY)));
+
+            Text gameOver = new Text("YOU WIN");
+            gameOver.setFill(Color.GREEN);
+            gameOver.setStyle("-fx-font-size: 50;-fx-font-family: Serif");
+
+            layout.setCenter(gameOver);
+            gameComponents.getChildren().add(layout);
+
+            //Ferme le programme 5s après le game over
+            Timer timer = new Timer();
+            TimerTask task = new TimerTask() { //Infâme mais fonctionnel (voir comment utiliser Timeline)
+                @Override
+                public void run() {
+                    System.exit(0);
+                }
+            };
+
+            timer.schedule(task,3000);
         }
         catch (Exception e){
             e.printStackTrace();

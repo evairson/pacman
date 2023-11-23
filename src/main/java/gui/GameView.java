@@ -15,7 +15,7 @@ package gui;
 import geometry.IntCoordinates;
 import javafx.animation.AnimationTimer;
 import javafx.scene.Node;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import model.MazeState;
@@ -65,6 +65,7 @@ public class GameView {
 
         // Ajouter les créatures à la vue en utilisant CritterGraphicsFactory
         for (var critter : maze.getCritters()) addGraphics(critterFactory.makeGraphics(critter));
+
 
     }
 
