@@ -126,7 +126,6 @@ public final class MazeState {
                 
             }
             else if (config.getCell(pacPos).initialItem() instanceof FakeEnergizer){
-                addScore(5);
                 FakeEnergizer.setFakeEnergized(true); 
             }
             else {
@@ -135,8 +134,8 @@ public final class MazeState {
             gridState[pacPos.y()][pacPos.x()] = true;
         }
         for (var critter : critters) { // Collision PacMan Ghosts
-            if (critter instanceof Ghost && critter.getPos().round().equals(pacPos)) {
-                if (PacMan.INSTANCE.isEnergized()) {
+            if (critter instanceof Ghost && critter.getPos().round().equals(pacPos) && !PacMan.INSTANCE.isFakeEnergized() ) {
+                if (PacMan.INSTANCE.isEnergized() ) {
                     addScore(10);
                     resetCritter(critter);
                 } else {
@@ -167,7 +166,10 @@ public final class MazeState {
             //animationController.gameOver();
         }
         System.out.println("Lives: " + lives);
-        resetCritters();
+        //if (!PacMan.INSTANCE.isFakeEnergized()){
+            resetCritters();
+        //}
+    
     }
 
     private void resetCritter(Critter critter) {
