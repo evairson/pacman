@@ -163,6 +163,9 @@ public final class PacMan implements Critter {
                     if (config.getCell(this.currCellI()).westWall()) {
                         return new RealCoordinates(Math.max(nextPos.x(), Math.floor(this.getPos().x())), this.getPos().y());
                     } else {
+                        if (nextPos.x()<-0.5) {
+                            nextPos = new RealCoordinates((config.getWidth() - TPINTERVAL),this.getPos().y());
+                        }
                         return nextPos;
                     }
                 }
@@ -170,6 +173,9 @@ public final class PacMan implements Critter {
                     if (config.getCell(this.currCellI()).eastWall()) {
                         return new RealCoordinates(Math.min(nextPos.x(), Math.ceil(this.getPos().x())), this.getPos().y());
                     } else {
+                        if (nextPos.x() > config.getWidth() - TPINTERVAL) {
+                            nextPos = new RealCoordinates((-0.5 + TPINTERVAL),this.getPos().y());
+                        }
                         return nextPos;
                     }
                 }
@@ -177,6 +183,9 @@ public final class PacMan implements Critter {
                     if (config.getCell(this.currCellI()).northWall()) {
                         return new RealCoordinates(this.getPos().x(), Math.max(nextPos.y(), Math.floor(this.getPos().y())));
                     } else {
+                        if (nextPos.y()<-0.5) {
+                            nextPos = new RealCoordinates(this.getPos().x(),(config.getHeight() - TPINTERVAL));
+                        }
                         return nextPos;
                     }
                 }
@@ -184,6 +193,9 @@ public final class PacMan implements Critter {
                     if (config.getCell(this.currCellI()).southWall()) {
                         return new RealCoordinates(this.getPos().x(), Math.min(nextPos.y(), Math.ceil(this.getPos().y())));
                     } else {
+                        if (nextPos.y() > config.getHeight() - TPINTERVAL) {
+                            nextPos = new RealCoordinates(this.getPos().x(),TPINTERVAL);
+                        }
                         return nextPos;
                     }
                 }
