@@ -7,6 +7,7 @@ import java.util.TimerTask;
 import config.Cell;
 
 import geometry.RealCoordinates;
+import model.Items.Inventory;
 
 /**
  * Implémente PacMan comme un singleton.
@@ -25,9 +26,11 @@ public final class PacMan implements Critter {
     public boolean Fake_energized;
     public int frameEnergizer;
 
+    private final Inventory inventory;
     static final double TPINTERVAL = 0.1;
 
     public PacMan() {
+        this.inventory = new Inventory();
     }
 
     public static final PacMan INSTANCE = new PacMan();
@@ -64,7 +67,11 @@ public final class PacMan implements Critter {
 
     public boolean isEnergized() {
         return energized;
-    } 
+    }
+
+    public Inventory getInventory(){
+        return this.inventory;
+    }
 
     public boolean isFakeEnergized(){
         return Fake_energized;
@@ -151,32 +158,38 @@ public final class PacMan implements Critter {
                         case EAST -> RealCoordinates.EAST_UNIT;
                         case SOUTH -> RealCoordinates.SOUTH_UNIT;
                         case WEST -> RealCoordinates.WEST_UNIT;}).times(this.getSpeed() * deltaTns * 1E-9));
-            switch(dir){ // Ajustement en fonction des murs, on ne veut pas dépasser un mur
-                case WEST :
-                    if(config.getCell(this.currCellI()).westWall()){
+            switch (dir) { // Ajustement en fonction des murs, on ne veut pas dépasser un mur
+                case WEST -> {
+                    if (config.getCell(this.currCellI()).westWall()) {
                         return new RealCoordinates(Math.max(nextPos.x(), Math.floor(this.getPos().x())), this.getPos().y());
                     } else {
                         return nextPos;
                     }
-                case EAST :
-                    if(config.getCell(this.currCellI()).eastWall()){
+                }
+                case EAST -> {
+                    if (config.getCell(this.currCellI()).eastWall()) {
                         return new RealCoordinates(Math.min(nextPos.x(), Math.ceil(this.getPos().x())), this.getPos().y());
                     } else {
                         return nextPos;
                     }
-                case NORTH :
-                    if(config.getCell(this.currCellI()).northWall()){
+                }
+                case NORTH -> {
+                    if (config.getCell(this.currCellI()).northWall()) {
                         return new RealCoordinates(this.getPos().x(), Math.max(nextPos.y(), Math.floor(this.getPos().y())));
                     } else {
                         return nextPos;
                     }
-                case SOUTH :
-                    if(config.getCell(this.currCellI()).southWall()){
+                }
+                case SOUTH -> {
+                    if (config.getCell(this.currCellI()).southWall()) {
                         return new RealCoordinates(this.getPos().x(), Math.min(nextPos.y(), Math.ceil(this.getPos().y())));
                     } else {
                         return nextPos;
                     }
-                default : return this.getPos();
+                }
+                default -> {
+                    return this.getPos();
+                }
             }
         } else {
             return this.getPos();

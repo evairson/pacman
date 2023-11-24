@@ -16,17 +16,18 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.util.Duration;
 import model.Ghost;
+import model.Items.Item;
+import model.Items.ItemTest;
 import model.MazeState;
 import model.PacMan;
 import model.Items.Dot;
 import model.Items.Energizer;
 import model.Items.FakeEnergizer;
 import config.Cell;
-
+import model.Items.ItemTest;
 
 public class CellGraphicsFactory {
     private final double scale;
-
 
     public CellGraphicsFactory(double scale) {
         this.scale = scale;
@@ -51,22 +52,26 @@ public class CellGraphicsFactory {
      */
 
     public void setEnergized(Energizer e){
-        
-
-        if(Energizer.isEnergized()){
-            Energizer.frameEnergizer ++;
+        if(e.isActive()){
+            e.frameActivity ++;
+            if(e.frameActivity>500){
+                e.setActive(false);
+                Ghost.energized = Energizer.isOneActive();
+                PacMan.INSTANCE.setEnergized(Energizer.isOneActive());
+            }
         }
+    }
 
-        if(Energizer.frameEnergizer>2000){
-            Energizer.setEnergized(false);
-            Ghost.energized = false;
-            PacMan.INSTANCE.setEnergized(false);
+    public void setActiveItemTest(ItemTest t){
+        if(t.isActive()) {
+            t.frameActivity++;
+            if (t.frameActivity > 500) {
+                t.setActive(false);
+            }
         }
     }
 
     public void setFakeEnergized(FakeEnergizer e){
-        
-
         if(FakeEnergizer.isFakeEnergized()){
             FakeEnergizer.frameEnergizer ++;
         }
@@ -90,28 +95,20 @@ public class CellGraphicsFactory {
 
         double radius =0;
         if(cell.initialItem().getClass() == Dot.class)  radius = scale/20;
-        if(cell.initialItem() instanceof Energizer || cell.initialItem() instanceof FakeEnergizer )  radius = scale/7;
-
+        if((cell.initialItem() instanceof Energizer) || (cell.initialItem() instanceof ItemTest) || (cell.initialItem() instanceof FakeEnergizer)) radius = scale/7;
         dot.setRadius(radius);
+
         dot.setCenterX(scale/2);
         dot.setCenterY(scale/2);
-        dot.setFill(Color.WHITE);
+
+        if(cell.initialItem() instanceof ItemTest) { dot.setFill(Color.RED); }
+        else if (cell.initialItem() instanceof FakeEnergizer) { dot.setFill(Color.GREEN); }
+        else { dot.setFill(Color.WHITE); }
         double taille = scale;
 
-        if(cell.initialItem() instanceof Energizer  ){
+
+        if((cell.initialItem() instanceof Energizer) || (cell.initialItem() instanceof ItemTest) || (cell.initialItem() instanceof FakeEnergizer)){
             ScaleTransition blink = new ScaleTransition(Duration.millis(600), dot);
-            blink.setFromX(1);
-            blink.setFromY(1);
-            blink.setToX(0.6);
-            blink.setToY(0.6);
-            blink.setAutoReverse(true);
-            blink.setCycleCount(Timeline.INDEFINITE);
-            blink.play();
-        }
-        else if (cell.initialItem() instanceof FakeEnergizer){
-            var dot1=dot;
-            dot.setFill(Color.GREEN);
-            ScaleTransition blink = new ScaleTransition(Duration.millis(600), dot1);
             blink.setFromX(1);
             blink.setFromY(1);
             blink.setToX(0.6);
@@ -151,17 +148,23 @@ public class CellGraphicsFactory {
 
             @Override
             public void update() {
+
                 //afficher les points si pacman pas passé dessus
                 dot.setVisible(!state.getGridState(pos));
 
-
                 if (cell.initialItem() instanceof Energizer){
-                    setEnergized((Energizer)cell.initialItem()); 
+                    setEnergized((Energizer)cell.initialItem());
                 }
-                else if (cell.initialItem() instanceof FakeEnergizer){
+                if(cell.initialItem() instanceof ItemTest){
+                    setActiveItemTest((ItemTest)cell.initialItem());
+                }
+                if (cell.initialItem() instanceof FakeEnergizer){
                     setFakeEnergized((FakeEnergizer)cell.initialItem());
                 }
-
+                for (Node n : group.getChildren()){
+                    n.setVisible(!ItemTest.isOneActive());
+                }
+                dot.setVisible(!state.getGridState(pos));
             }
 
             @Override

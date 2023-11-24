@@ -6,6 +6,7 @@ import model.Items.Dot;
 import model.Items.Energizer;
 import model.Items.FakeEnergizer;
 import model.Items.Item;
+import model.Items.ItemTest;
 import java.io.File;
 import java.nio.file.Paths;
 import java.nio.file.Files;
@@ -128,7 +129,11 @@ public class MazeConfig {
         for (int i = 1; i < lab.length; i+=2) {
             for (int j = 1; j < lab[0].length; j+=2) {
                 grid[i/2][j/2] = Cell.create(lab[i-1][j].equals("---"),lab[i][j+1].equals("|"),lab[i+1][j].equals("---"),
-                        lab[i][j-1].equals("|"),(lab[i][j].equals(" . "))? new Dot() : ((lab[i][j].equals(" E "))? new Energizer() : (lab[i][j].equals(" S "))? new FakeEnergizer(false,true,0) :new Item()));
+                        lab[i][j-1].equals("|"),
+                        (lab[i][j].equals(" . "))? new Dot() :
+                                ((lab[i][j].equals(" E "))? new Energizer() :
+                                        ((lab[i][j].equals(" T "))? new ItemTest() :
+                                            ((lab[i][j].equals(" S "))? new FakeEnergizer(false,true,0) : new Item()))));
             }
         }
         return grid;

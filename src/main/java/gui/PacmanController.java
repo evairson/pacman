@@ -26,7 +26,9 @@ public class PacmanController {
                     animationController.startPauseMenu();
                 }
             }
+            case U -> { PacMan.INSTANCE.getInventory().getNth(0).setActive(true); PacMan.INSTANCE.getInventory().remove(0);}
             default -> {
+                System.out.println(event.getCode());
                 PacMan.INSTANCE.setNextDir(
                         switch (event.getCode()) {
                             case LEFT -> Direction.WEST;
