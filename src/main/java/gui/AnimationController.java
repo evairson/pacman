@@ -60,7 +60,7 @@ public class AnimationController {
     }
 
     public void startPauseMenu(){
-        pauseMenu.startMenu();
+        pauseMenu.startMenu(gameComponents);
     }
     public void stopPauseMenu(){
         pauseMenu.stopMenu();
