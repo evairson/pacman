@@ -191,9 +191,9 @@ public class AnimationController {
             winScreen.setCenter(gameOver);
             gameComponents.getChildren().add(winScreen);
 
-            //Ferme le programme 5s après le game over
+            //Ferme le programme 5s après la win
             Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
-//                if (maze.getLevel() == 2) System.exit(69);
+                if(this.maze.getLevel() == 2) System.exit(0);
                 gameComponents.getChildren().remove(gameView.getGameRoot());
                 this.stopPause();
                 gameComponents.getChildren().remove(winScreen);
@@ -255,6 +255,7 @@ public class AnimationController {
     public void transitionLvl() throws IOException {
 
         MazeState maze = new MazeState(MazeConfig.makeExampleTxt1()); //Crée une nouvelle mazeconfig qui correspond à la nouvelle map
+        maze.setAnimationController(this);
         maze.setLevel(this.maze.getLevel() + 1);
         maze.setScore(this.maze.getScore());
         this.maze = maze;

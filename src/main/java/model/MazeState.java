@@ -43,7 +43,7 @@ public final class MazeState {
     private final List<Critter> critters;
     private int score;
 
-    private int level;
+    private int level = 1;
     private final Map<Critter, RealCoordinates> initialPos;
     private int lives = 3;
 
@@ -194,7 +194,6 @@ public final class MazeState {
                     }
                 }
             }
-            System.out.println(allDotsEaten());
             if (allDotsEaten() && animationController.hasntAlreadyWon()) {
                 System.out.println("caca");
                 if (level == 2) playerWin();
