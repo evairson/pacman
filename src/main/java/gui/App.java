@@ -8,14 +8,13 @@ package gui;
  */
 
 import javafx.application.Application;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import config.MazeConfig;
+import javafx.stage.StageStyle;
 import model.MazeState;
 
 import java.io.IOException;
@@ -34,13 +33,13 @@ public class App extends Application {
      */
     public void start(Stage primaryStage) throws IOException {
         // Pane est un conteneur qui peut contenir des éléments graphiques
-        var root = new Pane();
+        Pane root = new Pane();
         // Scene est un objet qui contient tous les éléments graphiques (ça correspond à la fenêtre qui sera affichée)
-        var gameScene = new Scene(root);
-        var config = MazeConfig.makeExampleTxt();
+        Scene gameScene = new Scene(root);
+        if (!MazeConfig.isGameComplete()) { TF2Complete(); }
 
         // PacmanController est un listener d'événements clavier (ça récupère les touches promptées par l'user)
-        var pacmanController = new PacmanController();
+        PacmanController pacmanController = new PacmanController();
 
         /** gameScene est un objet de type Scene
          *
@@ -71,34 +70,40 @@ public class App extends Application {
 
         gameScene.setOnKeyPressed(pacmanController::keyPressedHandler);
         gameScene.setOnKeyReleased(pacmanController::keyReleasedHandler);
-        var maze = new MazeState(MazeConfig.makeExampleTxt());
+
+        MazeState maze = new MazeState(MazeConfig.makeExampleTxt());
 
         //Récupère la taille de l'écran
         Rectangle2D screenBounds = Screen.getPrimary().getBounds();
 
-
         //Adapte la taille de l'écran en fonction du nombre de lignes et de colonnes, ainsi que de la taille de l'écran
         double widthScale = Math.floor(screenBounds.getWidth() / maze.getWidth())/10.0;
         double heightScale = Math.floor(screenBounds.getHeight() / maze.getHeight())/10.0;
-        double scale = Math.min((int)widthScale,(int)heightScale) * 10.0 - 3;
-        System.out.println(scale);
 
-        var gameView = new GameView(maze, root, scale);
+        double scale = Math.min((int)widthScale,(int)heightScale) * 10.0 - 5;
 
-        /**
-         * Ces 3 dernières lignes permette
-         * 1. la configuration de la fenêtre avec gameScene comme contenu.
-         * 2. l'affichage de la fenêtre.
-         * 3. le lancement de l'animation du jeu.
-         * c bo
-         * pour l'instant c'est surtout moche en fait xd
-         */
+        GameView gameView = new GameView(maze, root, scale);
+
+        AnimationController animationController = new AnimationController(gameView.getGraphicsUpdaters(), gameView.getMaze(), primaryStage, pacmanController,gameView);
+        pacmanController.setAnimationController(animationController);
+
+        maze.setAnimationController(animationController);
 
         //Empeche de resize la fenetre
         primaryStage.setResizable(false);
 
-        primaryStage.setScene(gameScene);
+        //Permet d'enlever la barre du haut (à voir pour la suite n'ayant pas fait de menu d'options in game ça m'a l'air complexe à rajouter de suite)
+        primaryStage.initStyle(StageStyle.UNDECORATED);
+
+
+        MainMenu mainMenu = new MainMenu();
+        primaryStage.setScene(mainMenu.startMenu(primaryStage,gameScene));
         primaryStage.show();
-        gameView.animate();
+        animationController.createAnimationTimer().start();
+    }
+
+    private void TF2Complete() {
+        System.out.println("Erreur de compilation, fichiers manquants...");
+        System.exit(42);
     }
 }

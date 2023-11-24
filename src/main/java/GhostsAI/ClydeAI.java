@@ -2,7 +2,6 @@ package GhostsAI;
 
 import geometry.AStar;
 import geometry.IntCoordinates;
-import geometry.RealCoordinates;
 import model.Direction;
 import model.Ghost;
 

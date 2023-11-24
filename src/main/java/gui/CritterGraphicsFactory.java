@@ -25,11 +25,11 @@ import java.lang.Math;
 public final class CritterGraphicsFactory {
     private final double scale;
 
-    private String etatPacman;
-    private static int etatghost;
-    private RealCoordinates pos;
+    private String etatPacman; //permet de changer l'image de pacman
+    private static int etatghost; //permet de changer l'image des fantômes
+    private RealCoordinates pos; 
     private static long time;
-    private final double offsetX = 0.01; //FIXME : très moche lol
+    private final double offsetX = 0.01; 
     private final double offsetY = 0.05;
 
     public void setEtatPacman(String e){ //permet de changer l'etat pour les tests
@@ -53,7 +53,7 @@ public final class CritterGraphicsFactory {
     // Choix de l'image de pacman
     public String setimgPacman(Critter critter){
         String url;
-        if(critter.getDirection()==Direction.NONE || etatPacman=="rond"){
+        if(critter.getDirection()==Direction.NONE){
             url = "pacman/pacman-rond.png";
         }
         else{
@@ -75,7 +75,7 @@ public final class CritterGraphicsFactory {
     }
 
     // Choix de l'image en fonction du fantôme (sans la direction)
-    public String setimgghostNEb(Critter critter){
+    public String setimgghostNE(Critter critter){
         String ghost = switch ((Ghost) critter) {
             case BLINKY -> "ghost-blinky/ghost-blinky-";
             case CLYDE -> "ghost-clyde/ghost-clyde-";
@@ -86,13 +86,9 @@ public final class CritterGraphicsFactory {
 
     }
 
-    public String setimgghostNE(Critter critter){ //avec direction
-        return setimgghostNEb(critter)+getDirectionString(critter);
-    }
-
     public String setimgghost(Ghost critter, int numghost, String setimgghostNE){
         if(!critter.isEnergized()) 
-        return setimgghostNE+etatghost+".png";
+        return setimgghostNE+getDirectionString(critter)+etatghost+".png";
         else {
             return "ghost-blue"+etatghost+".png";
 
@@ -126,14 +122,14 @@ public final class CritterGraphicsFactory {
             setimgghostNE = "";
         }
         
-        var size = 0.5; // facteur d'echelle de l'image
+        Double size = 0.65; // facteur d'echelle de l'image
         double taille = scale * size;
         
-        var url = (critter instanceof PacMan) ? setimgPacman(critter) :
+        String url = (critter instanceof PacMan) ? setimgPacman(critter) :
                 setimgghost((Ghost)critter,numghost,setimgghostNE);
         
         // chargement de l'image à partir du fichier url
-        var image = new ImageView(new Image(url, taille, taille, false, false));
+        ImageView image = new ImageView(new Image(url, taille, taille, true, false));
         return new GraphicsUpdater() {
             @Override
             public void update() {
@@ -143,7 +139,6 @@ public final class CritterGraphicsFactory {
                 image.setTranslateX((critter.getPos().x() + offsetX + (1 - size)/2) * scale);
                 image.setTranslateY((critter.getPos().y() + offsetY + (1 - size)/2) * scale);
 
-                // Debug.out("sprite updated");
 
                 //changer image pacman 
                 if(critter instanceof PacMan){
@@ -156,7 +151,7 @@ public final class CritterGraphicsFactory {
                         };
                         pos = critter.getPos();
                     }
-                    image.setImage(new Image(setimgPacman(critter), taille, taille, false, false));
+                    image.setImage(new Image(setimgPacman(critter), taille, taille, true, false));
                 }
 
 
@@ -168,7 +163,7 @@ public final class CritterGraphicsFactory {
                         if(etatghost == 1) {etatghost = 2; }
                         else { etatghost = 1; }
                     }
-                    image.setImage(new Image(setimgghost((Ghost)critter,numghost,setimgghostNE), taille, taille, false, false));
+                    image.setImage(new Image(setimgghost((Ghost)critter,numghost,setimgghostNE), taille, taille, true, false));
                         
                 }
             }

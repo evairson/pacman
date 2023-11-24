@@ -1,10 +1,5 @@
 package geometry;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import config.MazeConfig;
-
 /**
  * Représente un point dans le plan avec des coordonnées réelles, utilisé pour la position du joueur.
  *

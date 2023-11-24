@@ -48,31 +48,19 @@ public class CritterGraphicsFactoryTest{
             for(int j =0; j<2; j++){
                 facto.setEtatghost(j, numGhost);
                 critter.setDirection(Direction.NORTH);
-                assertEquals(facto.setimgghost(critter,numGhost,facto.setimgghostNE(critter)),facto.setimgghostNEb(critter)+"haut"+j+".png");
+                assertEquals(facto.setimgghost(critter,numGhost,facto.setimgghostNE(critter)),facto.setimgghostNE(critter)+"haut"+j+".png");
                 critter.setDirection(Direction.SOUTH);
-                assertEquals(facto.setimgghost(critter,numGhost,facto.setimgghostNE(critter)),facto.setimgghostNEb(critter)+"bas"+j+".png");
+                assertEquals(facto.setimgghost(critter,numGhost,facto.setimgghostNE(critter)),facto.setimgghostNE(critter)+"bas"+j+".png");
                 critter.setDirection(Direction.WEST);
-                assertEquals(facto.setimgghost(critter,numGhost,facto.setimgghostNE(critter)),facto.setimgghostNEb(critter)+"gauche"+j+".png");
+                assertEquals(facto.setimgghost(critter,numGhost,facto.setimgghostNE(critter)),facto.setimgghostNE(critter)+"gauche"+j+".png");
                 critter.setDirection(Direction.EAST);
-                assertEquals(facto.setimgghost(critter,numGhost,facto.setimgghostNE(critter)),facto.setimgghostNEb(critter)+"droite"+j+".png");
+                assertEquals(facto.setimgghost(critter,numGhost,facto.setimgghostNE(critter)),facto.setimgghostNE(critter)+"droite"+j+".png");
                 critter.setDirection(Direction.NONE);
-                assertEquals(facto.setimgghost(critter,numGhost,facto.setimgghostNE(critter)),facto.setimgghostNEb(critter)+"droite"+j+".png");
+                assertEquals(facto.setimgghost(critter,numGhost,facto.setimgghostNE(critter)),facto.setimgghostNE(critter)+"droite"+j+".png");
             }
         }    
     }
     }
 
-    /*@Test
-    public void updateTest(){
-        List<Ghost> critters = List.of(Ghost.CLYDE, Ghost.BLINKY, Ghost.INKY, Ghost.PINKY);
-        for(double i = 50; i <300;i+=0.5){
-            CritterGraphicsFactory facto = new CritterGraphicsFactory(i);
-            for (Ghost critter: critters){
-                critter.setDirection(Direction.NONE);
-                Pane gameRoot = new Pane();
-                gameRoot.getChildren().add(facto.makeGraphics(critter).getNode());
-            }
-        }
-    }*/
 
 }
