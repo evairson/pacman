@@ -161,8 +161,7 @@ public final class MazeState {
         lives--;
         if (lives == 0) {
             System.out.println("Game over!");
-            System.exit(0);
-            //animationController.gameOver();
+            animationController.gameOver();
         }
         System.out.println("Lives: " + lives);
         //if (!PacMan.INSTANCE.isFakeEnergized()){

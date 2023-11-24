@@ -3,26 +3,22 @@ package gui;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import model.MazeState;
 
-public class PauseMenu implements Menu{ //TODO : mettre des commentaires
+public class PauseMenu implements Menu{
 
-    private Stage stage;
-    private PacmanController pacmanController;
+    private final StackPane root;
     private final MazeState maze;
+    private Pane pauseLayout;
+    private VBox vBox;
 
-    public PauseMenu(PacmanController pacmanController, MazeState maze) {
-        this.pacmanController = pacmanController;
-        stage = new Stage();
-        stage.initStyle(StageStyle.TRANSPARENT);
+    public PauseMenu(MazeState maze, StackPane root) {
         this.maze = maze;
+        this.root  = root;
     }
 
     public void startMenu(){
@@ -74,36 +70,22 @@ public class PauseMenu implements Menu{ //TODO : mettre des commentaires
             vBox.setSpacing(100);
             vBox.getChildren().add(hBox);
 
-
-
             layout.setCenter(vBox);
 
 
-            Scene pause = new Scene(layout);
-            pause.setFill(Color.TRANSPARENT);
+            pauseLayout = layout;
+            this.vBox = vBox;
 
+            root.getChildren().add(layout);
 
-            pause.setOnKeyPressed(pacmanController::keyPressedHandler);
-            pause.setOnKeyReleased(pacmanController::keyReleasedHandler);
-
-            stage.setScene(pause);
-            stage.centerOnScreen();
-            stage.setAlwaysOnTop(true);
-            stage.show();
         }
         catch (Exception e){
             e.printStackTrace();
         }
 
-
-
-
     }
     public void stopMenu(){
-        stage.close();
+        root.getChildren().remove(pauseLayout);
     }
 
-    public Stage getStage() {
-        return stage;
-    }
 }
