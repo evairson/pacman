@@ -195,7 +195,6 @@ public final class MazeState {
                 }
             }
             if (allDotsEaten() && animationController.hasntAlreadyWon()) {
-                System.out.println("caca");
                 if (level == 2) playerWin();
                 animationController.setHasntAlreadyWon(false);
                 animationController.win();

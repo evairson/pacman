@@ -192,7 +192,7 @@ public class AnimationController {
             gameComponents.getChildren().add(winScreen);
 
             //Ferme le programme 5s après la win
-            Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
+            Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(3), event -> {
                 if(this.maze.getLevel() == 2) System.exit(0);
                 gameComponents.getChildren().remove(gameView.getGameRoot());
                 this.stopPause();
