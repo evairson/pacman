@@ -16,24 +16,32 @@ import config.Cell.Content;
 import geometry.IntCoordinates;
 import geometry.RealCoordinates;
 import gui.AnimationController;
+
+import java.io.IOException;
 import java.sql.SQLOutput;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+import java.io.PrintWriter;
 
 import static model.Ghost.*;
 
 public final class MazeState {
 
     private AnimationController animationController;
-    private final MazeConfig config;
+    private MazeConfig config;
     private final int height;
     private final int width;
 
-    private final boolean[][] gridState;
+    private boolean[][] gridState;
 
     private final List<Critter> critters;
     private int score;
 
+    private int level;
     private final Map<Critter, RealCoordinates> initialPos;
     private int lives = 3;
 
@@ -42,7 +50,7 @@ public final class MazeState {
         height = config.getHeight();
         width = config.getWidth();
         critters = List.of(PacMan.INSTANCE, Ghost.CLYDE, BLINKY, INKY, PINKY);
-        gridState = new boolean[height][width];
+        gridState = initGridState();
         initialPos = Map.of(
                 PacMan.INSTANCE, config.getPacManPos().toRealCoordinates(1.0),
                 BLINKY, config.getBlinkyPos().toRealCoordinates(1.0),
@@ -65,11 +73,25 @@ public final class MazeState {
         return height;
     }
 
+    public void setScore(int score) {
+        this.score = score;
+    }
+
     public int getScore() {
         return score;
     }
     public int getLives() {
         return lives;
+    }
+    public int getLevel() {
+        return level;
+    }
+    public void setLevel(int level) {
+        this.level = level;
+    }
+
+    public void setConfig(MazeConfig config){
+        this.config = config;
     }
 
     public void setAnimationController(AnimationController animationController) {
@@ -119,7 +141,7 @@ public final class MazeState {
             if(config.getCell(pacPos).initialContent()==Content.ENERGIZER){ /* score energizer */
                 addScore(5); 
                 PacMan.INSTANCE.setEnergized();
-                
+
             }
             else {
                 addScore(1);
@@ -136,6 +158,30 @@ public final class MazeState {
                     return;
                 }
             }
+        }
+
+        if (allDotsEaten() && animationController.hasntAlreadyWon()) {
+            animationController.setHasntAlreadyWon(false);
+            animationController.win();
+        }
+    }
+
+    public int getHighScore() {
+        try {
+            var scanner = new Scanner(new File(System.getProperty("user.dir") + "/src/main/resources/highscore.txt"));
+            return scanner.nextInt();
+        } catch (FileNotFoundException e) {
+            return -1;
+        }
+    }
+
+    public void setHighScore(int score) {
+        try {
+            var writer = new PrintWriter(new File(System.getProperty("user.dir") + "/src/main/resources/highscore.txt"));
+            writer.println(score);
+            writer.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         }
     }
 
@@ -155,10 +201,21 @@ public final class MazeState {
         lives--;
         if (lives == 0) {
             System.out.println("Game over!");
+            if (score > getHighScore()) {
+                setHighScore(score);
+                System.out.println("New high score: " + score);
+            }
+            System.exit(0);
             animationController.gameOver();
         }
         System.out.println("Lives: " + lives);
         resetCritters();
+    }
+
+    private void playerWin() {
+        System.out.println(allDotsEaten());
+        System.out.println("You won!");
+        return;
     }
 
     private void resetCritter(Critter critter) {
@@ -176,5 +233,28 @@ public final class MazeState {
 
     public boolean getGridState(IntCoordinates pos) {
         return gridState[pos.y()][pos.x()];
+    }
+
+    public boolean allDotsEaten() {
+        for (boolean[] row : gridState) {
+            for (boolean cell : row) {
+                if (!cell) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    public boolean[][] initGridState() {
+        boolean[][] gridState = new boolean[height][width];
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                if (config.getCell(new IntCoordinates(j, i)).initialContent() == Content.NOTHING) {
+                    gridState[i][j] = true;
+                }
+            }
+        }
+        return gridState;
     }
 }

@@ -12,6 +12,7 @@ package gui;
  *
  */
 
+
 import geometry.IntCoordinates;
 import javafx.animation.AnimationTimer;
 import javafx.scene.Node;
@@ -25,13 +26,17 @@ import java.util.List;
 
 public class GameView {
     // class parameters
-    private final MazeState maze;
+    private MazeState maze;
     private final Pane gameRoot; // main node of the game
 
     private final List<GraphicsUpdater> graphicsUpdaters;
 
     public Pane getGameRoot() {
         return gameRoot;
+    }
+
+    public void setMaze(MazeState maze) {
+        this.maze = maze;
     }
 
     private void addGraphics(GraphicsUpdater updater) {
@@ -61,7 +66,7 @@ public class GameView {
         // Ajouter les cellules du labyrinthe à la vue en utilisant CellGraphicsFactory
         for (int x = 0; x < maze.getWidth(); x++)
             for (int y = 0; y < maze.getHeight(); y++)
-                addGraphics(cellFactory.makeGraphics(maze, new IntCoordinates(x, y)));
+                addGraphics(cellFactory.makeGraphics(maze, new IntCoordinates(x, y), Color.BLUE));
 
         // Ajouter les créatures à la vue en utilisant CritterGraphicsFactory
         for (var critter : maze.getCritters()) addGraphics(critterFactory.makeGraphics(critter));

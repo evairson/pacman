@@ -41,27 +41,30 @@ public class CellGraphicsFactory {
      * 1. Utilisation de constante : scale/15, scale/5, scale/10, scale/2 ou 9 * scale / 10
      *  c'est quand même déguelasse
      * 2. Méthodes distinctes pour chaque élément graphique
-     * 3. Couleurs en paramètre ? comme ça le client choisi la couleur qu'il veut
      * 4. COMPLIQUÉ : Gestion des dimensions dynamiques :
      * pour l'instant les dimensions sont fixes, mais si on veut changer la taille de la fenêtre
      * il faut changer les dimensions de chaque élément graphique
      */
 
-    public GraphicsUpdater makeGraphics(MazeState state, IntCoordinates pos) {
+    public GraphicsUpdater makeGraphics(MazeState state, IntCoordinates pos, Color wallColor) {
         var group = new Group();
-        group.setTranslateX(pos.x()*scale);
-        group.setTranslateY(pos.y()*scale);
+        group.setTranslateX(pos.x() * scale);
+        group.setTranslateY(pos.y() * scale);
         var cell = state.getConfig().getCell(pos);
         var dot = new Circle();
         group.getChildren().add(dot);
-        dot.setRadius(switch (cell.initialContent()) { case DOT -> scale/20; case ENERGIZER -> scale/7; case NOTHING -> 0; });
-        dot.setCenterX(scale/2);
-        dot.setCenterY(scale/2);
+        dot.setRadius(switch (cell.initialContent()) {
+            case DOT -> scale / 20;
+            case ENERGIZER -> scale / 7;
+            case NOTHING -> 0;
+        });
+        dot.setCenterX(scale / 2);
+        dot.setCenterY(scale / 2);
         dot.setFill(Color.WHITE);
         double taille = scale;
 
 
-        if(cell.initialContent()==ENERGIZER){
+        if (cell.initialContent() == ENERGIZER) {
             ScaleTransition blink = new ScaleTransition(Duration.millis(600), dot);
             blink.setFromX(1);
             blink.setFromY(1);
@@ -96,6 +99,7 @@ public class CellGraphicsFactory {
             mur.setTranslateY(0);
             group.getChildren().add(mur);
         }
+
         return new GraphicsUpdater() {
             @Override
             public void update() {
@@ -109,4 +113,16 @@ public class CellGraphicsFactory {
             }
         };
     }
+
+    private Rectangle createWall(double width, double height, Color color, double x, double y) {
+            var wall = new Rectangle();
+            wall.setWidth(width);
+            wall.setHeight(height);
+            wall.setX(x);
+            wall.setY(y);
+            wall.setFill(color);
+            return wall;
+        }
+
 }
+

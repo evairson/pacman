@@ -1,6 +1,7 @@
 package gui;
 
 
+import javafx.animation.AnimationTimer;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -59,6 +60,7 @@ public class MainMenu implements Menu {
             primaryStage.setScene(gameScene);
             primaryStage.centerOnScreen();
             animationController.createAnimationTimer().start();
+
         });
         optionsText.setOnMouseClicked(event -> {
             try {

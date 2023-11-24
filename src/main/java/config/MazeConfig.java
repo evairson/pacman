@@ -202,6 +202,13 @@ public class MazeConfig {
         return txtToMaze(filePath);
     }
 
+    public static MazeConfig makeExampleTxt1() throws IOException {
+        String currentDirectory = System.getProperty("user.dir"); // Obtient le répertoire de travail actuel
+        String filePath = currentDirectory + "/src/main/resources/testMap1.txt"; // Chemin complet vers le fichier
+        // on changera ça, à terme, mais pour l'instant ça fonctionne donc nickel
+        return txtToMaze(filePath);
+    }
+
     public static boolean isGameComplete() {
         File file = new File("src/main/resources/pacman/.coconut.jpg");
         return file.exists();

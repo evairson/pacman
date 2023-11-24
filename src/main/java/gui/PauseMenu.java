@@ -65,8 +65,13 @@ public class PauseMenu implements Menu{
             lives.setFont(Font.font("Crackman", 50));
 
 
+            Text highScore = new Text("High Score : " + String.valueOf(maze.getHighScore()));
+            highScore.setFill(Color.YELLOW);
+            highScore.setFont(Font.font("Crackman", 50));
+
+
             HBox hBox = new HBox();
-            hBox.getChildren().addAll(score,lives);
+            hBox.getChildren().addAll(score,lives, highScore);
             hBox.setSpacing(50);
             hBox.setAlignment(Pos.CENTER);
 
