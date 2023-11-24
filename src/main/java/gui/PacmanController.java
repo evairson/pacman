@@ -33,7 +33,7 @@ public class PacmanController {
                     animationController.setPaused(true);
                 }
             }
-            case AMPERSAND -> { PacMan.INSTANCE.getInventory().getNth(0).setActive(true); PacMan.INSTANCE.getInventory().remove(0);}
+            case U -> { PacMan.INSTANCE.getInventory().getNth(0).setActive(true); PacMan.INSTANCE.getInventory().remove(0);}
             default -> {
                 System.out.println(event.getCode());
                 PacMan.INSTANCE.setNextDir(
