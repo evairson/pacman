@@ -85,6 +85,7 @@ public class App extends Application {
         GameView gameView = new GameView(maze, root, scale);
 
         AnimationController animationController = new AnimationController(gameView.getGraphicsUpdaters(), gameView.getMaze(), primaryStage, pacmanController,gameView);
+        animationController.mainTheme();
         pacmanController.setAnimationController(animationController);
 
         maze.setAnimationController(animationController);

@@ -109,6 +109,7 @@ public final class CritterGraphicsFactory {
     }
 
 
+
     // Méthode qui crée la représentation graphique d'une créature.
     public GraphicsUpdater makeGraphics(Critter critter) {
 
@@ -151,10 +152,9 @@ public final class CritterGraphicsFactory {
                             default -> "ferme";
                         };
                         pos = critter.getPos();
-                        AudioClip waku = new AudioClip(getClass().getResource("/audio/waku.mp3").toExternalForm());
-                        waku.play();
                     }
                     image.setImage(new Image(setimgPacman(critter), taille, taille, true, false));
+
                 }
 
 

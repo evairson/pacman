@@ -9,11 +9,13 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.CornerRadii;
+import javafx.scene.media.AudioClip;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import model.MazeState;
+import javafx.scene.media.AudioClip;
 
 import java.util.List;
 
@@ -31,6 +33,10 @@ public class AnimationController {
 
     private GameView gameView;
     private boolean isPaused = false;
+    AudioClip defaultSiren = new AudioClip(getClass().getResource("/audio/assassindelapolice.mp3").toExternalForm());
+    private boolean energizedSirenIsPlaying = false;
+    AudioClip energizedSiren = new AudioClip(getClass().getResource("/audio/assassindelapolice2.mp3").toExternalForm());
+
 
 
 
@@ -58,6 +64,10 @@ public class AnimationController {
         pauseMenu.stopMenu();
     }
 
+
+    public void setEnergizedSirenIsPlaying(boolean energizedSirenIsPlaying) {
+        this.energizedSirenIsPlaying = energizedSirenIsPlaying;
+    }
 
     public void blurGame(){
         ColorAdjust adj = new ColorAdjust(0, -0.9, -0.5, 0);
@@ -150,4 +160,24 @@ public class AnimationController {
         };
 
     }
+
+    // Sound controlling methods
+
+    public void ghostEatenSound() {
+        AudioClip eaten = new AudioClip(getClass().getResource("/audio/pacManGhostEaten.mp3").toExternalForm());
+        eaten.play();
+    }
+
+    public void mainTheme() {
+        AudioClip main = new AudioClip(getClass().getResource("/audio/pacmanThemeOriginal.mp3").toExternalForm());
+        main.play();
+    }
+    /* C'est à chier pour l'instant
+    public void siren() {
+        if (energizedSirenIsPlaying) {
+            defaultSiren.stop();
+        } else {
+            defaultSiren.play();
+        }
+    } */
 }

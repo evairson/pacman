@@ -15,6 +15,7 @@ import config.Cell.Content;
 import geometry.IntCoordinates;
 import geometry.RealCoordinates;
 import gui.AnimationController;
+
 import java.util.List;
 import java.util.Map;
 
@@ -127,6 +128,7 @@ public final class MazeState {
             if (critter instanceof Ghost && critter.getPos().round().equals(pacPos)) {
                 if (PacMan.INSTANCE.isEnergized()) {
                     addScore(10);
+                    animationController.ghostEatenSound();
                     resetCritter(critter);
                 } else {
                     playerLost(); 
