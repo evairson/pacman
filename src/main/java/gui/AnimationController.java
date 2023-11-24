@@ -36,8 +36,7 @@ public class AnimationController {
     private GameView gameView;
     private final StackPane gameComponents;
     private boolean isPaused = false;
-
-
+    private boolean isFancy = true;
 
     public AnimationController(List<GraphicsUpdater> graphicsUpdaters, MazeState maze, Stage primaryStage, PacmanController pacmanController, GameView gameView, StackPane root) {
         this.graphicsUpdaters = graphicsUpdaters;
@@ -58,12 +57,25 @@ public class AnimationController {
     }
 
     public void startPauseMenu(){
+        if (isFancy){
+            blurGame();
+        }
         pauseMenu.startMenu();
     }
     public void stopPauseMenu(){
+        if (isFancy){
+            unBlurGame();
+        }
         pauseMenu.stopMenu();
     }
 
+    public boolean isFancy() {
+        return isFancy;
+    }
+
+    public void setFancy(boolean fancy) {
+        isFancy = fancy;
+    }
 
     public void blurGame(){
         ColorAdjust adj = new ColorAdjust(0, -0.9, -0.5, 0);

@@ -31,8 +31,8 @@ import java.io.InputStream;
 
 public class OptionsMenu implements Menu {
 
+    private boolean isFancy = true;
     public Scene startMenu(Stage primaryStage, Scene gameScene, AnimationController animationController, MainMenu mainMenu) throws IOException {
-
 
         FXMLLoader loader =  new FXMLLoader(getClass().getResource("/fxml/optionsMenu.fxml"));
         AnchorPane anchorPane = loader.load();
@@ -41,20 +41,25 @@ public class OptionsMenu implements Menu {
 
         Font.loadFont(getClass().getResourceAsStream("/fonts/Crackman.otf"), 12);
 
-        Text fancyText = (Text) anchorPane.lookup("#fancy");
-        Text fastText = (Text) anchorPane.lookup("#fast");
+        Text fancyText = (Text) anchorPane.lookup("#fancyTest");
         Text returnText = (Text) anchorPane.lookup("#return");
 
-        fancyText.setFont(Font.font("Crackman", 77));
-        fastText.setFont(Font.font("Crackman", 52));
+        fancyText.setFont(Font.font("Crackman", 50));
         returnText.setFont(Font.font("Crackman", 56));
 
-        setHoverEffect(fancyText, "yellow", "black");
-        setHoverEffect(fastText, "blue", "black");
+        setHoverEffect(fancyText, "green", "black");
         setHoverEffect(returnText, "red", "black");
         fancyText.setOnMouseClicked(event -> {
-            primaryStage.setScene(gameScene);
-            animationController.createAnimationTimer().start();
+            if(!isFancy){
+                fancyText.setText("Fancy");
+                isFancy = true;
+                animationController.setFancy(true);
+            }
+            else{
+                fancyText.setText("Fast");
+                isFancy = false;
+                animationController.setFancy(false);
+            }
         });
         returnText.setOnMouseClicked(event -> {
             try {

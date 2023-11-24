@@ -17,17 +17,12 @@
                   <Image url="@../menusPng/optionsMenu.jpg" />
                </image>
             </ImageView>
-            <Text id="fancy" layoutX="422.0" layoutY="335.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Fancy" wrappingWidth="191.21875">
+            <Text id="fancyTest" layoutX="400.0" layoutY="345.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Fancy" wrappingWidth="200">
                <effect>
                   <Glow level="0.97" />
                </effect>
             </Text>
-            <Text id="fast" layoutX="422.0" layoutY="335.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Fast" wrappingWidth="141.21875" >
-               <effect>
-                  <Glow level="0.97" />
-               </effect>
-            </Text>
-            <Text id="return" layoutX="245.0" layoutY="343.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Return" wrappingWidth="239.21875" >
+            <Text id="return" layoutX="600.0" layoutY="500.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Return" wrappingWidth="239.21875" >
                <effect>
                   <Glow level="0.97" />
                </effect>

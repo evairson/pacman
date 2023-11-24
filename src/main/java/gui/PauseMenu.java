@@ -6,6 +6,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import model.MazeState;
 
@@ -23,6 +24,9 @@ public class PauseMenu implements Menu{
 
     public void startMenu(){
         try{
+
+            Font.loadFont(getClass().getResourceAsStream("/fonts/Crackman.otf"), 12);
+
             BorderPane layout = new BorderPane();
 
             double width = this.getWidth();
@@ -32,31 +36,31 @@ public class PauseMenu implements Menu{
             layout.setMinHeight(height*0.3);
             layout.setMaxWidth(width*0.7);
             layout.setMaxHeight(height*0.7);
-            layout.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, CornerRadii.EMPTY, Insets.EMPTY)));
+            layout.setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
 
             Text pauseMenuText = new Text("PAUSE");
-            pauseMenuText.setFill(Color.DARKBLUE);
-            pauseMenuText.setStyle("-fx-font-size: 50;-fx-font-family: Serif");
+            pauseMenuText.setFill(Color.YELLOW);
+            pauseMenuText.setFont(Font.font("Crackman", 50));
 
             Button exitButton = new Button("EXIT");
             exitButton.setWrapText(true);
-            exitButton.setStyle("-fx-font-size: 2em;-fx-border-color: black;-fx-font-family: Serif");
+            exitButton.setFont(Font.font("Crackman", 25));
             exitButton.setOnAction(event -> {
                 System.exit(0);
             });
 
 
             Text indication = new Text("Press ESC to resume...");
-            indication.setFill(Color.DARKBLUE);
-            indication.setStyle("-fx-font-size: 50;-fx-font-family: Serif");
+            indication.setFill(Color.YELLOW);
+            indication.setFont(Font.font("Crackman", 50));
 
             Text score = new Text("Score : " + String.valueOf(maze.getScore()));
-            score.setFill(Color.DARKBLUE);
-            score.setStyle("-fx-font-size: 50;-fx-font-family: Serif");
+            score.setFill(Color.YELLOW);
+            score.setFont(Font.font("Crackman", 50));
 
             Text lives = new Text("Vies restantes : " + String.valueOf(maze.getLives()));
-            lives.setFill(Color.DARKBLUE);
-            lives.setStyle("-fx-font-size: 50;-fx-font-family: Serif");
+            lives.setFill(Color.YELLOW);
+            lives.setFont(Font.font("Crackman", 50));
 
 
             HBox hBox = new HBox();
