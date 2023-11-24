@@ -38,7 +38,7 @@ public class AnimationController {
     private GameView gameView;
     private final StackPane gameComponents;
     private boolean isPaused = false;
-    private boolean isFancy = false;
+    private boolean isFancy = true;
 
     public AnimationController(List<GraphicsUpdater> graphicsUpdaters, MazeState maze, Stage primaryStage, PacmanController pacmanController, GameView gameView, StackPane root) {
         this.graphicsUpdaters = graphicsUpdaters;

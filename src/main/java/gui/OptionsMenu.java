@@ -31,7 +31,7 @@ import java.io.InputStream;
 
 public class OptionsMenu implements Menu {
 
-    private boolean isFancy = false;
+    private boolean isFancy = true;
     public Scene startMenu(Stage primaryStage, Scene gameScene, AnimationController animationController, MainMenu mainMenu) throws IOException {
 
         FXMLLoader loader =  new FXMLLoader(getClass().getResource("/fxml/optionsMenu.fxml"));
@@ -51,12 +51,12 @@ public class OptionsMenu implements Menu {
         setHoverEffect(returnText, "red", "black");
         fancyText.setOnMouseClicked(event -> {
             if(!isFancy){
-                fancyText.setText("Fast");
+                fancyText.setText("Fancy");
                 isFancy = true;
                 animationController.setFancy(true);
             }
             else{
-                fancyText.setText("Fancy");
+                fancyText.setText("Fast");
                 isFancy = false;
                 animationController.setFancy(false);
             }
