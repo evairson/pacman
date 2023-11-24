@@ -10,11 +10,11 @@ package model;
  * - la position initiale de chaque élément du labyrinthe
  */
 
-import geometry.*;
 import config.MazeConfig;
 import geometry.IntCoordinates;
 import geometry.RealCoordinates;
 import gui.AnimationController;
+
 import gui.CellGraphicsFactory;
 import model.Items.Energizer;
 import model.Items.FakeEnergizer;
@@ -96,13 +96,13 @@ public final class MazeState {
          *    message de fin de jeu + permettre au joueur de recommencer ou de quitter le jeu.
          *    (cf. https://docs.oracle.com/javase/8/javafx/api/javafx/scene/control/Alert.html)
          *    (cf. https://docs.oracle.com/javase/8/javafx/api/javafx/scene/control/Dialog.html)
-         * 3. déléguer certaines repsonsabilités à d'autres méthodes ?
+         * 3. déléguer certaines responsabilités à d'autres méthodes ?
          */
 
-        for (var critter: critters){
+        for (Critter critter: critters){
             critter.tpToCenter();
             if(critter == PacMan.INSTANCE){
-                var nextDir = ((PacMan) critter).getNextDir();
+                Direction nextDir = ((PacMan) critter).getNextDir();
                 if(PacMan.INSTANCE.canSetDirection(nextDir, this.config)){
                     critter.setPos(critter.getNextPos(deltaTns, nextDir, this.config));
                     critter.setDirection(nextDir);
@@ -139,7 +139,7 @@ public final class MazeState {
                     addScore(10);
                     resetCritter(critter);
                 } else {
-                    playerLost(); //FIXME : UNCOMMENT ME !!!
+                    playerLost(); 
                     return;
                 }
             }
@@ -154,10 +154,9 @@ public final class MazeState {
     private void displayScore() {
         // FIXME: this should be displayed in the JavaFX view, not in the console
         System.out.println("Score: " + score);
-        //System.out.println(PacMan.INSTANCE.isEnergized());
     }
 
-    private void playerLost() {
+    private void playerLost() { //le joueur a perdu au moment où il n'a plus de vie
         // FIXME: this should be displayed in the JavaFX view, not in the console. A game over screen would be nice too.
         lives--;
         if (lives == 0) {
@@ -178,7 +177,7 @@ public final class MazeState {
     }
 
     private void resetCritters() {
-        for (var critter: critters) resetCritter(critter);
+        for (Critter critter: critters) resetCritter(critter);
     }
 
     public MazeConfig getConfig() {

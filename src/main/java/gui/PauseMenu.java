@@ -5,8 +5,6 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
@@ -14,11 +12,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import model.MazeState;
 
-import java.io.FileInputStream;
-import java.util.Objects;
-import java.util.SimpleTimeZone;
-
-public class PauseMenu implements Menu{
+public class PauseMenu implements Menu{ //TODO : mettre des commentaires
 
     private Stage stage;
     private PacmanController pacmanController;
@@ -33,8 +27,6 @@ public class PauseMenu implements Menu{
 
     public void startMenu(){
         try{
-
-
             BorderPane layout = new BorderPane();
 
             double width = this.getWidth();

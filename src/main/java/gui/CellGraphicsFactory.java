@@ -10,9 +10,10 @@ import javafx.animation.ScaleTransition;
 import javafx.animation.Timeline;
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import model.Ghost;
 import model.MazeState;
@@ -20,6 +21,8 @@ import model.PacMan;
 import model.Items.Dot;
 import model.Items.Energizer;
 import model.Items.FakeEnergizer;
+import config.Cell;
+
 
 public class CellGraphicsFactory {
     private final double scale;
@@ -77,11 +80,13 @@ public class CellGraphicsFactory {
     }
 
     public GraphicsUpdater makeGraphics(MazeState state, IntCoordinates pos) {
-        var group = new Group();
+        Group group = new Group(); // permet de mettre dans groupe tous les node à afficher (mur + dot)
         group.setTranslateX(pos.x()*scale);
         group.setTranslateY(pos.y()*scale);
-        var cell = state.getConfig().getCell(pos);
-        var dot = new Circle();
+        Cell cell = state.getConfig().getCell(pos);
+
+        // creer les dots
+        Circle dot = new Circle();
         group.getChildren().add(dot);
 
         double radius =0;
@@ -92,10 +97,11 @@ public class CellGraphicsFactory {
         dot.setCenterX(scale/2);
         dot.setCenterY(scale/2);
         dot.setFill(Color.WHITE);
+        double taille = scale;
+
 
 
         if(cell.initialItem() instanceof Energizer  ){
-            
             ScaleTransition blink = new ScaleTransition(Duration.millis(600), dot);
             blink.setFromX(1);
             blink.setFromY(1);
@@ -118,48 +124,36 @@ public class CellGraphicsFactory {
             blink.play();
         }
 
+        //rajout des murs pour chaque case
         if (cell.northWall()) {
-            var nWall = new Rectangle();
-            nWall.setHeight(scale/10);
-            nWall.setWidth(scale);
-            nWall.setY(0);
-            nWall.setX(0);
-            nWall.setFill(Color.BLUE);
-            group.getChildren().add(nWall);
+            ImageView mur = new ImageView(new Image("mur-north.png", taille, taille, true, false));
+            mur.setTranslateX(0);
+            mur.setTranslateY(0);
+            group.getChildren().add(mur);
         }
         if (cell.eastWall()) {
-            var nWall = new Rectangle();
-            nWall.setHeight(scale);
-            nWall.setWidth(scale/10);
-            nWall.setY(0);
-            nWall.setX(9*scale/10);
-            nWall.setFill(Color.BLUE);
-            group.getChildren().add(nWall);
+            ImageView mur = new ImageView(new Image("mur-east.png", taille, taille, true, false));
+            mur.setTranslateX(9*scale/10);
+            mur.setTranslateY(0);
+            group.getChildren().add(mur);
         }
         if (cell.southWall()) {
-            var nWall = new Rectangle();
-            nWall.setHeight(scale/10);
-            nWall.setWidth(scale);
-            nWall.setY(9*scale/10);
-            nWall.setX(0);
-            nWall.setFill(Color.BLUE);
-            group.getChildren().add(nWall);
+            ImageView mur = new ImageView(new Image("mur-south.png", taille, taille, true, false));
+            mur.setTranslateX(0);
+            mur.setTranslateY(9*scale/10);
+            group.getChildren().add(mur);
         }
         if (cell.westWall()) {
-            var nWall = new Rectangle();
-            nWall.setHeight(scale);
-            nWall.setWidth(scale/10);
-            nWall.setY(0);
-            nWall.setX(0);
-            nWall.setFill(Color.BLUE);
-            group.getChildren().add(nWall);
+            ImageView mur = new ImageView(new Image("mur-west.png", taille, taille, true, false));
+            mur.setTranslateX(0);
+            mur.setTranslateY(0);
+            group.getChildren().add(mur);
         }
-
-
-
         return new GraphicsUpdater() {
+
             @Override
             public void update() {
+                //afficher les points si pacman pas passé dessus
                 dot.setVisible(!state.getGridState(pos));
 
 

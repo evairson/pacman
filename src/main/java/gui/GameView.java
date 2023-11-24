@@ -13,11 +13,8 @@ package gui;
  */
 
 import geometry.IntCoordinates;
-import javafx.animation.AnimationTimer;
-import javafx.scene.Node;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Text;
+import model.Critter;
 import model.MazeState;
 
 import java.util.ArrayList;
@@ -54,8 +51,8 @@ public class GameView {
         root.setMinHeight(maze.getHeight() * scale);
         // Définir la couleur de fond du nœud racine
         root.setStyle("-fx-background-color: #000000");
-        var critterFactory = new CritterGraphicsFactory(scale);
-        var cellFactory = new CellGraphicsFactory(scale);
+        CritterGraphicsFactory critterFactory = new CritterGraphicsFactory(scale);
+        CellGraphicsFactory cellFactory = new CellGraphicsFactory(scale);
         graphicsUpdaters = new ArrayList<>();
 
         // Ajouter les cellules du labyrinthe à la vue en utilisant CellGraphicsFactory
@@ -64,7 +61,7 @@ public class GameView {
                 addGraphics(cellFactory.makeGraphics(maze, new IntCoordinates(x, y)));
 
         // Ajouter les créatures à la vue en utilisant CritterGraphicsFactory
-        for (var critter : maze.getCritters()) addGraphics(critterFactory.makeGraphics(critter));
+        for (Critter critter : maze.getCritters()) addGraphics(critterFactory.makeGraphics(critter));
 
     }
 

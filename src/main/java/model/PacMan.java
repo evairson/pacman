@@ -2,7 +2,6 @@ package model;
 
 import config.MazeConfig;
 import geometry.IntCoordinates;
-import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 import config.Cell;
@@ -11,18 +10,17 @@ import geometry.RealCoordinates;
 
 /**
  * Implémente PacMan comme un singleton.
- * TODO : ajouter les fonctionnalités suivantes :
  * 1. Gestion du temps d'énergie : un timer qui se décrémente à chaque tick
  *    et qui désactive l'état énergisé quand il atteint 0.
  *    (voir https://stackoverflow.com/questions/4044726/how-to-set-a-timer-in-java)
  *
+ * 
  */
 public final class PacMan implements Critter {
 
     private RealCoordinates pos;
     private Direction direction = Direction.NONE;
     private Direction nextDir = Direction.NONE;
-    //private final double speed = 2.;
     private boolean energized;
     public boolean Fake_energized;
     public int frameEnergizer;
@@ -67,8 +65,26 @@ public final class PacMan implements Critter {
     public boolean isEnergized() {
         return energized;
     } 
+
     public boolean isFakeEnergized(){
         return Fake_energized;
+    }
+
+
+    public void setEnergized() { //active l'energizer pour un temps limité
+        PacMan pacman = this;
+        Timer t = new Timer();
+        TimerTask task = new TimerTask() {
+            public void run() {
+                pacman.energized = false;
+                Ghost.energized = false;
+                t.cancel();
+            }
+        };
+        this.energized = true;
+        Ghost.energized = true;
+        t.schedule(task, 10000);
+
     }
 
     //Methods
@@ -107,7 +123,6 @@ public final class PacMan implements Critter {
         RealCoordinates currCell = this.currCellR();
         if (this.isGoingToCenter() && this.getPos().dist(currCell) < TPINTERVAL) {
             this.setPos(currCell);
-//            System.out.println(this.currCellR());
         }
     }
 
