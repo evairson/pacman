@@ -44,10 +44,13 @@ public class MainMenu implements Menu {
         Text playText = (Text) anchorPane.lookup("#play");
         Text optionsText = (Text) anchorPane.lookup("#options");
         Text quitText = (Text) anchorPane.lookup("#quit");
+        playText.setStyle("-fx-font-size: 75");
+        optionsText.setStyle("-fx-font-size: 45");
+        quitText.setStyle("-fx-font-size: 50");
 
-        playText.setFont(Font.font("Crackman", 77));
-        optionsText.setFont(Font.font("Crackman", 52));
-        quitText.setFont(Font.font("Crackman", 56));
+        playText.setFont(Font.font("Crackman", 75));
+        optionsText.setFont(Font.font("Crackman", 45));
+        quitText.setFont(Font.font("Crackman", 50));
 
         setHoverEffect(playText, "yellow", "black");
         setHoverEffect(optionsText, "blue", "black");
