@@ -22,7 +22,7 @@ public class PauseMenu implements Menu{
         this.root  = root;
     }
 
-    public void startMenu(StackPane gameComponents){
+    public void startMenu(){
         try{
 
             Font.loadFont(getClass().getResourceAsStream("/fonts/Crackman.otf"), 12);
