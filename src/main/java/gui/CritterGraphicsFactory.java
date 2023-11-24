@@ -3,6 +3,7 @@ import geometry.RealCoordinates;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.media.AudioClip;
 import model.Critter;
 import model.Ghost;
 import model.PacMan;
@@ -136,6 +137,7 @@ public final class CritterGraphicsFactory {
     }
 
 
+
     // Méthode qui crée la représentation graphique d'une créature.
     public GraphicsUpdater makeGraphics(Critter critter) {
 
@@ -180,6 +182,7 @@ public final class CritterGraphicsFactory {
                         pos = critter.getPos();
                     }
                     image.setImage(new Image(setimgPacman(critter), taille, taille, true, false));
+
                 }
 
                  //changer image fantôme

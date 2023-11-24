@@ -155,6 +155,7 @@ public final class MazeState {
             if (critter instanceof Ghost && critter.getPos().round().equals(pacPos) && !PacMan.INSTANCE.isFakeEnergized() ) {
                 if (PacMan.INSTANCE.isEnergized() ) {
                     addScore(10);
+                    animationController.ghostEatenSound();
                     resetCritter(critter);
                 } else {
                     playerLost(); 

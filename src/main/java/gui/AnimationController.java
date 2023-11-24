@@ -10,6 +10,11 @@ import javafx.scene.Scene;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.effect.GaussianBlur;
 import javafx.scene.layout.*;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.media.AudioClip;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -18,6 +23,7 @@ import javafx.util.Duration;
 import model.MazeState;
 import java.io.IOException;
 import java.sql.Time;
+import javafx.scene.media.AudioClip;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -44,6 +50,9 @@ public class AnimationController {
     private double AppScale;
 
     private boolean hasntAlreadyWon = true; //Aide à gérer les transitions de niveau
+    AudioClip defaultSiren = new AudioClip(getClass().getResource("/audio/assassindelapolice.mp3").toExternalForm());
+    private boolean energizedSirenIsPlaying = false;
+    AudioClip energizedSiren = new AudioClip(getClass().getResource("/audio/assassindelapolice2.mp3").toExternalForm());
 
 
 
@@ -105,6 +114,10 @@ public class AnimationController {
     public void setHasntAlreadyWon(boolean hasntAlreadyWon) {
         this.hasntAlreadyWon = hasntAlreadyWon;
 
+    }
+
+    public void setEnergizedSirenIsPlaying(boolean energizedSirenIsPlaying) {
+        this.energizedSirenIsPlaying = energizedSirenIsPlaying;
     }
 
     public void blurGame(){
@@ -254,4 +267,23 @@ public class AnimationController {
         this.unBlurGame();
     }
 
+    // Sound controlling methods
+
+    public void ghostEatenSound() {
+        AudioClip eaten = new AudioClip(getClass().getResource("/audio/pacManGhostEaten.mp3").toExternalForm());
+        eaten.play();
+    }
+
+    public void mainTheme() {
+        AudioClip main = new AudioClip(getClass().getResource("/audio/pacmanThemeOriginal.mp3").toExternalForm());
+        main.play();
+    }
+    /* C'est à chier pour l'instant
+    public void siren() {
+        if (energizedSirenIsPlaying) {
+            defaultSiren.stop();
+        } else {
+            defaultSiren.play();
+        }
+    } */
 }
