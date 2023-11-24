@@ -18,6 +18,7 @@ import gui.AnimationController;
 import gui.CellGraphicsFactory;
 import model.Items.Energizer;
 import model.Items.FakeEnergizer;
+import model.Items.Item;
 import model.Items.ItemTest;
 import java.sql.SQLOutput;
 import java.util.Arrays;
@@ -193,8 +194,10 @@ public final class MazeState {
                     }
                 }
             }
-
+            System.out.println(allDotsEaten());
             if (allDotsEaten() && animationController.hasntAlreadyWon()) {
+                System.out.println("caca");
+                if (level == 2) playerWin();
                 animationController.setHasntAlreadyWon(false);
                 animationController.win();
             }
@@ -226,22 +229,18 @@ public final class MazeState {
 
         private void displayScore() {
             // FIXME: this should be displayed in the JavaFX view, not in the console
-            System.out.println("Score: " + score);
         }
 
         private void playerLost() { //le joueur a perdu au moment où il n'a plus de vie
             // FIXME: this should be displayed in the JavaFX view, not in the console. A game over screen would be nice too.
             lives--;
             if (lives == 0) {
-                System.out.println("Game over!");
                 if (score > getHighScore()) {
                     setHighScore(score);
-                    System.out.println("New high score: " + score);
                 }
                 System.exit(0);
                 animationController.gameOver();
             }
-            System.out.println("Lives: " + lives);
             //if (!PacMan.INSTANCE.isFakeEnergized()){
             resetCritters();
             //}
@@ -249,9 +248,7 @@ public final class MazeState {
         }
 
         private void playerWin () {
-            System.out.println(allDotsEaten());
-            System.out.println("You won!");
-            return;
+            animationController.win();
         }
 
         private void resetCritter (Critter critter){
@@ -286,7 +283,7 @@ public final class MazeState {
             boolean[][] gridState = new boolean[height][width];
             for (int i = 0; i < height; i++) {
                 for (int j = 0; j < width; j++) {
-                    if (config.getCell(new IntCoordinates(j, i)).initialItem() == null) {
+                    if (config.getCell(new IntCoordinates(j, i)).initialItem().getClass().equals(Item.class)) {
                         gridState[i][j] = true;
                     }
                 }

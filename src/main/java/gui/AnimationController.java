@@ -16,6 +16,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.media.AudioClip;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -139,6 +140,7 @@ public class AnimationController {
 
             this.startPause();
 
+            Font.loadFont(getClass().getResourceAsStream("/fonts/Crackman.otf"), 12);
 
             //Affiche le game over
             BorderPane layout = new BorderPane();
@@ -147,7 +149,7 @@ public class AnimationController {
 
             Text gameOver = new Text("GAME OVER");
             gameOver.setFill(Color.RED);
-            gameOver.setStyle("-fx-font-size: 50;-fx-font-family: Serif");
+            gameOver.setFont(Font.font("Crackman", 50));
 
             layout.setCenter(gameOver);
             gameComponents.getChildren().add(layout);
@@ -180,15 +182,18 @@ public class AnimationController {
 
             winScreen.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, CornerRadii.EMPTY, Insets.EMPTY)));
 
+            Font.loadFont(getClass().getResourceAsStream("/fonts/Crackman.otf"), 12);
+
             Text gameOver = new Text("YOU WIN");
             gameOver.setFill(Color.GREEN);
-            gameOver.setStyle("-fx-font-size: 50;-fx-font-family: Serif");
+            gameOver.setFont(Font.font("Crackman", 50));
 
             winScreen.setCenter(gameOver);
             gameComponents.getChildren().add(winScreen);
 
             //Ferme le programme 5s après le game over
             Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
+//                if (maze.getLevel() == 2) System.exit(69);
                 gameComponents.getChildren().remove(gameView.getGameRoot());
                 this.stopPause();
                 gameComponents.getChildren().remove(winScreen);
