@@ -3,10 +3,9 @@ package gui;
  * Classe pour le controleur du Pacman
  * keyPressedHandler : récupère la touche appuyée et change la direction du Pacman
  * avec event.getCode() qui renvoie la touche appuyée
- * keyReleasedHandler : rien à faire ???
+ * keyReleasedHandler : rien à faire 
  */
 
-import javafx.animation.AnimationTimer;
 import model.Direction;
 import model.PacMan;
 
@@ -41,7 +40,7 @@ public class PacmanController {
         }
     }
     public void keyReleasedHandler(KeyEvent event) {
-        // Nothing to do?
+        // Nothing for now
     }
 
     public AnimationController getAnimationController() {

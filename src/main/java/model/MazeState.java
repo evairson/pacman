@@ -10,14 +10,14 @@ package model;
  * - la position initiale de chaque élément du labyrinthe
  */
 
-import geometry.*;
 import config.MazeConfig;
-import config.Cell.Content;
 import geometry.IntCoordinates;
 import geometry.RealCoordinates;
 import gui.AnimationController;
 
-import java.io.IOException;
+import gui.CellGraphicsFactory;
+import model.Items.Energizer;
+import model.Items.FakeEnergizer;
 import java.sql.SQLOutput;
 import java.util.Arrays;
 import java.util.List;
@@ -115,13 +115,13 @@ public final class MazeState {
          *    message de fin de jeu + permettre au joueur de recommencer ou de quitter le jeu.
          *    (cf. https://docs.oracle.com/javase/8/javafx/api/javafx/scene/control/Alert.html)
          *    (cf. https://docs.oracle.com/javase/8/javafx/api/javafx/scene/control/Dialog.html)
-         * 3. déléguer certaines repsonsabilités à d'autres méthodes ?
+         * 3. déléguer certaines responsabilités à d'autres méthodes ?
          */
 
-        for (var critter: critters){
+        for (Critter critter: critters){
             critter.tpToCenter();
             if(critter == PacMan.INSTANCE){
-                var nextDir = ((PacMan) critter).getNextDir();
+                Direction nextDir = ((PacMan) critter).getNextDir();
                 if(PacMan.INSTANCE.canSetDirection(nextDir, this.config)){
                     critter.setPos(critter.getNextPos(deltaTns, nextDir, this.config));
                     critter.setDirection(nextDir);
@@ -129,7 +129,7 @@ public final class MazeState {
                     critter.setPos(critter.getNextPos(deltaTns, critter.getDirection(), this.config));
                 }
             } else {
-                var nextDir = ((Ghost) critter).getNextDir(this.config, PacMan.INSTANCE.currCellI(), PacMan.INSTANCE.getDirection(), PacMan.INSTANCE.isEnergized());
+                var nextDir = ((Ghost) critter).getNextDir(this.config, PacMan.INSTANCE.currCellI(), PacMan.INSTANCE.getDirection(), PacMan.INSTANCE.isEnergized(),PacMan.INSTANCE.isFakeEnergized());
                 critter.setPos(critter.getNextPos(deltaTns, nextDir, this.config));
                 critter.setDirection(nextDir);
             }
@@ -137,11 +137,14 @@ public final class MazeState {
 
         // FIXME Pac-Man rules should somehow be in Pacman class
         var pacPos = PacMan.INSTANCE.getPos().round();
+        
         if (!gridState[pacPos.y()][pacPos.x()]) { // Energizer
-            if(config.getCell(pacPos).initialContent()==Content.ENERGIZER){ /* score energizer */
-                addScore(5); 
-                PacMan.INSTANCE.setEnergized();
-
+            if(config.getCell(pacPos).initialItem() instanceof Energizer){ /* score energizer */
+                addScore(5);
+                Energizer.setEnergized(true);
+            }
+            else if (config.getCell(pacPos).initialItem() instanceof FakeEnergizer){
+                FakeEnergizer.setFakeEnergized(true); 
             }
             else {
                 addScore(1);
@@ -149,12 +152,12 @@ public final class MazeState {
             gridState[pacPos.y()][pacPos.x()] = true;
         }
         for (var critter : critters) { // Collision PacMan Ghosts
-            if (critter instanceof Ghost && critter.getPos().round().equals(pacPos)) {
-                if (PacMan.INSTANCE.isEnergized()) {
+            if (critter instanceof Ghost && critter.getPos().round().equals(pacPos) && !PacMan.INSTANCE.isFakeEnergized() ) {
+                if (PacMan.INSTANCE.isEnergized() ) {
                     addScore(10);
                     resetCritter(critter);
                 } else {
-                    playerLost(); //FIXME : UNCOMMENT ME !!!
+                    playerLost(); 
                     return;
                 }
             }
@@ -193,10 +196,9 @@ public final class MazeState {
     private void displayScore() {
         // FIXME: this should be displayed in the JavaFX view, not in the console
         System.out.println("Score: " + score);
-        //System.out.println(PacMan.INSTANCE.isEnergized());
     }
 
-    private void playerLost() {
+    private void playerLost() { //le joueur a perdu au moment où il n'a plus de vie
         // FIXME: this should be displayed in the JavaFX view, not in the console. A game over screen would be nice too.
         lives--;
         if (lives == 0) {
@@ -209,7 +211,10 @@ public final class MazeState {
             animationController.gameOver();
         }
         System.out.println("Lives: " + lives);
-        resetCritters();
+        //if (!PacMan.INSTANCE.isFakeEnergized()){
+            resetCritters();
+        //}
+    
     }
 
     private void playerWin() {
@@ -224,7 +229,7 @@ public final class MazeState {
     }
 
     private void resetCritters() {
-        for (var critter: critters) resetCritter(critter);
+        for (Critter critter: critters) resetCritter(critter);
     }
 
     public MazeConfig getConfig() {
@@ -250,7 +255,7 @@ public final class MazeState {
         boolean[][] gridState = new boolean[height][width];
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
-                if (config.getCell(new IntCoordinates(j, i)).initialContent() == Content.NOTHING) {
+                if (config.getCell(new IntCoordinates(j, i)).initialItem() == null) {
                     gridState[i][j] = true;
                 }
             }

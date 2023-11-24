@@ -41,12 +41,11 @@ public class App extends Application {
         // gamePane est le conteneur de l'écran de jeu
         var gamePane = new Pane();
         // Scene est un objet qui contient tous les éléments graphiques (ça correspond à la fenêtre qui sera affichée)
-        var gameScene = new Scene(root);
+        Scene gameScene = new Scene(root);
         if (!MazeConfig.isGameComplete()) { TF2Complete(); }
-        var config = MazeConfig.makeExampleTxt();
 
         // PacmanController est un listener d'événements clavier (ça récupère les touches promptées par l'user)
-        var pacmanController = new PacmanController();
+        PacmanController pacmanController = new PacmanController();
 
         /** gameScene est un objet de type Scene
          *
@@ -78,7 +77,7 @@ public class App extends Application {
         gameScene.setOnKeyPressed(pacmanController::keyPressedHandler);
         gameScene.setOnKeyReleased(pacmanController::keyReleasedHandler);
 
-        var maze = new MazeState(MazeConfig.makeExampleTxt());
+        MazeState maze = new MazeState(MazeConfig.makeExampleTxt());
 
         //Récupère la taille de l'écran
         Rectangle2D screenBounds = Screen.getPrimary().getBounds();

@@ -16,7 +16,6 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
 import model.MazeState;
-
 import java.io.IOException;
 import java.sql.Time;
 import java.util.List;
@@ -223,10 +222,10 @@ public class AnimationController {
                         animationStart = now;
                         return;
                     }
-                    var deltaT = now - animationStart;
+                    long deltaT = now - animationStart;
                     deltaT = now - animationStart;
                     maze.update(deltaT);
-                    for (var updater : graphicsUpdaters) {
+                    for (GraphicsUpdater updater : graphicsUpdaters) {
                         updater.update();
                     }
                     animationStart = now;
