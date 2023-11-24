@@ -1,6 +1,7 @@
 package gui;
 
 
+import com.sun.tools.javac.Main;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -28,47 +29,39 @@ import java.io.IOException;
 import java.io.InputStream;
 
 
-public class MainMenu implements Menu {
+public class OptionsMenu implements Menu {
 
-    public AnchorPane imageAnchor;
+    public Scene startMenu(Stage primaryStage, Scene gameScene, AnimationController animationController, MainMenu mainMenu) throws IOException {
 
-    public Scene startMenu(Stage primaryStage, Scene gameScene, AnimationController animationController, OptionsMenu optionsMenu) throws IOException {
 
-        FXMLLoader loader =  new FXMLLoader(getClass().getResource("/fxml/sample.fxml"));
+        FXMLLoader loader =  new FXMLLoader(getClass().getResource("/fxml/optionsMenu.fxml"));
         AnchorPane anchorPane = loader.load();
 
-        ImageView imageView = (ImageView) anchorPane.lookup("#imageMENU");
+        ImageView imageView = (ImageView) anchorPane.lookup("#imageOptionsMenu");
 
         Font.loadFont(getClass().getResourceAsStream("/fonts/Crackman.otf"), 12);
 
-        Text playText = (Text) anchorPane.lookup("#play");
-        Text optionsText = (Text) anchorPane.lookup("#options");
-        Text quitText = (Text) anchorPane.lookup("#quit");
-        playText.setStyle("-fx-font-size: 75");
-        optionsText.setStyle("-fx-font-size: 45");
-        quitText.setStyle("-fx-font-size: 50");
+        Text fancyText = (Text) anchorPane.lookup("#fancy");
+        Text fastText = (Text) anchorPane.lookup("#fast");
+        Text returnText = (Text) anchorPane.lookup("#return");
 
-        playText.setFont(Font.font("Crackman", 75));
-        optionsText.setFont(Font.font("Crackman", 45));
-        quitText.setFont(Font.font("Crackman", 50));
+        fancyText.setFont(Font.font("Crackman", 77));
+        fastText.setFont(Font.font("Crackman", 52));
+        returnText.setFont(Font.font("Crackman", 56));
 
-        setHoverEffect(playText, "yellow", "black");
-        setHoverEffect(optionsText, "blue", "black");
-        setHoverEffect(quitText, "red", "black");
-        playText.setOnMouseClicked(event -> {
+        setHoverEffect(fancyText, "yellow", "black");
+        setHoverEffect(fastText, "blue", "black");
+        setHoverEffect(returnText, "red", "black");
+        fancyText.setOnMouseClicked(event -> {
             primaryStage.setScene(gameScene);
-            primaryStage.centerOnScreen();
             animationController.createAnimationTimer().start();
         });
-        optionsText.setOnMouseClicked(event -> {
+        returnText.setOnMouseClicked(event -> {
             try {
-                primaryStage.setScene(optionsMenu.startMenu(primaryStage,gameScene,animationController,this));
+                primaryStage.setScene(mainMenu.startMenu(primaryStage,gameScene,animationController,this));
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-        });
-        quitText.setOnMouseClicked(event -> {
-            System.exit(0);
         });
 
 

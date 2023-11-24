@@ -109,12 +109,13 @@ public class App extends Application {
         //Empeche de resize la fenetre
         primaryStage.setResizable(false);
 
-        //Permet d'enlever la barre du haut
+//        Permet d'enlever la barre du haut
         primaryStage.initStyle(StageStyle.UNDECORATED);
 
 
         var mainMenu = new MainMenu();
-        primaryStage.setScene(mainMenu.startMenu(primaryStage,gameScene,animationController));
+        var optionsMenu = new OptionsMenu();
+        primaryStage.setScene(mainMenu.startMenu(primaryStage,gameScene,animationController, optionsMenu));
         primaryStage.show();
 //        primaryStage.setMaximized(true);
 
