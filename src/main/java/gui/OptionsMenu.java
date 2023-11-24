@@ -31,7 +31,7 @@ import java.io.InputStream;
 
 public class OptionsMenu implements Menu {
 
-    private boolean isFancy = true;
+    private boolean isFancy = false;
     public Scene startMenu(Stage primaryStage, Scene gameScene, AnimationController animationController, MainMenu mainMenu) throws IOException {
 
         FXMLLoader loader =  new FXMLLoader(getClass().getResource("/fxml/optionsMenu.fxml"));

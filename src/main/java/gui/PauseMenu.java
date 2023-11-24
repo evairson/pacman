@@ -22,7 +22,7 @@ public class PauseMenu implements Menu{
         this.root  = root;
     }
 
-    public void startMenu(){
+    public void startMenu(boolean isFancy){
         try{
 
             Font.loadFont(getClass().getResourceAsStream("/fonts/Crackman.otf"), 12);
@@ -36,7 +36,9 @@ public class PauseMenu implements Menu{
             layout.setMinHeight(height*0.3);
             layout.setMaxWidth(width*0.7);
             layout.setMaxHeight(height*0.7);
-            layout.setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
+            if(!isFancy){
+                layout.setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
+            }
 
             Text pauseMenuText = new Text("PAUSE");
             pauseMenuText.setFill(Color.YELLOW);
