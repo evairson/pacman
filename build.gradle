@@ -2,7 +2,6 @@ plugins {
     id 'java'
     id 'application'
     id 'org.openjfx.javafxplugin' version '0.1.0'
-    id 'java-library-distribution'
 }
 
 group 'fr.u-paris.informatique.cproj'
@@ -24,12 +23,6 @@ test {
 javafx {
     version = "17"
     modules = [ 'javafx.controls', 'javafx.fxml', 'javafx.media' ]
-}
-
-distributions {
-    main {
-        distributionBaseName = 'PacMan'
-    }
 }
 
 mainClassName = 'gui.App'
