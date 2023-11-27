@@ -8,6 +8,7 @@ package gui;
  */
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
@@ -126,5 +127,23 @@ public class App extends Application {
     private void TF2Complete() {
         System.out.println("Erreur de compilation, fichiers manquants...");
         System.exit(42);
+    }
+
+    public static void restartApplication(Stage stage) {
+        try {
+            // Fermer le stage actuel
+            stage.close();
+
+            // Lancer une nouvelle instance de l'application
+            Platform.runLater(() -> {
+                try {
+                    new App().start(new Stage());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

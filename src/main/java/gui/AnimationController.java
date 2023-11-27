@@ -2,6 +2,7 @@ package gui;
 
 import config.MazeConfig;
 import javafx.animation.*;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -66,6 +67,10 @@ public class AnimationController {
         this.gameComponents = root;
         this.AppScale = AppScale;
         pauseMenu = new PauseMenu(gameView.getMaze(), root);
+    }
+
+    public Stage getPrimaryStage() {
+        return primaryStage;
     }
 
     public void setPaused(boolean paused) {
@@ -153,12 +158,16 @@ public class AnimationController {
             layout.setCenter(gameOver);
             gameComponents.getChildren().add(layout);
 
+            final Stage stage = this.primaryStage;
+
             //Ferme le programme 5s après le game over
             Timer timer = new Timer();
             TimerTask task = new TimerTask() { //Infâme mais fonctionnel (voir comment utiliser Timeline)
                 @Override
                 public void run() {
-                    System.exit(0);
+                    Platform.runLater(() -> {
+                        App.restartApplication(stage);
+                    });
                 }
             };
 
@@ -192,7 +201,11 @@ public class AnimationController {
 
             //Ferme le programme 5s après la win
             Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(3), event -> {
-                if(this.maze.getLevel() == 2) System.exit(0);
+                if(this.maze.getLevel() == 2) {
+                    Platform.runLater(() -> {
+                        App.restartApplication(this.primaryStage);
+                    });
+                }
                 gameComponents.getChildren().remove(gameView.getGameRoot());
                 this.stopPause();
                 gameComponents.getChildren().remove(winScreen);

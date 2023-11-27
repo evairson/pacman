@@ -15,7 +15,10 @@ import geometry.IntCoordinates;
 import geometry.RealCoordinates;
 import gui.AnimationController;
 
+import gui.App;
 import gui.CellGraphicsFactory;
+import javafx.animation.PauseTransition;
+import javafx.util.Duration;
 import model.Items.Energizer;
 import model.Items.FakeEnergizer;
 import model.Items.Item;
@@ -237,11 +240,6 @@ public final class MazeState {
 
         private void addScore ( int increment){
             score += increment;
-            displayScore();
-        }
-
-        private void displayScore() {
-            // FIXME: this should be displayed in the JavaFX view, not in the console
         }
 
         private void playerLost() { //le joueur a perdu au moment où il n'a plus de vie
@@ -251,12 +249,9 @@ public final class MazeState {
                 if (score > getHighScore()) {
                     setHighScore(score);
                 }
-                System.exit(0);
                 animationController.gameOver();
             }
-            //if (!PacMan.INSTANCE.isFakeEnergized()){
             resetCritters();
-            //}
 
         }
 
