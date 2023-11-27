@@ -14,15 +14,25 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
+import model.Ghost;
+import model.Items.Item;
+import model.Items.ItemTest;
 import model.MazeState;
-import static config.Cell.Content.ENERGIZER;
-
-import config.Cell;;
+import model.PacMan;
+import model.Items.Dot;
+import model.Items.Energizer;
+import model.Items.FakeEnergizer;
+import config.Cell;
+import model.Items.ItemTest;
 
 public class CellGraphicsFactory {
     private final double scale;
+    private static boolean finNiveau;
+
+    public static void setFinNiveau(boolean b){
+        finNiveau = b;
+    }
 
     public void ImageMur(String url, double taille, double translateX, double translateY, Group group) {
         ImageView mur = new ImageView(new Image("mur/"+url, taille, taille, true, false));
@@ -70,6 +80,7 @@ public class CellGraphicsFactory {
 
     public CellGraphicsFactory(double scale) {
         this.scale = scale;
+        finNiveau = false;
     }
 
     /**
@@ -85,29 +96,71 @@ public class CellGraphicsFactory {
      * 1. Utilisation de constante : scale/15, scale/5, scale/10, scale/2 ou 9 * scale / 10
      *  c'est quand même déguelasse
      * 2. Méthodes distinctes pour chaque élément graphique
-     * 3. Couleurs en paramètre ? comme ça le client choisi la couleur qu'il veut
      * 4. COMPLIQUÉ : Gestion des dimensions dynamiques :
      * pour l'instant les dimensions sont fixes, mais si on veut changer la taille de la fenêtre
      * il faut changer les dimensions de chaque élément graphique
      */
 
-    public GraphicsUpdater makeGraphics(MazeState state, IntCoordinates pos) {
-        var group = new Group();
+    public void setEnergized(Energizer e){
+        if(e.isActive()){
+            e.frameActivity ++;
+            if(e.frameActivity>500){
+                e.setActive(false);
+                Ghost.energized = Energizer.isOneActive();
+                PacMan.INSTANCE.setEnergized(Energizer.isOneActive());
+            }
+        }
+    }
+
+    public void setActiveItemTest(ItemTest t){
+        if(t.isActive()) {
+            t.frameActivity++;
+            if (t.frameActivity > 500) {
+                t.setActive(false);
+            }
+        }
+    }
+
+    public void setFakeEnergized(FakeEnergizer e){
+        if(FakeEnergizer.isFakeEnergized()){
+            FakeEnergizer.frameEnergizer ++;
+        }
+
+        if(FakeEnergizer.frameEnergizer>750){
+            FakeEnergizer.setFakeEnergized(false);
+            //Ghost.energized = false;
+            PacMan.INSTANCE.setFakeEnergized(false);
+        }
+    }
+
+    public GraphicsUpdater makeGraphics(MazeState state, IntCoordinates pos, Color color) {
+        Group group = new Group(); // permet de mettre dans groupe tous les node à afficher (mur + dot)
         group.setTranslateX(pos.x()*scale);
         group.setTranslateY(pos.y()*scale);
-        var cell = state.getConfig().getCell(pos);
-        var dot = new Circle();
+        Cell cell = state.getConfig().getCell(pos);
+
+        // creer les dots
+        Circle dot = new Circle();
         group.getChildren().add(dot);
-        dot.setRadius(switch (cell.initialContent()) { case DOT -> scale/20; case ENERGIZER -> scale/7; case NOTHING -> 0; });
+
+        double radius =0;
+        if(cell.initialItem().getClass() == Dot.class)  radius = scale/20;
+        if((cell.initialItem() instanceof Energizer) || (cell.initialItem() instanceof ItemTest) || (cell.initialItem() instanceof FakeEnergizer)) radius = scale/7;
+        dot.setRadius(radius);
+
         dot.setCenterX(scale/2);
         dot.setCenterY(scale/2);
-        dot.setFill(Color.WHITE);
+
+        if(cell.initialItem() instanceof ItemTest) { dot.setFill(Color.RED); }
+        else if (cell.initialItem() instanceof FakeEnergizer) { dot.setFill(Color.GREEN); }
+        else { dot.setFill(Color.WHITE); }
+
         double taille = scale;
         choixMur(cell, taille, group);
         
 
 
-        if(cell.initialContent()==ENERGIZER){
+        if((cell.initialItem() instanceof Energizer) || (cell.initialItem() instanceof ItemTest) || (cell.initialItem() instanceof FakeEnergizer)){
             ScaleTransition blink = new ScaleTransition(Duration.millis(600), dot);
             blink.setFromX(1);
             blink.setFromY(1);
@@ -127,33 +180,64 @@ public class CellGraphicsFactory {
             @Override
             public void update() {
 
-                if(System.currentTimeMillis()-time>400){
-                    for(Node m : group.getChildren()){
-                        int i = 0;
-                        if(m instanceof ImageView){
-                            while (i < 4){
-                                if(typeMur[i]){
-                                    typeMur[i]=false;
-                                    ImageView mur = (ImageView)m;
-                                    mur.setImage(new Image("mur/"+(changeImage(i,etatMur)),taille,taille,true,false));
-                                    i = 4;
+                if(finNiveau){
+                    if(System.currentTimeMillis()-time>300){
+                        for(Node m : group.getChildren()){
+                            int i = 0;
+                            if(m instanceof ImageView){
+                                while (i < 4){
+                                    if(typeMur[i]){
+                                        typeMur[i]=false;
+                                        ImageView mur = (ImageView)m;
+                                        mur.setImage(new Image("mur/"+(changeImage(i,etatMur)),taille,taille,true,false));
+                                        i = 4;
+                                    }
+                                    else i++;
                                 }
-                                else i++;
+                                }
                             }
-                            }
-                        }
-                    typeMur = typeMur(cell);
-                    time = System.currentTimeMillis();
-                    if(etatMur==1) etatMur=2; 
-                    else etatMur=1;
+                        typeMur = typeMur(cell);
+                        time = System.currentTimeMillis();
+                        if(etatMur==1) etatMur=2; 
+                        else etatMur=1;
+    
+                    }
+                }
+
+                //afficher les points si pacman pas passé dessus
+                dot.setVisible(!state.getGridState(pos));
+
+                if (cell.initialItem() instanceof Energizer){
+                    setEnergized((Energizer)cell.initialItem());
+                }
+                if(cell.initialItem() instanceof ItemTest){
+                    setActiveItemTest((ItemTest)cell.initialItem());
+                }
+                if (cell.initialItem() instanceof FakeEnergizer){
+                    setFakeEnergized((FakeEnergizer)cell.initialItem());
+                }
+                for (Node n : group.getChildren()){
+                    n.setVisible(!ItemTest.isOneActive());
                 }
                 dot.setVisible(!state.getGridState(pos));
             }
 
             @Override
-            public Node getNode() {
+            public Node getNode(){
                 return group;
             }
         };
     }
+
+//    private Rectangle createWall(double width, double height, Color color, double x, double y) {
+//            var wall = new Rectangle();
+//            wall.setWidth(width);
+//            wall.setHeight(height);
+//            wall.setX(x);
+//            wall.setY(y);
+//            wall.setFill(color);
+//            return wall;
+//        }
+
 }
+

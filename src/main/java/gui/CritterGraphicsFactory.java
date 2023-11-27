@@ -3,11 +3,14 @@ import geometry.RealCoordinates;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.media.AudioClip;
 import model.Critter;
 import model.Ghost;
 import model.PacMan;
 import model.Direction;
 import java.lang.Math;
+import gui.App;
+
 
 
 /**
@@ -25,12 +28,13 @@ import java.lang.Math;
 public final class CritterGraphicsFactory {
     private final double scale;
 
-    private String etatPacman;
-    private static int etatghost;
-    private RealCoordinates pos;
+    private String etatPacman; //permet de changer l'image de pacman
+    private static int etatghost; //permet de changer l'image des fantômes
+    private RealCoordinates pos; 
     private static long time;
-    private final double offsetX = 0.01; //FIXME : très moche lol
+    private final double offsetX = 0.01; 
     private final double offsetY = 0.05;
+        
 
     public void setEtatPacman(String e){ //permet de changer l'etat pour les tests
         etatPacman = e;
@@ -53,14 +57,40 @@ public final class CritterGraphicsFactory {
     // Choix de l'image de pacman
     public String setimgPacman(Critter critter){
         String url;
-        if(critter.getDirection()==Direction.NONE){
-            url = "pacman/pacman-rond.png";
-        }
-        else{
-            url = "pacman/pacman-"+getDirectionString(critter)+"-"+etatPacman+".png";
-        }
-        return url;
+        
+            //primaryStage.addKeyListener(new EspaceClickListener());
+        
+            if ( critter.isFakeEnergized() /*&& clickListener.isEspaceClique()*/ ){
+                url = "FakeGhost.jpg";
+                return url;
+            }
+            else {
+                if(critter.getDirection()==Direction.NONE){
+                    url = "pacman/pacman-rond.png";
+                    return url;
+                }
+                else{
+                    url = "pacman/pacman-"+getDirectionString(critter)+"-"+etatPacman+".png";
+                    return url;
+                } 
+            }
+            
     }
+
+        
+    
+
+    //choix de l'image de pacman lorsqu'il est fakely energizé A REVOIR !!!!!!!!!!!
+    /*public String setimgPacmanF(Critter critter){
+        
+        String url;
+        
+        url = "ghost-blue1.png";
+        
+        
+        return url;
+
+    }*/
 
     // Trouve la direction des critters
     private String getDirectionString(Critter critter){
@@ -92,8 +122,7 @@ public final class CritterGraphicsFactory {
         else {
             return "ghost-blue"+etatghost+".png";
 
-        }
-        
+        }  
     }
 
     // Choix du numéro des fantômes
@@ -106,6 +135,7 @@ public final class CritterGraphicsFactory {
         };
         return numghost;
     }
+
 
 
     // Méthode qui crée la représentation graphique d'une créature.
@@ -122,14 +152,14 @@ public final class CritterGraphicsFactory {
             setimgghostNE = "";
         }
         
-        var size = 0.65; // facteur d'echelle de l'image
+        Double size = 0.65; // facteur d'echelle de l'image
         double taille = scale * size;
         
-        var url = (critter instanceof PacMan) ? setimgPacman(critter) :
+        String url = (critter instanceof PacMan) ? setimgPacman(critter) :
                 setimgghost((Ghost)critter,numghost,setimgghostNE);
         
         // chargement de l'image à partir du fichier url
-        var image = new ImageView(new Image(url, taille, taille, true, false));
+        ImageView image = new ImageView(new Image(url, taille, taille, true, false));
         return new GraphicsUpdater() {
             @Override
             public void update() {
@@ -139,7 +169,6 @@ public final class CritterGraphicsFactory {
                 image.setTranslateX((critter.getPos().x() + offsetX + (1 - size)/2) * scale);
                 image.setTranslateY((critter.getPos().y() + offsetY + (1 - size)/2) * scale);
 
-                // Debug.out("sprite updated");
 
                 //changer image pacman 
                 if(critter instanceof PacMan){
@@ -153,8 +182,8 @@ public final class CritterGraphicsFactory {
                         pos = critter.getPos();
                     }
                     image.setImage(new Image(setimgPacman(critter), taille, taille, true, false));
-                }
 
+                }
 
                  //changer image fantôme
 

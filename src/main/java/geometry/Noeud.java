@@ -2,7 +2,7 @@ package geometry;
 import config.*;
 import java.util.ArrayList;
 
-public class Noeud {
+public class Noeud { //TODO : mettre des commentaires
     private final IntCoordinates coordinates;
     private final Noeud parent;
     private int cout;
