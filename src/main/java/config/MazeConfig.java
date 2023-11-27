@@ -185,7 +185,7 @@ public class MazeConfig {
 
     public static MazeConfig makeExampleTxt() throws IOException {
         String currentDirectory = System.getProperty("user.dir"); // Obtient le répertoire de travail actuel
-        String filePath = currentDirectory + "/src/main/resources/testMap.txt"; // Chemin complet vers le fichier
+        String filePath = currentDirectory + "/src/main/resources/testMap2.txt"; // Chemin complet vers le fichier
         // on changera ça, à terme, mais pour l'instant ça fonctionne donc nickel
         return txtToMaze(filePath);
     }

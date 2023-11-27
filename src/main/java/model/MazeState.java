@@ -27,6 +27,8 @@ import java.util.Map;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.io.PrintWriter;
 
 import static model.Ghost.*;
@@ -195,9 +197,22 @@ public final class MazeState {
                 }
             }
             if (allDotsEaten() && animationController.hasntAlreadyWon()) {
-                if (level == 2) playerWin();
-                animationController.setHasntAlreadyWon(false);
-                animationController.win();
+                
+                CellGraphicsFactory.setFinNiveau(true);
+                Timer timer = new Timer();
+                timer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        CellGraphicsFactory.setFinNiveau(false);
+
+                        timer.cancel();
+                    }
+                  }, 3000);                
+                  if (level == 2) playerWin();
+                  animationController.setHasntAlreadyWon(false);
+                  animationController.win();
+                  
+
             }
         }
 
