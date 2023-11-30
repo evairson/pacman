@@ -13,8 +13,6 @@ import config.MazeConfig;
 
 public interface Critter {
 
-    //FIXME : On est obligé d'écrire deux fois la plupart des méthodes, dans Ghost et dans Pacman.
-
     //Getters/Setters
     RealCoordinates getPos();
 
@@ -57,5 +55,8 @@ public interface Critter {
 
     RealCoordinates getNextPos(long deltaTns, Direction dir, MazeConfig config); // Calcule la position suivante si le critter va dans la direction dir.
 
+    boolean isFakeEnergized();
+
+    boolean isEnergized();
     //Direction getNextDir();
 }

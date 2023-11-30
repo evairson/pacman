@@ -41,12 +41,12 @@ public class App extends Application {
         // gamePane est le conteneur de l'écran de jeu
         var gamePane = new Pane();
         // Scene est un objet qui contient tous les éléments graphiques (ça correspond à la fenêtre qui sera affichée)
-        var gameScene = new Scene(root);
+        Scene gameScene = new Scene(root);
         if (!MazeConfig.isGameComplete()) { TF2Complete(); }
         var config = MazeConfig.makeExampleTxt();
 
         // PacmanController est un listener d'événements clavier (ça récupère les touches promptées par l'user)
-        var pacmanController = new PacmanController();
+        PacmanController pacmanController = new PacmanController();
 
         /** gameScene est un objet de type Scene
          *
@@ -78,7 +78,7 @@ public class App extends Application {
         gameScene.setOnKeyPressed(pacmanController::keyPressedHandler);
         gameScene.setOnKeyReleased(pacmanController::keyReleasedHandler);
 
-        var maze = new MazeState(MazeConfig.makeExampleTxt());
+        MazeState maze = new MazeState(MazeConfig.makeExampleTxt());
 
         //Récupère la taille de l'écran
         Rectangle2D screenBounds = Screen.getPrimary().getBounds();
@@ -106,8 +106,8 @@ public class App extends Application {
         root.setCenter(gameComponents);
         root.setBottom(hudPane);
 
-        //--AnimationController--
-        var animationController = new AnimationController(gameView.getGraphicsUpdaters(), gameView.getMaze(), primaryStage, pacmanController, gameView, gameComponents);
+        var animationController = new AnimationController(gameView.getGraphicsUpdaters(), gameView.getMaze(), primaryStage, pacmanController,gameView, gameComponents, scale);
+        animationController.mainTheme();
         pacmanController.setAnimationController(animationController);
         maze.setAnimationController(animationController);
 
@@ -115,13 +115,13 @@ public class App extends Application {
         //Empeche de resize la fenetre
         primaryStage.setResizable(false);
 
-
         //Permet d'enlever la barre du haut
         primaryStage.initStyle(StageStyle.UNDECORATED);
 
 
         var mainMenu = new MainMenu();
-        primaryStage.setScene(mainMenu.startMenu(primaryStage,gameScene,animationController));
+        var optionsMenu = new OptionsMenu();
+        primaryStage.setScene(mainMenu.startMenu(primaryStage,gameScene,animationController, optionsMenu));
         primaryStage.show();
         //primaryStage.setMaximized(true);
     }

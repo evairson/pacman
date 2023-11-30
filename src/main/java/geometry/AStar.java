@@ -7,7 +7,7 @@ import java.util.LinkedList;
 import java.util.PriorityQueue;
 import java.util.Comparator;
 
-public class AStar {
+public class AStar { //TODO : mettre des commentaires
 
     static Comparator<Noeud> comparator = new Comparator<Noeud>() {
         @Override

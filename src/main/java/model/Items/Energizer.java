@@ -6,8 +6,9 @@ import model.PacMan;
 
 import java.util.ArrayList;
 
-public class Energizer extends Item {
 
+    /*public boolean special;*/
+public class Energizer extends Item {
     public int frameActivity;
     private static final ArrayList<Energizer> itemList = new ArrayList<>();
 
@@ -26,7 +27,7 @@ public class Energizer extends Item {
         return false;
     }
 
-    public /*static*/ void setActive(boolean b){
+        public /*static*/ void setActive(boolean b){
         super.setActive(b);
         this.frameActivity = 0;
         PacMan.INSTANCE.setEnergized(Energizer.isOneActive());

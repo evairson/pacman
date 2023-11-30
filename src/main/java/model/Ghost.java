@@ -1,10 +1,10 @@
 package model;
 
+import java.util.Random;
+
 /**
- * Pas grand chose à détailler, ça définit simplement les 4 fantômes.
- * CEPENDANT, il faut implémenter un comportement différent pour chaque fantôme.
- * Chaque fantome devrait avoir sa propre classe ou méthode qui implémente sa logique de déplacement.
- * une classe BlinkyAI, InkyAI, PinkyAI, ClydeAI qui implémentent une interface GhostAI ???
+ * Définit les 4 fantômes.
+ * Un comportement différent pour chaque fantôme.
  * Utiliser les données du jeu pour déterminer la direction du fantôme. (la position de PacMan par exemple)
  *
  */
@@ -13,11 +13,10 @@ import GhostsAI.*;
 import config.MazeConfig;
 import geometry.IntCoordinates;
 import geometry.RealCoordinates;
-import java.util.Random;
+import  java.util.Random;
 
 public enum Ghost implements Critter {
 
-    // TODO: implement a different AI for each ghost, according to the description in Wikipedia's page
     BLINKY, INKY, PINKY, CLYDE;
 
     private RealCoordinates pos;
@@ -105,9 +104,25 @@ public enum Ghost implements Critter {
         };
     }
 
+    public boolean isFakeEnergized(){
+        return false;
+    }
+
     public boolean isCentered(){
         return (Math.round(this.pos.x()) == this.pos.x()) && (Math.round(this.pos.y()) == this.pos.y());
     }
+
+    public static Direction getRandomDirection(){
+        Random rd = new Random();
+        int dir = rd.nextInt(4);
+        return switch (dir) {
+            case 0 -> Direction.SOUTH;
+            case 1 -> Direction.NORTH;
+            case 2 -> Direction.EAST;
+            default -> Direction.WEST;
+        };
+    }
+
 
 
     public RealCoordinates getNextPos(long deltaTns, Direction dir, MazeConfig config){
@@ -151,8 +166,16 @@ public enum Ghost implements Critter {
         }
     }
 
-    public Direction getNextDir(MazeConfig config, IntCoordinates pacPos, Direction pacDir, Boolean energized){
-        if (energized){
+    public Direction getNextDir(MazeConfig config, IntCoordinates pacPos, Direction pacDir, Boolean energized,boolean FakeEnergized){
+        if (FakeEnergized){
+            if (this.isCentered()){
+                return getRandomDirection();
+            }
+            else{
+                return this.direction;
+            }
+        }
+        else if (energized){
             if (this.isCentered()) {
                 return RunAwayAI.getDirection(config, pacPos, this.currCellI());
             } else {
