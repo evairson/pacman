@@ -7,6 +7,7 @@ import javafx.scene.media.AudioClip;
 import model.Critter;
 import model.Ghost;
 import model.PacMan;
+import model.Items.BouleNeige;
 import model.Direction;
 import java.lang.Math;
 import gui.App;
@@ -156,18 +157,23 @@ public final class CritterGraphicsFactory {
         double taille = scale * size;
         
         String url = (critter instanceof PacMan) ? setimgPacman(critter) :
+                     (critter instanceof BouleNeige) ? "BouleNeige.png" :
                 setimgghost((Ghost)critter,numghost,setimgghostNE);
         
         // chargement de l'image à partir du fichier url
-        ImageView image = new ImageView(new Image(url, taille, taille, true, false));
+        
+            ImageView image = (critter instanceof PacMan || critter instanceof Ghost) ? new ImageView(new Image(url, taille, taille, true, false)):
+                              new ImageView();
+
         return new GraphicsUpdater() {
             @Override
             public void update() {
 
                 // mise à jour de la position de l'image
-
-                image.setTranslateX((critter.getPos().x() + offsetX + (1 - size)/2) * scale);
-                image.setTranslateY((critter.getPos().y() + offsetY + (1 - size)/2) * scale);
+                if(critter instanceof PacMan || critter instanceof Ghost){
+                    image.setTranslateX((critter.getPos().x() + offsetX + (1 - size)/2) * scale);
+                    image.setTranslateY((critter.getPos().y() + offsetY + (1 - size)/2) * scale);
+                }
 
 
                 //changer image pacman 

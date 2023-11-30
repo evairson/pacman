@@ -46,22 +46,18 @@ public final class MazeState {
 
     private boolean[][] gridState;
 
-    private static List<Critter> critters;
+    private final List<Critter> critters;
     private int score;
 
     private int level = 1;
     private final Map<Critter, RealCoordinates> initialPos;
     private int lives = 3;
 
-    public static void addCritter(Critter c){
-        critters.add(c);
-    }
-
     public MazeState(MazeConfig config) {
         this.config = config;
         height = config.getHeight();
         width = config.getWidth();
-        critters = List.of(PacMan.INSTANCE, Ghost.CLYDE, BLINKY, INKY, PINKY);
+        critters = List.of(PacMan.INSTANCE, Ghost.CLYDE, BLINKY, INKY, PINKY, BouleNeige.INSTANCE);
         gridState = initGridState();
         initialPos = Map.of(
                 PacMan.INSTANCE, config.getPacManPos().toRealCoordinates(1.0),
@@ -115,6 +111,8 @@ public final class MazeState {
 
     public void update(long deltaTns) {
 
+        
+
         /**
          * Reponsable de mettre à jour l'état du jeu.
          * Cette méthode est appelée à chaque frame.
@@ -134,7 +132,13 @@ public final class MazeState {
          */
 
         for (Critter critter : critters) {
+
+            if(critter != BouleNeige.INSTANCE){
+
+            
             critter.tpToCenter();
+
+
             if (critter == PacMan.INSTANCE) {
                 Direction nextDir = ((PacMan) critter).getNextDir();
                 if (PacMan.INSTANCE.canSetDirection(nextDir, this.config)) {
@@ -148,6 +152,7 @@ public final class MazeState {
                 critter.setPos(critter.getNextPos(deltaTns, nextDir, this.config));
                 critter.setDirection(nextDir);
             }
+        }
         }
 
         // FIXME Pac-Man rules should somehow be in Pacman class
@@ -219,10 +224,10 @@ public final class MazeState {
                   if (level == 2) playerWin();
                   animationController.setHasntAlreadyWon(false);
                   animationController.win();
-                  
+                 
+            }
 
             }
-        }
 
         public int getHighScore () {
             try {

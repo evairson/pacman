@@ -7,17 +7,17 @@ import model.Critter;
 import model.Direction;
 import model.MazeState;
 
-public class BouleNeige implements Critter {
+public final class BouleNeige implements Critter {
     private RealCoordinates pos;
     private Direction direction;
     private final double speed = 2;
 
     private static final double TPINTERVAL = 0.02;
 
-    BouleNeige(RealCoordinates pos, Direction direction){
-        this.pos = pos;
-        this.direction = direction;
-        MazeState.addCritter(this);
+    public static final BouleNeige INSTANCE = new BouleNeige();
+
+    public BouleNeige(){
+
     }
 
     public Direction getDirection(){
