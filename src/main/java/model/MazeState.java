@@ -19,6 +19,7 @@ import gui.App;
 import gui.CellGraphicsFactory;
 import javafx.animation.PauseTransition;
 import javafx.util.Duration;
+import model.Items.BouleNeige;
 import model.Items.Energizer;
 import model.Items.FakeEnergizer;
 import model.Items.Item;
@@ -45,12 +46,16 @@ public final class MazeState {
 
     private boolean[][] gridState;
 
-    private final List<Critter> critters;
+    private static List<Critter> critters;
     private int score;
 
     private int level = 1;
     private final Map<Critter, RealCoordinates> initialPos;
     private int lives = 3;
+
+    public static void addCritter(Critter c){
+        critters.add(c);
+    }
 
     public MazeState(MazeConfig config) {
         this.config = config;
