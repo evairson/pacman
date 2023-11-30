@@ -67,6 +67,14 @@ public class MazeConfig {
         return grid[Math.floorMod(pos.y(), getHeight())][Math.floorMod(pos.x(), getWidth())];
     }
 
+    public Cell[][] getGrid() {
+        return grid;
+    }
+
+    public void setCell(IntCoordinates pos, Cell c){
+        grid[pos.x()][pos.y()] = c;
+    }
+
 
     /** txtToMaze prend en entrée le chemin vers un fichier texte (String) et renvoie le labyrinthe associé (MazeConfig)
      *  Tout d'abord on lit le fichier texte avec readAllLines et on place la liste des lignes

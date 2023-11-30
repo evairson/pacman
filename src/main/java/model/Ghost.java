@@ -126,6 +126,9 @@ public enum Ghost implements Critter {
                             case SOUTH -> RealCoordinates.SOUTH_UNIT;
                             case WEST -> RealCoordinates.WEST_UNIT;
                         }).times(this.getSpeed() * deltaTns * 1E-9));
+                if (!this.isAlive()) {
+                    return nextPos;
+                }
                 switch (dir) { // Ajustement en fonction des murs, on ne veut pas dépasser un mur
                     case WEST:
                         if (config.getCell(this.currCellI()).westWall()) {

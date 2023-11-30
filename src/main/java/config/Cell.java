@@ -21,4 +21,5 @@ Cell(boolean northWall, boolean eastWall, boolean southWall, boolean westWall, C
         return (northWall && southWall && !eastWall && !westWall) ||
                 (eastWall && westWall && !northWall && !southWall);
     }
+
 }

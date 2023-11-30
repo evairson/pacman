@@ -5,6 +5,7 @@ import model.Direction;
 import config.MazeConfig;
 import java.util.ArrayList;
 import model.Ghost;
+import config.*;
 
 public class BlinkyAI {
 
@@ -29,8 +30,11 @@ public class BlinkyAI {
         if (!Ghost.BLINKY.isAlive()) {
             if (ghostPos.equals(config.getGhostHousePos())) {
                 return Direction.NONE;
-            }else{
-                ArrayList<IntCoordinates> path = AStar.shortestPath(ghostPos, config.getGhostHousePos(), config);
+            } else if (ghostPos.equals(new IntCoordinates(config.getGhostHousePos().x(),config.getGhostHousePos().y()-1))) {
+                return Direction.SOUTH;
+
+            } else{
+                ArrayList<IntCoordinates> path = AStar.shortestPath(ghostPos, new IntCoordinates(config.getGhostHousePos().x(),config.getGhostHousePos().y()-1), config);
                 int pathlen = path.size();
                 IntCoordinates nextPos = path.get(pathlen-1);
                 System.out.println(nextPos);

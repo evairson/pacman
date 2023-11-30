@@ -1,5 +1,6 @@
 package GhostsAI;
 
+import config.Cell;
 import geometry.AStar;
 import geometry.IntCoordinates;
 import model.Direction;
@@ -32,12 +33,14 @@ public class ClydeAI{
         if (!Ghost.CLYDE.isAlive()) {
             if (intC.equals(config.getGhostHousePos())){
                 return Direction.NONE;
-            }else{
-                ArrayList<IntCoordinates> path = AStar.shortestPath(ghostPos, config.getGhostHousePos(), config);
+            } else if (ghostPos.equals(new IntCoordinates(config.getGhostHousePos().x(),config.getGhostHousePos().y()-1))) {
+                return Direction.SOUTH;
+
+            } else{
+                ArrayList<IntCoordinates> path = AStar.shortestPath(ghostPos, new IntCoordinates(config.getGhostHousePos().x(),config.getGhostHousePos().y()-1), config);
                 int pathlen = path.size();
                 IntCoordinates nextPos = path.get(pathlen-1);
-                return BlinkyAI.whichDir(ghostPos
-                        , nextPos);
+                return BlinkyAI.whichDir(ghostPos, nextPos);
 
 
             }
