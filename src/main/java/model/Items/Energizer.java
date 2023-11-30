@@ -9,7 +9,6 @@ import java.util.ArrayList;
 
     /*public boolean special;*/
 public class Energizer extends Item {
-    private static boolean energized;
     public int frameActivity;
     private static final ArrayList<Energizer> itemList = new ArrayList<>();
 

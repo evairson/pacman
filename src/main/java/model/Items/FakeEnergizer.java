@@ -29,5 +29,4 @@ public class FakeEnergizer extends Item {
         PacMan.INSTANCE.setFakeEnergized(b);
         //Ghost.energized = false;
     }
-    
 }
