@@ -11,7 +11,7 @@ public class ItemBouleNeige extends Item {
     @Override
     public void setActive(boolean b){
         super.setActive(b);
-        
+        BouleNeige.INSTANCE.lancer();
     }
 
     

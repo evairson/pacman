@@ -20,6 +20,7 @@ import gui.CellGraphicsFactory;
 import javafx.animation.PauseTransition;
 import javafx.util.Duration;
 import model.Items.BouleNeige;
+import model.Items.Dot;
 import model.Items.Energizer;
 import model.Items.FakeEnergizer;
 import model.Items.Item;
@@ -133,7 +134,7 @@ public final class MazeState {
 
         for (Critter critter : critters) {
 
-            if(critter != BouleNeige.INSTANCE){
+            if(critter != BouleNeige.INSTANCE  || BouleNeige.INSTANCE.isActive()){
 
             
             critter.tpToCenter();
@@ -147,11 +148,19 @@ public final class MazeState {
                 } else {
                     critter.setPos(critter.getNextPos(deltaTns, critter.getDirection(), this.config));
                 }
-            } else {
+            } else if(critter instanceof Ghost) {
                 var nextDir = ((Ghost) critter).getNextDir(this.config, PacMan.INSTANCE.currCellI(), PacMan.INSTANCE.getDirection(), PacMan.INSTANCE.isEnergized(), PacMan.INSTANCE.isFakeEnergized());
                 critter.setPos(critter.getNextPos(deltaTns, nextDir, this.config));
                 critter.setDirection(nextDir);
             }
+            else if(critter == BouleNeige.INSTANCE){
+                if(critter.getNextPos(deltaTns, BouleNeige.INSTANCE.getDirection(), this.config)==null) {
+                    BouleNeige.INSTANCE.detruire();
+                }
+                else{
+                    critter.setPos(critter.getNextPos(deltaTns, BouleNeige.INSTANCE.getDirection(), this.config));
+                }
+}
         }
         }
 
@@ -178,6 +187,9 @@ public final class MazeState {
                     addScore(1);
                     gridState[pacPos.y()][pacPos.x()] = true;
                 }
+
+
+
             /*if(config.getCell(pacPos).initialItem() instanceof Energizer){
                 addScore(5); 
                 Energizer.setEnergized(true);
@@ -196,7 +208,19 @@ public final class MazeState {
                 gridState[pacPos.y()][pacPos.x()] = true;
             }*/
             }
-            } // TODO: Faire une fonction dans item qui fait tout bien (le ramssage) pour chaque item (pour éviter d'écrire 'if ... instanceof ...') et qui ne met pas grid true si l'item n'est pas ramassé...
+            } 
+            if(BouleNeige.INSTANCE.isActive()){
+                var boulePos = BouleNeige.INSTANCE.getPos().round();
+                if(!gridState[boulePos.y()][boulePos.x()]){
+                    if(config.getCell(boulePos).initialItem() instanceof Dot){
+                        config.getCell(boulePos).initialItem().setActive(true);
+                        addScore(1);
+                        gridState[boulePos.y()][boulePos.x()] = true;
+                    }
+                }
+            }
+            
+            // TODO: Faire une fonction dans item qui fait tout bien (le ramssage) pour chaque item (pour éviter d'écrire 'if ... instanceof ...') et qui ne met pas grid true si l'item n'est pas ramassé...
             for (var critter : critters) { // Collision PacMan Ghosts
                 if (critter instanceof Ghost && critter.getPos().round().equals(pacPos) && !PacMan.INSTANCE.isFakeEnergized()) {
                     if (PacMan.INSTANCE.isEnergized()) {
@@ -254,6 +278,7 @@ public final class MazeState {
 
         private void playerLost() { //le joueur a perdu au moment où il n'a plus de vie
             // FIXME: this should be displayed in the JavaFX view, not in the console. A game over screen would be nice too.
+            BouleNeige.INSTANCE.detruire();
             lives--;
             if (lives == 0) {
                 if (score > getHighScore()) {

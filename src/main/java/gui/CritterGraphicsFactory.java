@@ -169,8 +169,21 @@ public final class CritterGraphicsFactory {
             @Override
             public void update() {
 
+                if(critter instanceof BouleNeige){
+                    if(BouleNeige.INSTANCE.isActive() ){
+                        if(image.getImage()==null){
+                            image.setImage(new Image(url, 3*taille/4, 3*taille/4, true, false));
+                        }
+                    }
+                    else {
+                        image.setImage(null);
+                    }
+                    
+                }
+
+
                 // mise à jour de la position de l'image
-                if(critter instanceof PacMan || critter instanceof Ghost){
+                if(critter instanceof PacMan || critter instanceof Ghost || BouleNeige.INSTANCE.isActive()){
                     image.setTranslateX((critter.getPos().x() + offsetX + (1 - size)/2) * scale);
                     image.setTranslateY((critter.getPos().y() + offsetY + (1 - size)/2) * scale);
                 }
