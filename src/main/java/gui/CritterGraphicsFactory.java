@@ -137,8 +137,6 @@ public final class CritterGraphicsFactory {
         return numghost;
     }
 
-
-
     // Méthode qui crée la représentation graphique d'une créature.
     public GraphicsUpdater makeGraphics(Critter critter) {
 

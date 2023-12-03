@@ -232,6 +232,14 @@ public final class MazeState {
                         return;
                     }
                 }
+                if(BouleNeige.INSTANCE.isActive()){
+                    var boulePos = BouleNeige.INSTANCE.getPos().round();
+                    if(critter instanceof Ghost && critter.getPos().round().equals(boulePos)){
+                        addScore(10);
+                        animationController.ghostEatenSound();
+                        resetCritter(critter);
+                    }
+                }
             }
             if (allDotsEaten() && animationController.hasntAlreadyWon()) {
                 
