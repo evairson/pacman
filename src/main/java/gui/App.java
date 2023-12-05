@@ -99,7 +99,6 @@ public class App extends Application {
         StackPane.setAlignment(gamePane,Pos.CENTER);
 
         root.setCenter(gameComponents);
-        //root.setBottom();
 
         var animationController = new AnimationController(gameView.getGraphicsUpdaters(), gameView.getMaze(), primaryStage, pacmanController,gameView, gameComponents, scale);
 
