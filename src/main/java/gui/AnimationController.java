@@ -48,9 +48,6 @@ public class AnimationController {
     private final StackPane gameComponents;
     private boolean isPaused = false;
     private boolean isFancy = false;
-
-
-
     private double AppScale;
 
     private boolean hasntAlreadyWon = true; //Aide à gérer les transitions de niveau
@@ -69,7 +66,7 @@ public class AnimationController {
         this.gameView = gameView;
         this.gameComponents = root;
         this.AppScale = AppScale;
-        pauseMenu = new PauseMenu(gameView.getMaze(), root);
+        pauseMenu = new PauseMenu(gameView.getMaze(), root,this);
 
         //Crée la liste des wall à update
         this.wallUpdaters = new ArrayList<>();
