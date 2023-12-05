@@ -31,7 +31,6 @@ public class GameView {
     // class parameters
     private MazeState maze;
     private final Pane gameRoot; // main node of the game
-
     private final List<GraphicsUpdater> graphicsUpdaters;
 
     public Pane getGameRoot() {
@@ -46,7 +45,6 @@ public class GameView {
         gameRoot.getChildren().add(updater.getNode());
         graphicsUpdaters.add(updater);
     }
-
 
 
     /**
@@ -73,7 +71,6 @@ public class GameView {
 
         // Ajouter les créatures à la vue en utilisant CritterGraphicsFactory
         for (Critter critter : maze.getCritters()) addGraphics(critterFactory.makeGraphics(critter));
-
 
     }
 

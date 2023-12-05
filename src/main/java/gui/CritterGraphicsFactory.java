@@ -165,7 +165,6 @@ public final class CritterGraphicsFactory {
             public void update() {
 
                 // mise à jour de la position de l'image
-
                 image.setTranslateX((critter.getPos().x() + offsetX + (1 - size)/2) * scale);
                 image.setTranslateY((critter.getPos().y() + offsetY + (1 - size)/2) * scale);
 
@@ -174,7 +173,7 @@ public final class CritterGraphicsFactory {
                 if(critter instanceof PacMan){
                     if(Math.abs(critter.getPos().x() - pos.x()) >= 0.2 || Math.abs(critter.getPos().y() - pos.y()) >= 0.2 ){
                         etatPacman = switch(etatPacman){
-                            case "ferme" ->"rond"; 
+                            case "ferme" -> "rond";
                             case "rond" -> "ouvert";
                             case "ouvert" -> "ferme";
                             default -> "ferme";
@@ -182,11 +181,9 @@ public final class CritterGraphicsFactory {
                         pos = critter.getPos();
                     }
                     image.setImage(new Image(setimgPacman(critter), taille, taille, true, false));
-
                 }
 
                  //changer image fantôme
-
                 if((critter instanceof Ghost)){
                     if(critter==Ghost.BLINKY && System.currentTimeMillis()-time>500){
                         time = System.currentTimeMillis(); 

@@ -93,7 +93,7 @@ public class CellGraphicsFactory {
         Circle dot = new Circle();
         group.getChildren().add(dot);
 
-        double radius =0;
+        double radius = 0;
         if(cell.initialItem().getClass() == Dot.class)  radius = scale/20;
         if((cell.initialItem() instanceof Energizer) || (cell.initialItem() instanceof ItemTest) || (cell.initialItem() instanceof FakeEnergizer)) radius = scale/7;
         dot.setRadius(radius);
@@ -145,7 +145,6 @@ public class CellGraphicsFactory {
         }
 
         return new GraphicsUpdater() {
-
             @Override
             public void update() {
 

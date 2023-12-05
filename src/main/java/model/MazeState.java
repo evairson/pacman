@@ -16,10 +16,8 @@ import geometry.RealCoordinates;
 import gui.AnimationController;
 
 import gui.CellGraphicsFactory;
-import model.Items.Energizer;
-import model.Items.FakeEnergizer;
-import model.Items.Item;
-import model.Items.ItemTest;
+import model.Items.*;
+
 import java.sql.SQLOutput;
 import java.util.Arrays;
 import java.util.List;
@@ -289,5 +287,9 @@ public final class MazeState {
             }
             return gridState;
         }
+
+        public Inventory getInventory(){
+        return PacMan.INSTANCE.getInventory();
+    }
 
 }

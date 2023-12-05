@@ -262,7 +262,7 @@ public class AnimationController {
 
         this.gameView.getGameRoot().getChildren().clear(); //Clear l'ancien panneau de jeu
 
-        GameView gameView1 = new GameView(maze, gameView.getGameRoot(), AppScale);//Crée une nouvelle vue de jeu
+        GameView gameView1 = new GameView(maze, gameView.getGameRoot(), AppScale); //Crée une nouvelle vue de jeu
         this.gameView = gameView1;
         this.graphicsUpdaters = gameView1.getGraphicsUpdaters();
         gameComponents.getChildren().add(gameView.getGameRoot()); //Ajoute la nouvelle map à l'affichage

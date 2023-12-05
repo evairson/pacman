@@ -36,14 +36,13 @@ public class App extends Application {
      */
     public void start(Stage primaryStage) throws IOException {
         // Pane est un conteneur qui peut contenir des éléments graphiques
-        // root est le conteneur principal du jeu (il contient tous les autres conteneurs
+        // root est le conteneur principal du jeu (il contient tous les autres conteneurs)
         var root = new BorderPane();
         // gamePane est le conteneur de l'écran de jeu
         var gamePane = new Pane();
         // Scene est un objet qui contient tous les éléments graphiques (ça correspond à la fenêtre qui sera affichée)
         Scene gameScene = new Scene(root);
         if (!MazeConfig.isGameComplete()) { TF2Complete(); }
-        var config = MazeConfig.makeExampleTxt();
 
         // PacmanController est un listener d'événements clavier (ça récupère les touches promptées par l'user)
         PacmanController pacmanController = new PacmanController();
@@ -100,17 +99,16 @@ public class App extends Application {
 
         //--HUD--
         Pane hudPane = new Pane();
-        hudPane.setStyle("-fx-background-color: black;");
-        hudPane.setMinHeight(screenBounds.getHeight() - 0.9*scale*maze.getHeight());
+        HUDView hudView = new HUDView(maze, hudPane, 0.1*scale);
+        gameView.getGraphicsUpdaters().add(hudView.getHudUpdater());
 
         root.setCenter(gameComponents);
         root.setBottom(hudPane);
 
-        var animationController = new AnimationController(gameView.getGraphicsUpdaters(), gameView.getMaze(), primaryStage, pacmanController,gameView, gameComponents, scale);
+        var animationController = new AnimationController(gameView.getGraphicsUpdaters(), gameView.getMaze(), primaryStage, pacmanController, gameView, gameComponents, scale);
         animationController.mainTheme();
         pacmanController.setAnimationController(animationController);
         maze.setAnimationController(animationController);
-
 
         //Empeche de resize la fenetre
         primaryStage.setResizable(false);
@@ -121,7 +119,7 @@ public class App extends Application {
 
         var mainMenu = new MainMenu();
         var optionsMenu = new OptionsMenu();
-        primaryStage.setScene(mainMenu.startMenu(primaryStage,gameScene,animationController, optionsMenu));
+        primaryStage.setScene(mainMenu.startMenu(primaryStage, gameScene, animationController, optionsMenu));
         primaryStage.show();
         //primaryStage.setMaximized(true);
     }

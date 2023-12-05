@@ -71,7 +71,7 @@ public class PauseMenu implements Menu{
 
 
             HBox hBox = new HBox();
-            hBox.getChildren().addAll(score,lives, highScore);
+            hBox.getChildren().addAll(score, lives, highScore);
             hBox.setSpacing(50);
             hBox.setAlignment(Pos.CENTER);
 
