@@ -24,6 +24,7 @@ public enum Ghost implements Critter {
     private double speed = 1.3;
     public static boolean energized;
     private boolean alive = true;
+    private boolean alreadyArrivedAtHome = false;
 
     private static final double TPINTERVAL = 0.02;
 
@@ -32,6 +33,13 @@ public enum Ghost implements Critter {
     }
     public void setIsAlive(boolean alive){
         this.alive = alive;
+    }
+
+    public boolean getAlreadyArrivedAtHome(){
+        return this.alreadyArrivedAtHome;
+    }
+    public void setAlreadyArrivedAtHome(boolean b){
+        this.alreadyArrivedAtHome = b;
     }
 
     // Getters/Setters

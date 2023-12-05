@@ -31,8 +31,22 @@ public class ClydeAI{
 
     public static Direction getDirection(MazeConfig config, IntCoordinates intC, Direction defaultDir,IntCoordinates ghostPos) {
         if (!Ghost.CLYDE.isAlive()) {
+            if (Ghost.CLYDE.getAlreadyArrivedAtHome()){
+                if (ghostPos.equals(new IntCoordinates(config.getGhostHousePos().x(),config.getGhostHousePos().y()-1))){
+                    Ghost.CLYDE.setIsAlive(true);
+                    Ghost.CLYDE.setAlreadyArrivedAtHome(false);
+                    return getDirection(config,intC,defaultDir,ghostPos);
+                }else{
+                    ArrayList<IntCoordinates> path = AStar.shortestPath(ghostPos, new IntCoordinates(config.getGhostHousePos().x(),config.getGhostHousePos().y()-1), config);
+                    int pathlen = path.size();
+                    IntCoordinates nextPos = path.get(pathlen-1);
+                    return BlinkyAI.whichDir(ghostPos, nextPos);
+
+                }
+            }
             if (intC.equals(config.getGhostHousePos())){
-                return Direction.NONE;
+                Ghost.CLYDE.setAlreadyArrivedAtHome(true);
+                return Direction.NORTH;
             } else if (ghostPos.equals(new IntCoordinates(config.getGhostHousePos().x(),config.getGhostHousePos().y()-1))) {
                 return Direction.SOUTH;
 

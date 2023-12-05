@@ -58,8 +58,22 @@ public class PinkyAI {
 
     public static Direction getDirection(MazeConfig config, IntCoordinates pacPos, IntCoordinates ghostPos, Direction pacDir){
         if (!Ghost.PINKY.isAlive()) {
+            if (Ghost.PINKY.getAlreadyArrivedAtHome()){
+                if (ghostPos.equals(new IntCoordinates(config.getGhostHousePos().x(),config.getGhostHousePos().y()-1))){
+                    Ghost.PINKY.setIsAlive(true);
+                    Ghost.PINKY.setAlreadyArrivedAtHome(false);
+                    return getDirection(config,pacPos,ghostPos,pacDir);
+                }else{
+                    ArrayList<IntCoordinates> path = AStar.shortestPath(ghostPos, new IntCoordinates(config.getGhostHousePos().x(),config.getGhostHousePos().y()-1), config);
+                    int pathlen = path.size();
+                    IntCoordinates nextPos = path.get(pathlen-1);
+                    return BlinkyAI.whichDir(ghostPos, nextPos);
+
+                }
+            }
             if (ghostPos.equals(config.getGhostHousePos())){
-                return Direction.NONE;
+                Ghost.PINKY.setAlreadyArrivedAtHome(true);
+                return Direction.NORTH;
             } else if (ghostPos.equals(new IntCoordinates(config.getGhostHousePos().x(),config.getGhostHousePos().y()-1))) {
                 return Direction.SOUTH;
 

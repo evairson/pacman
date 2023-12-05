@@ -87,11 +87,15 @@ public final class CritterGraphicsFactory {
     }
 
     public String setimgghost(Ghost critter, int numghost, String setimgghostNE){
-        if(!critter.isEnergized()) 
-        return setimgghostNE+getDirectionString(critter)+etatghost+".png";
-        else {
-            return "ghost-blue"+etatghost+".png";
+        if (!critter.isAlive()){
+            return "ghost-dead.jpg";
+        }else {
+            if (!critter.isEnergized())
+                return setimgghostNE + getDirectionString(critter) + etatghost + ".png";
+            else {
+                return "ghost-blue" + etatghost + ".png";
 
+            }
         }
         
     }
