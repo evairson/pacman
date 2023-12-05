@@ -28,7 +28,7 @@ import model.Items.ItemTest;
 
 public class CellGraphicsFactory {
     private final double scale;
-    private static boolean finNiveau;
+    public static boolean finNiveau;
 
     public static void setFinNiveau(boolean b){
         finNiveau = b;
@@ -228,6 +228,7 @@ public class CellGraphicsFactory {
             }
         };
     }
+
 
 //    private Rectangle createWall(double width, double height, Color color, double x, double y) {
 //            var wall = new Rectangle();

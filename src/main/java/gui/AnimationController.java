@@ -25,6 +25,8 @@ import model.MazeState;
 import java.io.IOException;
 import java.sql.Time;
 import javafx.scene.media.AudioClip;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -34,6 +36,7 @@ import java.util.TimerTask;
  */
 public class AnimationController {
     private List<GraphicsUpdater> graphicsUpdaters;
+    private List<GraphicsUpdater> wallUpdaters;
     private MazeState maze;
     private final Stage primaryStage;
 
@@ -67,6 +70,9 @@ public class AnimationController {
         this.gameComponents = root;
         this.AppScale = AppScale;
         pauseMenu = new PauseMenu(gameView.getMaze(), root);
+
+        //Crée la liste des wall à update
+        this.wallUpdaters = new ArrayList<>();
     }
 
     public Stage getPrimaryStage() {
@@ -180,9 +186,6 @@ public class AnimationController {
     public void win(){
         try {
             //Démarre une pause
-            if (isFancy){
-                this.blurGame();
-            }
             this.startPause();
 
             //Affiche le game over
@@ -199,7 +202,11 @@ public class AnimationController {
             winScreen.setCenter(gameOver);
             gameComponents.getChildren().add(winScreen);
 
-            //Ferme le programme 5s après la win
+
+            CellGraphicsFactory.setFinNiveau(true);
+
+
+            //Ferme le programme 3s après la win
             Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(3), event -> {
                 if(this.maze.getLevel() == 2) {
                     Platform.runLater(() -> {
@@ -253,13 +260,23 @@ public class AnimationController {
                         return;
                     }
                     long deltaT = now - animationStart;
-                    deltaT = now - animationStart;
                     maze.update(deltaT);
                     for (GraphicsUpdater updater : graphicsUpdaters) {
                         updater.update();
                     }
                     animationStart = now;
+
                 }
+
+
+                //Ce morceau de boucle permet de faire clignoter les murs à la win d'un niveau
+                if(isFancy){ //Ne s'active que si on est en mode "fancy"
+                    //La non mise à jour de la variable animationStart permet au jeu de ne pas se dérouler (seuls les murs s'animeront)
+                    for(GraphicsUpdater updater : graphicsUpdaters){
+                        updater.update();
+                    }
+                }
+
             }
         };
     }
