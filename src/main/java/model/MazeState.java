@@ -149,7 +149,7 @@ public final class MazeState {
                             }
                         };*/
                         ((Ghost) critter).setIsAlive(false);
-                        //((Ghost) critter).setSpeed(critter.getSpeed()*1.5);
+                        ((Ghost) critter).setSpeed(critter.getSpeed()*1.5);
                         //timer.schedule(comeBackToLife,20000);
                     }else {
                         ((Ghost) critter).setIsAlive(false);

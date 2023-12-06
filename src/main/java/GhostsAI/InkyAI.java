@@ -19,6 +19,7 @@ public class InkyAI { //TODO : mettre des commentaires
                 if (ghostPos.equals(new IntCoordinates(config.getGhostHousePos().x(),config.getGhostHousePos().y()-1))){
                     Ghost.INKY.setIsAlive(true);
                     Ghost.INKY.setAlreadyArrivedAtHome(false);
+                    Ghost.INKY.setSpeed(Ghost.INKY.getSpeed()/1.5);
                     return getDirection(config,pacPos,ghostPos,pacDir);
                 }else{
                     ArrayList<IntCoordinates> path = AStar.shortestPath(ghostPos, new IntCoordinates(config.getGhostHousePos().x(),config.getGhostHousePos().y()-1), config);

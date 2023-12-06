@@ -35,6 +35,7 @@ public class ClydeAI{
                 if (ghostPos.equals(new IntCoordinates(config.getGhostHousePos().x(),config.getGhostHousePos().y()-1))){
                     Ghost.CLYDE.setIsAlive(true);
                     Ghost.CLYDE.setAlreadyArrivedAtHome(false);
+                    Ghost.CLYDE.setSpeed(Ghost.CLYDE.getSpeed()/1.5);
                     return getDirection(config,intC,defaultDir,ghostPos);
                 }else{
                     ArrayList<IntCoordinates> path = AStar.shortestPath(ghostPos, new IntCoordinates(config.getGhostHousePos().x(),config.getGhostHousePos().y()-1), config);

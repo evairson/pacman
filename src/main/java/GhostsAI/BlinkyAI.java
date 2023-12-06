@@ -32,6 +32,7 @@ public class BlinkyAI {
                 if (ghostPos.equals(new IntCoordinates(config.getGhostHousePos().x(),config.getGhostHousePos().y()-1))){
                     Ghost.BLINKY.setIsAlive(true);
                     Ghost.BLINKY.setAlreadyArrivedAtHome(false);
+                    Ghost.BLINKY.setSpeed(Ghost.BLINKY.getSpeed()/1.5);
                     return getDirection(config,pacPos,ghostPos);
                 }else{
                     ArrayList<IntCoordinates> path = AStar.shortestPath(ghostPos, new IntCoordinates(config.getGhostHousePos().x(),config.getGhostHousePos().y()-1), config);
