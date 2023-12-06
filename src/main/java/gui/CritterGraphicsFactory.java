@@ -155,7 +155,7 @@ public final class CritterGraphicsFactory {
         double taille = scale * size;
         
         String url = (critter instanceof PacMan) ? setimgPacman(critter) :
-                     (critter instanceof BouleNeige) ? "BouleNeige.png" :
+                     (critter instanceof BouleNeige) ? "bouleNeige.png" :
                 setimgghost((Ghost)critter,numghost,setimgghostNE);
         
         // chargement de l'image à partir du fichier url
