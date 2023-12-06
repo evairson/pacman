@@ -99,7 +99,7 @@ public class App extends Application {
 
         //--HUD--
         Pane hudPane = new Pane();
-        HUDView hudView = new HUDView(maze, hudPane, maze.getWidth() * 0.8 * scale, maze.getHeight() * 0.8 * scale * 0.25); //Dégueu, il faut rendre ça plus dynamique.
+        HUDView hudView = new HUDView(maze, hudPane, maze.getWidth() * 0.8 * scale, maze.getHeight() * 0.8 * scale * 0.25, scale); //Dégueu, il faut rendre ça plus dynamique.
         gameView.getGraphicsUpdaters().add(hudView.getHudUpdater());
 
         root.setCenter(gameComponents);

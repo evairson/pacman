@@ -24,9 +24,18 @@ import java.util.ArrayList;
 public class HUDGraphicsFactory {
     private final double width;
     private final double height;
-    public HUDGraphicsFactory(double width, double height){
+    private final double scale;
+
+    //--Sprites--
+    private final Image fakeEnergizerSprite;
+    private final Image noneImage = null;
+
+    public HUDGraphicsFactory(double width, double height, double scale){
         this.height = height;
         this.width = width;
+        this.scale = scale;
+
+        this.fakeEnergizerSprite = new Image("FakeGhost.jpg", 0.35 * this.scale, 0.35 * this.scale, true, false);
     }
 
     public Text[] initKeybordIndicators(){
@@ -43,16 +52,12 @@ public class HUDGraphicsFactory {
         return keyBoardIndicators;
     }
 
-    public Circle[] initItemDisplay(){
-        Circle[] circles = new Circle[4];
+    public ImageView[] initItemDisplay(){
+        ImageView[] imageTab = new ImageView[4];
         for(int i = 0; i < 4; i ++){
-            circles[i] = new Circle();
-            circles[i].setRadius(15);
-            circles[i].setStroke(Color.WHITE);
-            circles[i].setStrokeWidth(3);
-            circles[i].setFill(Color.BLACK);
-            }
-        return circles;
+            imageTab[i] = new ImageView();
+        }
+        return imageTab;
     }
 
     public Circle[] initHealthDisplay(){
@@ -67,14 +72,12 @@ public class HUDGraphicsFactory {
         return circles;
     }
 
-    public void updateItems(Inventory inventory, Circle[] circles){
+    public void updateItems(Inventory inventory, ImageView[] imageTab){
         for(int i = 0; i < 4; i ++){
-            if(inventory.getNth(i) instanceof ItemTest){
-                circles[i].setFill(Color.BLUE);
-            } else if(inventory.getNth(i) instanceof FakeEnergizer){
-                circles[i].setFill(Color.GREEN);
+            if(inventory.getNth(i) instanceof FakeEnergizer){
+                imageTab[i].setImage(this.fakeEnergizerSprite);
             } else {
-                circles[i].setFill(Color.BLACK);
+                imageTab[i].setImage(noneImage);
             }
         }
     }
@@ -85,12 +88,12 @@ public class HUDGraphicsFactory {
         }
     }
 
-    public VBox[] initInventoryDisplay(Text[] keyBoardIndicators, Circle[] circles){
+    public VBox[] initInventoryDisplay(Text[] keyBoardIndicators, ImageView[] imageTab){
         VBox[] vBoxes = new VBox[4];
 
         for(int i = 0; i < 4; i++){
             vBoxes[i] = new VBox();
-            vBoxes[i].getChildren().addAll(keyBoardIndicators[i], circles[i]);
+            vBoxes[i].getChildren().addAll(keyBoardIndicators[i], imageTab[i]);
             vBoxes[i].setSpacing(20);
             vBoxes[i].setAlignment(Pos.CENTER);
         }
@@ -107,10 +110,10 @@ public class HUDGraphicsFactory {
         scoreTxt.setFill(Color.WHITE);
         scoreTxt.setFont(Font.font("Crackman", 35));
 
-        Circle[] circlesItems = this.initItemDisplay(); // Ce sera plutôt des sprites pour représenter les items
+        ImageView[] spriteItems = this.initItemDisplay();
         Circle[] circlesHealth = this.initHealthDisplay(); // Ce sera plutôt des sprites pour représenter la vie
         Text[] keyBoardIndicators = this.initKeybordIndicators();
-        VBox[] inventoryDisplay = this.initInventoryDisplay(keyBoardIndicators, circlesItems);
+        VBox[] inventoryDisplay = this.initInventoryDisplay(keyBoardIndicators, spriteItems);
 
 
         HBox hBox = new HBox();
@@ -132,7 +135,7 @@ public class HUDGraphicsFactory {
         return new GraphicsUpdater() {
             @Override
             public void update() {
-                updateItems(maze.getInventory(), circlesItems);
+                updateItems(maze.getInventory(), spriteItems);
                 updateHealth(maze.getLives(), circlesHealth);
                 scoreTxt.setText("Score : " + maze.getScore());
             }

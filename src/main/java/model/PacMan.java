@@ -23,8 +23,7 @@ public final class PacMan implements Critter {
     private Direction direction = Direction.NONE;
     private Direction nextDir = Direction.NONE;
     private boolean energized;
-    public boolean Fake_energized;
-    public int frameEnergizer;
+    public boolean fakeEnergized;
 
     private final Inventory inventory;
     static final double TPINTERVAL = 0.1;
@@ -50,11 +49,11 @@ public final class PacMan implements Critter {
     }
 
     public void setEnergized(boolean b){
-        energized = b;
+        this.energized = b;
     }
 
     public void setFakeEnergized(boolean b){
-        Fake_energized=b;
+        this.fakeEnergized = b;
     }
 
     public void setPos(RealCoordinates pos) {
@@ -74,10 +73,10 @@ public final class PacMan implements Critter {
     }
 
     public boolean isFakeEnergized(){
-        return Fake_energized;
+        return this.fakeEnergized;
     }
 
-
+    /*
     public void setEnergized() { //active l'energizer pour un temps limité
         PacMan pacman = this;
         Timer t = new Timer();
@@ -91,8 +90,7 @@ public final class PacMan implements Critter {
         this.energized = true;
         Ghost.energized = true;
         t.schedule(task, 10000);
-
-    }
+    }*/
 
     //Methods
     public RealCoordinates currCellR() {

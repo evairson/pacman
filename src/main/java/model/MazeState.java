@@ -141,13 +141,10 @@ public final class MazeState {
         // FIXME Pac-Man rules should somehow be in Pacman class
         var pacPos = PacMan.INSTANCE.getPos().round();
 
-        if (!gridState[pacPos.y()][pacPos.x()]) { // Energizer
-            if (config.getCell(pacPos).initialItem() instanceof Energizer) { /* score energizer */
+        if (!gridState[pacPos.y()][pacPos.x()]) { //Case déjà visitée ?
+            if (config.getCell(pacPos).initialItem() instanceof Energizer) { // La case contient-elle un energizer ?
                 addScore(5);
-                config.getCell(pacPos).initialItem().setActive(true);
-                gridState[pacPos.y()][pacPos.x()] = true;
-            } else if (config.getCell(pacPos).initialItem() instanceof FakeEnergizer) {
-                FakeEnergizer.setFakeEnergized(true);
+                if(!FakeEnergizer.isOneActive()) { config.getCell(pacPos).initialItem().setActive(true); }
                 gridState[pacPos.y()][pacPos.x()] = true;
             } else {
                 if (config.getCell(pacPos).initialItem().isCollectable()) {
@@ -161,44 +158,28 @@ public final class MazeState {
                     addScore(1);
                     gridState[pacPos.y()][pacPos.x()] = true;
                 }
-            /*if(config.getCell(pacPos).initialItem() instanceof Energizer){
-                addScore(5); 
-                Energizer.setEnergized(true);
-                gridState[pacPos.y()][pacPos.x()] = true;
-            } else if(config.getCell(pacPos).initialItem() instanceof ItemTest){
-                if(!PacMan.INSTANCE.getInventory().isFull()){
+            }
+        } // TODO: Faire une fonction dans item qui fait tout bien (le ramssage) pour chaque item (pour éviter d'écrire 'if ... instanceof ...') et qui ne met pas grid true si l'item n'est pas ramassé...
+        for (var critter : critters) { // Collision PacMan Ghosts
+            if (critter instanceof Ghost && critter.getPos().round().equals(pacPos) && !PacMan.INSTANCE.isFakeEnergized()) {
+                if (PacMan.INSTANCE.isEnergized()) {
                     addScore(10);
-                    PacMan.INSTANCE.getInventory().add(config.getCell(pacPos).initialItem());
-                    //ItemTest.setActive(true);
-                    gridState[pacPos.y()][pacPos.x()] = true;
-                    System.out.println(PacMan.INSTANCE.getInventory());
+                    animationController.ghostEatenSound();
+                    resetCritter(critter);
+                } else {
+                    playerLost();
+                    return;
                 }
-            } else {
->>>>>>> iss33-inventory
-                addScore(1);
-                gridState[pacPos.y()][pacPos.x()] = true;
-            }*/
-            }
-            } // TODO: Faire une fonction dans item qui fait tout bien (le ramssage) pour chaque item (pour éviter d'écrire 'if ... instanceof ...') et qui ne met pas grid true si l'item n'est pas ramassé...
-            for (var critter : critters) { // Collision PacMan Ghosts
-                if (critter instanceof Ghost && critter.getPos().round().equals(pacPos) && !PacMan.INSTANCE.isFakeEnergized()) {
-                    if (PacMan.INSTANCE.isEnergized()) {
-                        addScore(10);
-                        animationController.ghostEatenSound();
-                        resetCritter(critter);
-                    } else {
-                        playerLost();
-                        return;
-                    }
-                }
-            }
-            if (allDotsEaten() && animationController.hasntAlreadyWon()) {
-                System.out.println("caca");
-                if (level == 2) playerWin();
-                animationController.setHasntAlreadyWon(false);
-                animationController.win();
             }
         }
+        if (allDotsEaten() && animationController.hasntAlreadyWon()) {
+            //System.out.println("caca"); ?????????????????
+            this.resetItems();
+            if (level == 2) playerWin();
+            animationController.setHasntAlreadyWon(false);
+            animationController.win();
+        }
+    }
 
         public int getHighScore () {
             try {
@@ -290,6 +271,10 @@ public final class MazeState {
 
         public Inventory getInventory(){
         return PacMan.INSTANCE.getInventory();
+    }
+
+    public void resetItems(){
+        this.config.resetItems();
     }
 
 }

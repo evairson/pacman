@@ -166,16 +166,15 @@ public enum Ghost implements Critter {
         }
     }
 
-    public Direction getNextDir(MazeConfig config, IntCoordinates pacPos, Direction pacDir, Boolean energized,boolean FakeEnergized){
-        if (FakeEnergized){
+    public Direction getNextDir(MazeConfig config, IntCoordinates pacPos, Direction pacDir, Boolean energized, boolean fakeEnergized){
+        if (fakeEnergized){
             if (this.isCentered()){
                 return getRandomDirection();
             }
             else{
                 return this.direction;
             }
-        }
-        else if (energized){
+        } else if (energized){
             if (this.isCentered()) {
                 return RunAwayAI.getDirection(config, pacPos, this.currCellI());
             } else {

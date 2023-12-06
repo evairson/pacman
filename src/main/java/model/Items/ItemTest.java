@@ -6,13 +6,10 @@ import java.util.ArrayList;
 public class ItemTest extends Item{
 
     private final static ArrayList<ItemTest> itemList = new ArrayList<>();
-
-    //public /*static*/ boolean active;
-    public /*static*/ int frameActivity;
-    //private final boolean collectable;
+    public int frameActivity;
 
     public ItemTest(){
-        super.setCollectable(true);
+        super.setCollectable(false);
         this.frameActivity = 0;
         itemList.add(this);
     }
@@ -25,7 +22,7 @@ public class ItemTest extends Item{
         return super.isActive();
     }*/
 
-    public /*static*/ void setActive(boolean b){
+    public void setActive(boolean b){
         super.setActive(b);
         this.frameActivity = 0;
     }

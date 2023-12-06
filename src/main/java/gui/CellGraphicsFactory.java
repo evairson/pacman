@@ -71,15 +71,12 @@ public class CellGraphicsFactory {
         }
     }
 
-    public void setFakeEnergized(FakeEnergizer e){
-        if(FakeEnergizer.isFakeEnergized()){
-            FakeEnergizer.frameEnergizer ++;
-        }
-
-        if(FakeEnergizer.frameEnergizer>750){
-            FakeEnergizer.setFakeEnergized(false);
-            //Ghost.energized = false;
-            PacMan.INSTANCE.setFakeEnergized(false);
+    public void setActiveFakeEnergizer(FakeEnergizer e){
+        if(e.isActive()){
+            e.frameActivity ++;
+            if(e.frameActivity > 500){
+                e.setActive(false);
+            }
         }
     }
 
@@ -158,7 +155,7 @@ public class CellGraphicsFactory {
                     setActiveItemTest((ItemTest)cell.initialItem());
                 }
                 if (cell.initialItem() instanceof FakeEnergizer){
-                    setFakeEnergized((FakeEnergizer)cell.initialItem());
+                    setActiveFakeEnergizer((FakeEnergizer)cell.initialItem());
                 }
                 for (Node n : group.getChildren()){
                     n.setVisible(!ItemTest.isOneActive());

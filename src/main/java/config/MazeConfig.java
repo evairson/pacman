@@ -133,7 +133,7 @@ public class MazeConfig {
                         (lab[i][j].equals(" . "))? new Dot() :
                                 ((lab[i][j].equals(" E "))? new Energizer() :
                                         ((lab[i][j].equals(" T "))? new ItemTest() :
-                                            ((lab[i][j].equals(" S "))? new FakeEnergizer(false,true,0) : new Item()))));
+                                            ((lab[i][j].equals(" S "))? new FakeEnergizer() : new Item()))));
             }
         }
         return grid;
@@ -200,6 +200,14 @@ public class MazeConfig {
     public static boolean isGameComplete() {
         File file = new File("src/main/resources/pacman/.coconut.jpg");
         return file.exists();
+    }
+
+    public void resetItems(){
+        for(Cell[] col : grid){
+            for(Cell c : col){
+                c.initialItem().setActive(false);
+            }
+        }
     }
 
 }

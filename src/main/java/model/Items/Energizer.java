@@ -27,7 +27,7 @@ public class Energizer extends Item {
         return false;
     }
 
-        public /*static*/ void setActive(boolean b){
+        public void setActive(boolean b){
         super.setActive(b);
         this.frameActivity = 0;
         PacMan.INSTANCE.setEnergized(Energizer.isOneActive());
