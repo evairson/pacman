@@ -101,7 +101,7 @@ public class CellGraphicsFactory {
         dot.setCenterX(scale/2);
         dot.setCenterY(scale/2);
 
-        if(cell.initialItem() instanceof ItemTest) { dot.setFill(Color.RED); }
+        if(cell.initialItem() instanceof ItemTest) { dot.setFill(Color.BLUE); }
         else if (cell.initialItem() instanceof FakeEnergizer) { dot.setFill(Color.GREEN); }
         else { dot.setFill(Color.WHITE); }
         double taille = scale;

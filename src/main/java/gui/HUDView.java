@@ -1,6 +1,9 @@
 package gui;
 
-import javafx.scene.layout.Pane;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import model.MazeState;
 
 public class HUDView {
@@ -8,15 +11,16 @@ public class HUDView {
     private final Pane hudRoot;
     private GraphicsUpdater hudUpdater;
 
-    public HUDView(MazeState maze, Pane hudRoot, double scale){
+    public HUDView(MazeState maze, Pane hudRoot, double width, double height){
         this.maze = maze;
         this.hudRoot = hudRoot;
 
-        hudRoot.setMinWidth(scale * maze.getWidth());
-        hudRoot.setMinHeight(scale * maze.getHeight());
-        hudRoot.setStyle("-fx-background-color: #0F289B");
+        hudRoot.setPrefWidth(width);
+        hudRoot.setPrefHeight(height);
+        hudRoot.setStyle("-fx-background-color: #000000");
+        //hudRoot.setBorder(new Border(new BorderStroke(Color.BLUE, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(2))));
 
-        HUDGraphicsFactory hudFactory = new HUDGraphicsFactory(scale);
+        HUDGraphicsFactory hudFactory = new HUDGraphicsFactory(width, height);
 
         this.setGraphics(hudFactory.makeGraphics(maze));
     }

@@ -92,20 +92,20 @@ public class App extends Application {
         StackPane gameComponents = new StackPane();
 
         //Vue de la partie (sans le hud)
-        var gameView = new GameView(maze, gamePane, 0.9*scale);
+        var gameView = new GameView(maze, gamePane, 0.8*scale);
 
         gameComponents.getChildren().add(gamePane);
         StackPane.setAlignment(gamePane,Pos.CENTER);
 
         //--HUD--
         Pane hudPane = new Pane();
-        HUDView hudView = new HUDView(maze, hudPane, 0.1*scale);
+        HUDView hudView = new HUDView(maze, hudPane, maze.getWidth() * 0.8 * scale, maze.getHeight() * 0.8 * scale * 0.25); //Dégueu, il faut rendre ça plus dynamique.
         gameView.getGraphicsUpdaters().add(hudView.getHudUpdater());
 
         root.setCenter(gameComponents);
         root.setBottom(hudPane);
 
-        var animationController = new AnimationController(gameView.getGraphicsUpdaters(), gameView.getMaze(), primaryStage, pacmanController, gameView, gameComponents, scale);
+        var animationController = new AnimationController(gameView.getGraphicsUpdaters(), gameView.getMaze(), primaryStage, pacmanController, gameView, gameComponents, 0.8*scale);
         animationController.mainTheme();
         pacmanController.setAnimationController(animationController);
         maze.setAnimationController(animationController);

@@ -192,7 +192,7 @@ public class AnimationController {
             gameComponents.getChildren().add(winScreen);
 
             //Ferme le programme 5s après la win
-            Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
+            Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(2), event -> {
                 if(this.maze.getLevel() == 2) System.exit(0);
                 gameComponents.getChildren().remove(gameView.getGameRoot());
                 this.stopPause();
@@ -254,7 +254,7 @@ public class AnimationController {
 
     public void transitionLvl() throws IOException {
 
-        MazeState maze = new MazeState(MazeConfig.makeExampleTxt1()); //Crée une nouvelle mazeconfig qui correspond à la nouvelle map
+        MazeState maze = new MazeState(MazeConfig.makeExampleTxt1()); //Crée une nouvelle mazestate qui correspond à la nouvelle map
         maze.setAnimationController(this);
         maze.setLevel(this.maze.getLevel() + 1);
         maze.setScore(this.maze.getScore());
@@ -264,6 +264,7 @@ public class AnimationController {
 
         GameView gameView1 = new GameView(maze, gameView.getGameRoot(), AppScale); //Crée une nouvelle vue de jeu
         this.gameView = gameView1;
+        gameView1.getGraphicsUpdaters().add(this.graphicsUpdaters.get(this.graphicsUpdaters.size() - 1)); // Ajout du hud updater
         this.graphicsUpdaters = gameView1.getGraphicsUpdaters();
         gameComponents.getChildren().add(gameView.getGameRoot()); //Ajoute la nouvelle map à l'affichage
         // ajout vies
