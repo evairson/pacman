@@ -3,9 +3,14 @@ package model.Items;
 public class Item {
     private boolean collectable;
     private boolean active = false;
+    protected String url;
 
     public Item(){
         this.collectable = false;
+    }
+
+    public String getUrl(){
+        return url;
     }
 
     public boolean isCollectable(){

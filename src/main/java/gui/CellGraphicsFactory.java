@@ -138,6 +138,7 @@ public class CellGraphicsFactory {
         group.setTranslateX(pos.x()*scale);
         group.setTranslateY(pos.y()*scale);
         Cell cell = state.getConfig().getCell(pos);
+        double taille = scale;
 
         // creer les dots
         Circle dot = new Circle();
@@ -145,22 +146,25 @@ public class CellGraphicsFactory {
 
         double radius =0;
         if(cell.initialItem().getClass() == Dot.class)  radius = scale/20;
-        if((cell.initialItem() instanceof Energizer) || (cell.initialItem() instanceof ItemTest) || (cell.initialItem() instanceof FakeEnergizer)) radius = scale/7;
+        if(cell.initialItem() instanceof Energizer || (cell.initialItem() instanceof ItemTest)) radius = scale/7;
         dot.setRadius(radius);
 
         dot.setCenterX(scale/2);
         dot.setCenterY(scale/2);
 
-        if(cell.initialItem() instanceof ItemTest) { dot.setFill(Color.RED); }
-        else if (cell.initialItem() instanceof FakeEnergizer) { dot.setFill(Color.GREEN); }
-        else { dot.setFill(Color.WHITE); }
+        if(cell.initialItem() instanceof FakeEnergizer){
+            ImageView item = new ImageView(new Image(cell.initialItem().getUrl(), taille, taille, true, false));
+            item.setTranslateX(0);
+            item.setTranslateY(0);
+            group.getChildren().add(item);
+        }
 
-        double taille = scale;
-        choixMur(cell, taille, group);
+
+        dot.setFill(Color.WHITE);
         
+        choixMur(cell, taille, group);
 
-
-        if((cell.initialItem() instanceof Energizer) || (cell.initialItem() instanceof ItemTest) || (cell.initialItem() instanceof FakeEnergizer)){
+        if((cell.initialItem() instanceof Energizer) || (cell.initialItem() instanceof ItemTest)){
             ScaleTransition blink = new ScaleTransition(Duration.millis(600), dot);
             blink.setFromX(1);
             blink.setFromY(1);
