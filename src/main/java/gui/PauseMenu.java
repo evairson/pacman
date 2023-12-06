@@ -1,6 +1,7 @@
 package gui;
 
 
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -10,16 +11,21 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import model.MazeState;
 
+import java.awt.*;
+import java.awt.event.KeyEvent;
+
 public class PauseMenu implements Menu{
 
     private final StackPane root;
     private final MazeState maze;
+    private final AnimationController animationController;
     private Pane pauseLayout;
     private VBox vBox;
 
-    public PauseMenu(MazeState maze, StackPane root) {
+    public PauseMenu(MazeState maze, StackPane root, AnimationController animationController) {
         this.maze = maze;
         this.root  = root;
+        this.animationController = animationController;
     }
 
     public void startMenu(boolean isFancy){
@@ -29,8 +35,10 @@ public class PauseMenu implements Menu{
 
             BorderPane layout = new BorderPane();
 
-            double width = this.getWidth();
-            double height = this.getHeight();
+            double width = root.getWidth();
+            double height = root.getHeight();
+
+            double fontScale = (50*root.getHeight())/1020;
 
             layout.setMinWidth(width*0.3);
             layout.setMinHeight(height*0.3);
@@ -42,44 +50,52 @@ public class PauseMenu implements Menu{
 
             Text pauseMenuText = new Text("PAUSE");
             pauseMenuText.setFill(Color.YELLOW);
-            pauseMenuText.setFont(Font.font("Crackman", 50));
+            pauseMenuText.setFont(Font.font("Crackman", fontScale));
 
-            Button exitButton = new Button("EXIT");
-            exitButton.setWrapText(true);
-            exitButton.setFont(Font.font("Crackman", 25));
-            exitButton.setOnAction(event -> {
-                System.exit(0);
+
+            Text exitText = new Text("EXIT");
+            exitText.setStyle("-fx-font-family: Crackman; -fx-font-size: " + fontScale);
+            exitText.setFill(Color.WHITE);
+            setHoverEffect(exitText,Color.RED,Color.WHITE);
+            exitText.setOnMouseClicked(event -> {
+                Platform.runLater(() -> App.restartApplication(animationController.getPrimaryStage()));
             });
-
 
             Text indication = new Text("Press ESC to resume...");
             indication.setFill(Color.YELLOW);
-            indication.setFont(Font.font("Crackman", 50));
+            indication.setFont(Font.font("Crackman", fontScale));
+            setHoverEffect(indication,Color.BLUE,Color.YELLOW);
+            indication.setOnMouseClicked(event -> {
+                animationController.stopPauseMenu();
+                    }
+            );
 
             Text score = new Text("Score : " + String.valueOf(maze.getScore()));
-            score.setFill(Color.YELLOW);
-            score.setFont(Font.font("Crackman", 50));
+            score.setFill(Color.WHITE);
+            score.setFont(Font.font("Crackman", fontScale));
 
             Text lives = new Text("Vies restantes : " + String.valueOf(maze.getLives()));
-            lives.setFill(Color.YELLOW);
-            lives.setFont(Font.font("Crackman", 50));
+            lives.setFill(Color.RED);
+            lives.setFont(Font.font("Crackman", fontScale));
 
 
             Text highScore = new Text("High Score : " + String.valueOf(maze.getHighScore()));
-            highScore.setFill(Color.YELLOW);
-            highScore.setFont(Font.font("Crackman", 50));
+            highScore.setFill(Color.GREEN);
+            highScore.setFont(Font.font("Crackman", fontScale));
 
 
-            HBox hBox = new HBox();
-            hBox.getChildren().addAll(score,lives, highScore);
-            hBox.setSpacing(50);
-            hBox.setAlignment(Pos.CENTER);
+            VBox components = new VBox();
+            components.getChildren().addAll(score,lives, highScore);
+            components.setSpacing((30*root.getHeight())/1020);
+            components.setAlignment(Pos.CENTER);
 
             VBox vBox = new VBox();
-            vBox.getChildren().addAll(pauseMenuText,exitButton,indication);
+            vBox.maxHeightProperty().bind(root.maxHeightProperty());//Pour qu'elle fit bien dans la pane
+            vBox.setSpacing((90*root.getHeight())/1020);
+            vBox.getChildren().addAll(pauseMenuText,exitText,indication);
             vBox.setAlignment(Pos.TOP_CENTER);
-            vBox.setSpacing(100);
-            vBox.getChildren().add(hBox);
+            vBox.getChildren().add(components);
+
 
             layout.setCenter(vBox);
 

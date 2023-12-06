@@ -15,7 +15,10 @@ import geometry.IntCoordinates;
 import geometry.RealCoordinates;
 import gui.AnimationController;
 
+import gui.App;
 import gui.CellGraphicsFactory;
+import javafx.animation.PauseTransition;
+import javafx.util.Duration;
 import model.Items.Energizer;
 import model.Items.FakeEnergizer;
 import model.Items.Item;
@@ -27,6 +30,8 @@ import java.util.Map;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.io.PrintWriter;
 
 import static model.Ghost.*;
@@ -195,10 +200,22 @@ public final class MazeState {
                 }
             }
             if (allDotsEaten() && animationController.hasntAlreadyWon()) {
-                System.out.println("caca");
-                if (level == 2) playerWin();
-                animationController.setHasntAlreadyWon(false);
-                animationController.win();
+                
+                CellGraphicsFactory.setFinNiveau(true);
+                Timer timer = new Timer();
+                timer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        CellGraphicsFactory.setFinNiveau(false);
+
+                        timer.cancel();
+                    }
+                  }, 3000);                
+                  if (level == 2) playerWin();
+                  animationController.setHasntAlreadyWon(false);
+                  animationController.win();
+                  
+
             }
         }
 
@@ -223,11 +240,6 @@ public final class MazeState {
 
         private void addScore ( int increment){
             score += increment;
-            displayScore();
-        }
-
-        private void displayScore() {
-            // FIXME: this should be displayed in the JavaFX view, not in the console
         }
 
         private void playerLost() { //le joueur a perdu au moment où il n'a plus de vie
@@ -237,12 +249,9 @@ public final class MazeState {
                 if (score > getHighScore()) {
                     setHighScore(score);
                 }
-                System.exit(0);
                 animationController.gameOver();
             }
-            //if (!PacMan.INSTANCE.isFakeEnergized()){
             resetCritters();
-            //}
 
         }
 

@@ -28,9 +28,59 @@ import model.Items.ItemTest;
 
 public class CellGraphicsFactory {
     private final double scale;
+    public static boolean finNiveau;
+
+    public static void setFinNiveau(boolean b){
+        finNiveau = b;
+    }
+
+    public void ImageMur(String url, double taille, double translateX, double translateY, Group group) {
+        ImageView mur = new ImageView(new Image("mur/"+url, taille, taille, true, false));
+        mur.setTranslateX(translateX);
+        mur.setTranslateY(translateY);
+        group.getChildren().add(mur);
+    }
+
+    public String changeImage(int i, int n){
+        switch(i){
+            case 0 : return "mur-north"+n+".png";
+            case 2 : return "mur-south"+n+".png";
+            case 1 : return "mur-east"+n+".png";
+            case 3 : return "mur-west"+n+".png";
+            default : return "";
+
+        }
+    }
+
+    public void choixMur(Cell cell, double taille, Group group) {
+        if (cell.northWall()) {
+            ImageMur("mur-north1.png", taille, 0, 0, group);
+        }
+        if (cell.eastWall()) {
+            ImageMur("mur-east1.png", taille, 9*scale/10, 0, group);
+            
+        }
+        if (cell.southWall()) {
+            ImageMur("mur-south1.png", taille, 0, 9*scale/10, group);
+        }
+        if (cell.westWall()) {
+            ImageMur("mur-west1.png", taille, 0, 0, group);
+        }
+    }
+
+    public boolean[] typeMur(Cell cell){
+        boolean[] type = new boolean[4];
+        if(cell.northWall()) type[0]=true;
+        if(cell.eastWall()) type[1]=true;
+        if(cell.southWall()) type[2]=true;
+        if(cell.westWall()) type[3]=true;
+        return type;
+    }
+
 
     public CellGraphicsFactory(double scale) {
         this.scale = scale;
+        finNiveau = false;
     }
 
     /**
@@ -104,7 +154,10 @@ public class CellGraphicsFactory {
         if(cell.initialItem() instanceof ItemTest) { dot.setFill(Color.RED); }
         else if (cell.initialItem() instanceof FakeEnergizer) { dot.setFill(Color.GREEN); }
         else { dot.setFill(Color.WHITE); }
+
         double taille = scale;
+        choixMur(cell, taille, group);
+        
 
 
         if((cell.initialItem() instanceof Energizer) || (cell.initialItem() instanceof ItemTest) || (cell.initialItem() instanceof FakeEnergizer)){
@@ -118,36 +171,38 @@ public class CellGraphicsFactory {
             blink.play();
         }
 
-        //rajout des murs pour chaque case
-        if (cell.northWall()) {
-            ImageView mur = new ImageView(new Image("mur-north.png", taille, taille, true, false));
-            mur.setTranslateX(0);
-            mur.setTranslateY(0);
-            group.getChildren().add(mur);
-        }
-        if (cell.eastWall()) {
-            ImageView mur = new ImageView(new Image("mur-east.png", taille, taille, true, false));
-            mur.setTranslateX(9*scale/10);
-            mur.setTranslateY(0);
-            group.getChildren().add(mur);
-        }
-        if (cell.southWall()) {
-            ImageView mur = new ImageView(new Image("mur-south.png", taille, taille, true, false));
-            mur.setTranslateX(0);
-            mur.setTranslateY(9*scale/10);
-            group.getChildren().add(mur);
-        }
-        if (cell.westWall()) {
-            ImageView mur = new ImageView(new Image("mur-west.png", taille, taille, true, false));
-            mur.setTranslateX(0);
-            mur.setTranslateY(0);
-            group.getChildren().add(mur);
-        }
 
         return new GraphicsUpdater() {
+            long time = System.currentTimeMillis();
+            int etatMur =1;
+            boolean[] typeMur = typeMur(cell);
 
             @Override
             public void update() {
+
+                if(finNiveau){
+                    if(System.currentTimeMillis()-time>300){
+                        for(Node m : group.getChildren()){
+                            int i = 0;
+                            if(m instanceof ImageView){
+                                while (i < 4){
+                                    if(typeMur[i]){
+                                        typeMur[i]=false;
+                                        ImageView mur = (ImageView)m;
+                                        mur.setImage(new Image("mur/"+(changeImage(i,etatMur)),taille,taille,true,false));
+                                        i = 4;
+                                    }
+                                    else i++;
+                                }
+                                }
+                            }
+                        typeMur = typeMur(cell);
+                        time = System.currentTimeMillis();
+                        if(etatMur==1) etatMur=2; 
+                        else etatMur=1;
+    
+                    }
+                }
 
                 //afficher les points si pacman pas passé dessus
                 dot.setVisible(!state.getGridState(pos));
@@ -168,11 +223,12 @@ public class CellGraphicsFactory {
             }
 
             @Override
-            public Node getNode() {
+            public Node getNode(){
                 return group;
             }
         };
     }
+
 
 //    private Rectangle createWall(double width, double height, Color color, double x, double y) {
 //            var wall = new Rectangle();
