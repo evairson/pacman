@@ -7,6 +7,7 @@ import javafx.scene.media.AudioClip;
 import model.Critter;
 import model.Ghost;
 import model.PacMan;
+import model.Items.BouleNeige;
 import model.Direction;
 import java.lang.Math;
 import gui.App;
@@ -136,8 +137,6 @@ public final class CritterGraphicsFactory {
         return numghost;
     }
 
-
-
     // Méthode qui crée la représentation graphique d'une créature.
     public GraphicsUpdater makeGraphics(Critter critter) {
 
@@ -156,18 +155,36 @@ public final class CritterGraphicsFactory {
         double taille = scale * size;
         
         String url = (critter instanceof PacMan) ? setimgPacman(critter) :
+                     (critter instanceof BouleNeige) ? "bouleNeige.png" :
                 setimgghost((Ghost)critter,numghost,setimgghostNE);
         
         // chargement de l'image à partir du fichier url
-        ImageView image = new ImageView(new Image(url, taille, taille, true, false));
+        
+            ImageView image = (critter instanceof PacMan || critter instanceof Ghost) ? new ImageView(new Image(url, taille, taille, true, false)):
+                              new ImageView();
+
         return new GraphicsUpdater() {
             @Override
             public void update() {
 
-                // mise à jour de la position de l'image
+                if(critter instanceof BouleNeige){
+                    if(BouleNeige.INSTANCE.isActive() ){
+                        if(image.getImage()==null){
+                            image.setImage(new Image(url, 3*taille/4, 3*taille/4, true, false));
+                        }
+                    }
+                    else {
+                        image.setImage(null);
+                    }
+                    
+                }
 
-                image.setTranslateX((critter.getPos().x() + offsetX + (1 - size)/2) * scale);
-                image.setTranslateY((critter.getPos().y() + offsetY + (1 - size)/2) * scale);
+
+                // mise à jour de la position de l'image
+                if(critter instanceof PacMan || critter instanceof Ghost || BouleNeige.INSTANCE.isActive()){
+                    image.setTranslateX((critter.getPos().x() + offsetX + (1 - size)/2) * scale);
+                    image.setTranslateY((critter.getPos().y() + offsetY + (1 - size)/2) * scale);
+                }
 
 
                 //changer image pacman 

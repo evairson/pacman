@@ -2,6 +2,7 @@ package config;
 
 import geometry.IntCoordinates;
 import javafx.scene.effect.Light.Point;
+import model.Items.ItemBouleNeige;
 import model.Items.Dot;
 import model.Items.Energizer;
 import model.Items.FakeEnergizer;
@@ -133,7 +134,8 @@ public class MazeConfig {
                         (lab[i][j].equals(" . "))? new Dot() :
                                 ((lab[i][j].equals(" E "))? new Energizer() :
                                         ((lab[i][j].equals(" T "))? new ItemTest() :
-                                            ((lab[i][j].equals(" S "))? new FakeEnergizer(false,true,0) : new Item()))));
+                                            ((lab[i][j].equals(" S "))? new FakeEnergizer(false,true,0) :
+                                                ((lab[i][j].equals(" B "))? new ItemBouleNeige() : new Item())))));
             }
         }
         return grid;

@@ -20,6 +20,7 @@ import model.Items.Item;
 import model.Items.ItemTest;
 import model.MazeState;
 import model.PacMan;
+import model.Items.ItemBouleNeige;
 import model.Items.Dot;
 import model.Items.Energizer;
 import model.Items.FakeEnergizer;
@@ -145,7 +146,8 @@ public class CellGraphicsFactory {
 
         double radius =0;
         if(cell.initialItem().getClass() == Dot.class)  radius = scale/20;
-        if((cell.initialItem() instanceof Energizer) || (cell.initialItem() instanceof ItemTest) || (cell.initialItem() instanceof FakeEnergizer)) radius = scale/7;
+        if((cell.initialItem() instanceof Energizer) || (cell.initialItem() instanceof ItemTest) 
+        || (cell.initialItem() instanceof ItemBouleNeige) || (cell.initialItem() instanceof FakeEnergizer)) radius = scale/7;
         dot.setRadius(radius);
 
         dot.setCenterX(scale/2);
@@ -153,6 +155,7 @@ public class CellGraphicsFactory {
 
         if(cell.initialItem() instanceof ItemTest) { dot.setFill(Color.RED); }
         else if (cell.initialItem() instanceof FakeEnergizer) { dot.setFill(Color.GREEN); }
+        else if (cell.initialItem() instanceof ItemBouleNeige) { dot.setFill(Color.BLUE); }
         else { dot.setFill(Color.WHITE); }
 
         double taille = scale;
@@ -160,7 +163,8 @@ public class CellGraphicsFactory {
         
 
 
-        if((cell.initialItem() instanceof Energizer) || (cell.initialItem() instanceof ItemTest) || (cell.initialItem() instanceof FakeEnergizer)){
+        if((cell.initialItem() instanceof Energizer) || (cell.initialItem() instanceof ItemTest)
+        || (cell.initialItem() instanceof ItemBouleNeige)|| (cell.initialItem() instanceof FakeEnergizer)){
             ScaleTransition blink = new ScaleTransition(Duration.millis(600), dot);
             blink.setFromX(1);
             blink.setFromY(1);
