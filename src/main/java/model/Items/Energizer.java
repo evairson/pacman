@@ -31,6 +31,6 @@ public class Energizer extends Item {
         super.setActive(b);
         this.frameActivity = 0;
         PacMan.INSTANCE.setEnergized(Energizer.isOneActive());
-        Ghost.energized = Energizer.isOneActive();
+        Ghost.setAllEnergizedValue(Energizer.isOneActive());
     }
 }

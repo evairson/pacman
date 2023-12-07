@@ -22,9 +22,19 @@ public enum Ghost implements Critter {
     private RealCoordinates pos;
     private Direction direction;
     private final double speed = 1.3;
-    public static boolean energized;
+    private boolean energized;
 
     private static final double TPINTERVAL = 0.02;
+
+    public boolean allEnergergized(){
+        return BLINKY.energized && INKY.energized && PINKY.energized && CLYDE.energized;
+    }
+    public static void setAllEnergizedValue(boolean value){
+        BLINKY.energized = value;
+        INKY.energized = value;
+        PINKY.energized = value;
+        CLYDE.energized = value;
+    }
 
     // Getters/Setters
     @Override
