@@ -21,6 +21,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
+import model.Ghost;
 import model.MazeState;
 import java.io.IOException;
 import java.sql.Time;
@@ -258,22 +259,15 @@ public class AnimationController {
                     }
                     long deltaT = now - animationStart;
                     maze.update(deltaT);
-                    for (GraphicsUpdater updater : graphicsUpdaters) {
-                        updater.update();
-                    }
                     animationStart = now;
 
                 }
 
-
-                //Ce morceau de boucle permet de faire clignoter les murs à la win d'un niveau
-                if(isFancy){ //Ne s'active que si on est en mode "fancy"
-                    //La non mise à jour de la variable animationStart permet au jeu de ne pas se dérouler (seuls les murs s'animeront)
-                    for(GraphicsUpdater updater : graphicsUpdaters){
-                        updater.update();
-                    }
+                //Ce morceau de boucle permet de tout mettre à jour
+                //La non mise à jour de la variable animationStart permet au jeu de ne pas se dérouler (seuls les murs s'animeront)
+                for(GraphicsUpdater updater : graphicsUpdaters){
+                    updater.update();
                 }
-
             }
         };
     }
@@ -292,6 +286,7 @@ public class AnimationController {
         this.gameView = gameView1;
         this.graphicsUpdaters = gameView1.getGraphicsUpdaters();
         gameComponents.getChildren().add(gameView.getGameRoot()); //Ajoute la nouvelle map à l'affichage
+        Ghost.setAllEnergizedValue(false);
         // ajout vies
 
         this.hasntAlreadyWon = true; //Remet le paramètre pour la transition de level

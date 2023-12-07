@@ -107,7 +107,7 @@ public class CellGraphicsFactory {
             e.frameActivity ++;
             if(e.frameActivity>500){
                 e.setActive(false);
-                Ghost.energized = Energizer.isOneActive();
+                Ghost.setAllEnergizedValue(Energizer.isOneActive());
                 PacMan.INSTANCE.setEnergized(Energizer.isOneActive());
             }
         }

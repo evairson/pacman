@@ -84,12 +84,12 @@ public final class PacMan implements Critter {
         TimerTask task = new TimerTask() {
             public void run() {
                 pacman.energized = false;
-                Ghost.energized = false;
+                Ghost.setAllEnergizedValue(false);
                 t.cancel();
             }
         };
         this.energized = true;
-        Ghost.energized = true;
+        Ghost.setAllEnergizedValue(true);
         t.schedule(task, 10000);
 
     }
