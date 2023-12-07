@@ -78,7 +78,7 @@ public class App extends Application {
         gameScene.setOnKeyPressed(pacmanController::keyPressedHandler);
         gameScene.setOnKeyReleased(pacmanController::keyReleasedHandler);
 
-        MazeState maze = new MazeState(MazeConfig.makeExampleTxt());
+        MazeState maze = new MazeState(MazeConfig.makeGenericExample(1));
 
         //Récupère la taille de l'écran
         Rectangle2D screenBounds = Screen.getPrimary().getBounds();

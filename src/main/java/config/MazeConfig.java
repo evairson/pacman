@@ -184,17 +184,9 @@ public class MazeConfig {
      *  3. Ajout d'une méthode de lecture de fichier dans la classe {@link MazeConfig}
      *
      */
-
-    public static MazeConfig makeExampleTxt() throws IOException {
+        public static MazeConfig makeGenericExample(int x) throws IOException {
         String currentDirectory = System.getProperty("user.dir"); // Obtient le répertoire de travail actuel
-        String filePath = currentDirectory + "/src/main/resources/testMap2.txt"; // Chemin complet vers le fichier
-        // on changera ça, à terme, mais pour l'instant ça fonctionne donc nickel
-        return txtToMaze(filePath);
-    }
-
-    public static MazeConfig makeExampleTxt1() throws IOException {
-        String currentDirectory = System.getProperty("user.dir"); // Obtient le répertoire de travail actuel
-        String filePath = currentDirectory + "/src/main/resources/testMap1.txt"; // Chemin complet vers le fichier
+        String filePath = currentDirectory + "/src/main/resources/testMap" + x + ".txt"; // Chemin complet vers le fichier
         // on changera ça, à terme, mais pour l'instant ça fonctionne donc nickel
         return txtToMaze(filePath);
     }

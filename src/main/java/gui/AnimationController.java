@@ -27,10 +27,8 @@ import model.MazeState;
 import java.io.IOException;
 import java.sql.Time;
 import javafx.scene.media.AudioClip;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
+
+import java.util.*;
 
 /**
  * Cette classe est responsable de la gestion des événements durant l'animation et de l'animation elle-même.
@@ -164,7 +162,7 @@ public class AnimationController {
 
             final Stage stage = this.primaryStage;
 
-            //Ferme le programme 5s après le game over
+            //Ferme le programme 3s après le game over
             Timer timer = new Timer();
             TimerTask task = new TimerTask() { //Infâme mais fonctionnel (voir comment utiliser Timeline)
                 @Override
@@ -207,16 +205,12 @@ public class AnimationController {
 
             //Ferme le programme 3s après la win
             Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(3), event -> {
-                if(this.maze.getLevel() == 2) {
-                    Platform.runLater(() -> {
-                        App.restartApplication(this.primaryStage);
-                    });
-                }
+
                 gameComponents.getChildren().remove(gameView.getGameRoot());
                 this.stopPause();
                 gameComponents.getChildren().remove(winScreen);
                 try {
-                    transitionLvl();
+                    transitionLvl(getNextLevel(this.maze.getLevel()));
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
@@ -270,11 +264,10 @@ public class AnimationController {
         };
     }
 
-    public void transitionLvl() throws IOException {
-
-        MazeState maze = new MazeState(MazeConfig.makeExampleTxt1()); //Crée une nouvelle mazestate qui correspond à la nouvelle map
+    public void transitionLvl(int nextLevel) throws IOException {
+        MazeState maze = new MazeState(Objects.requireNonNull(MazeConfig.makeGenericExample(nextLevel))); //Crée une nouvelle mazestate qui correspond à la nouvelle map
         maze.setAnimationController(this);
-        maze.setLevel(this.maze.getLevel() + 1);
+        maze.setLevel(nextLevel);
         maze.setScore(this.maze.getScore());
         this.maze = maze;
 
@@ -302,6 +295,11 @@ public class AnimationController {
     public void mainTheme() {
         AudioClip main = new AudioClip(getClass().getResource("/audio/pacmanThemeOriginal.mp3").toExternalForm());
         main.play();
+    }
+
+    public static int getNextLevel(int x){
+        if(x == 2) return 1;
+        else return ++x;
     }
     /* C'est à chier pour l'instant
     public void siren() {
