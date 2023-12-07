@@ -29,10 +29,10 @@ public class BlinkyAI {
     public static Direction getDirection(MazeConfig config, IntCoordinates pacPos, IntCoordinates ghostPos){
         if (!Ghost.BLINKY.isAlive()) {
             if (Ghost.BLINKY.getAlreadyArrivedAtHome()){
-                if (ghostPos.equals(new IntCoordinates(config.getGhostHousePos().x(),config.getGhostHousePos().y()-1))){ //Si Blinky est déjà passé par la maison et qu'il se trouve au dessus de la maison des fantomes alors il peut revenir en vie
+                if (ghostPos.equals(new IntCoordinates(config.getGhostHousePos().x(),config.getGhostHousePos().y()-1)) || ghostPos.equals(new IntCoordinates(config.getGhostHousePos().x(),config.getGhostHousePos().y()-2))){ //Si Blinky est déjà passé par la maison et qu'il se trouve au dessus de la maison des fantomes alors il peut revenir en vie
                     Ghost.BLINKY.setIsAlive(true);
                     Ghost.BLINKY.setAlreadyArrivedAtHome(false);
-                    Ghost.BLINKY.setSpeed(Ghost.BLINKY.getSpeed()/1.5);
+                    Ghost.BLINKY.setSpeed(Ghost.BLINKY.getSpeed()/2);
                     return getDirection(config,pacPos,ghostPos);
                 }else{ //S'il n'y est pas encore arrivé alors il continu de "traquer" la maison des fantomes
                     ArrayList<IntCoordinates> path = AStar.shortestPath(ghostPos, new IntCoordinates(config.getGhostHousePos().x(),config.getGhostHousePos().y()-1), config);
@@ -46,7 +46,8 @@ public class BlinkyAI {
                 Ghost.BLINKY.setAlreadyArrivedAtHome(true);
                 return Direction.NORTH; //Permet à Blinky de sortir de la maison des fantomes, il ne faut pas le ramener à la vie sinon il sera coincé car les murs seront réactivés
             } else if (ghostPos.equals(new IntCoordinates(config.getGhostHousePos().x(),config.getGhostHousePos().y()-1))) {
-                return Direction.SOUTH; //Permet à Blinky de rentrer dans la maison des fantomes
+                Ghost.BLINKY.setPos(new RealCoordinates(config.getGhostHousePos().x(),config.getGhostHousePos().y()));
+                return Direction.NONE; //Permet à Blinky de rentrer dans la maison des fantomes
 
             } else{
                 ArrayList<IntCoordinates> path = AStar.shortestPath(ghostPos, new IntCoordinates(config.getGhostHousePos().x(),config.getGhostHousePos().y()-1), config); //Blinky traque la case au dessus de la maison des fantomes car la méthode AStar.shortestPath ne peut pas faire le plus court chemin d'une case inaccessible

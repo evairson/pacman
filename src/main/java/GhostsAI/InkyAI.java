@@ -16,10 +16,10 @@ public class InkyAI { //TODO : mettre des commentaires
     public static Direction getDirection(MazeConfig config, IntCoordinates pacPos, IntCoordinates ghostPos, Direction pacDir){ //Voir commentaire dans BlinkyAI.java
         if (!Ghost.INKY.isAlive()) {
             if (Ghost.INKY.getAlreadyArrivedAtHome()){
-                if (ghostPos.equals(new IntCoordinates(config.getGhostHousePos().x(),config.getGhostHousePos().y()-1))){
+                if (ghostPos.equals(new IntCoordinates(config.getGhostHousePos().x(),config.getGhostHousePos().y()-1)) || ghostPos.equals(new IntCoordinates(config.getGhostHousePos().x(),config.getGhostHousePos().y()-2))){
                     Ghost.INKY.setIsAlive(true);
                     Ghost.INKY.setAlreadyArrivedAtHome(false);
-                    Ghost.INKY.setSpeed(Ghost.INKY.getSpeed()/1.5);
+                    Ghost.INKY.setSpeed(Ghost.INKY.getSpeed()/2);
                     return getDirection(config,pacPos,ghostPos,pacDir);
                 }else{
                     ArrayList<IntCoordinates> path = AStar.shortestPath(ghostPos, new IntCoordinates(config.getGhostHousePos().x(),config.getGhostHousePos().y()-1), config);
@@ -33,7 +33,8 @@ public class InkyAI { //TODO : mettre des commentaires
                 Ghost.INKY.setAlreadyArrivedAtHome(true);
                 return Direction.NORTH;
             } else if (ghostPos.equals(new IntCoordinates(config.getGhostHousePos().x(),config.getGhostHousePos().y()-1))) {
-                return Direction.SOUTH;
+                Ghost.INKY.setPos(new RealCoordinates(config.getGhostHousePos().x(),config.getGhostHousePos().y()));
+                return Direction.NONE;
             } else{
                 ArrayList<IntCoordinates> path = AStar.shortestPath(ghostPos, new IntCoordinates(config.getGhostHousePos().x(),config.getGhostHousePos().y()-1), config);
                 int pathlen = path.size();

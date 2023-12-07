@@ -3,6 +3,7 @@ package GhostsAI;
 import config.Cell;
 import geometry.AStar;
 import geometry.IntCoordinates;
+import geometry.RealCoordinates;
 import model.Direction;
 import model.Ghost;
 
@@ -32,10 +33,10 @@ public class ClydeAI{
     public static Direction getDirection(MazeConfig config, IntCoordinates intC, Direction defaultDir,IntCoordinates ghostPos) { //Voir commentaire dans BlinkyAI.java
         if (!Ghost.CLYDE.isAlive()) {
             if (Ghost.CLYDE.getAlreadyArrivedAtHome()){
-                if (ghostPos.equals(new IntCoordinates(config.getGhostHousePos().x(),config.getGhostHousePos().y()-1))){
+                if (ghostPos.equals(new IntCoordinates(config.getGhostHousePos().x(),config.getGhostHousePos().y()-1)) || ghostPos.equals(new IntCoordinates(config.getGhostHousePos().x(),config.getGhostHousePos().y()-2))){
                     Ghost.CLYDE.setIsAlive(true);
                     Ghost.CLYDE.setAlreadyArrivedAtHome(false);
-                    Ghost.CLYDE.setSpeed(Ghost.CLYDE.getSpeed()/1.5);
+                    Ghost.CLYDE.setSpeed(Ghost.CLYDE.getSpeed()/2);
                     return getDirection(config,intC,defaultDir,ghostPos);
                 }else{
                     ArrayList<IntCoordinates> path = AStar.shortestPath(ghostPos, new IntCoordinates(config.getGhostHousePos().x(),config.getGhostHousePos().y()-1), config);
@@ -49,7 +50,8 @@ public class ClydeAI{
                 Ghost.CLYDE.setAlreadyArrivedAtHome(true);
                 return Direction.NORTH;
             } else if (ghostPos.equals(new IntCoordinates(config.getGhostHousePos().x(),config.getGhostHousePos().y()-1))) {
-                return Direction.SOUTH;
+                Ghost.CLYDE.setPos(new RealCoordinates(config.getGhostHousePos().x(),config.getGhostHousePos().y()));
+                return Direction.NONE;
 
             } else{
                 ArrayList<IntCoordinates> path = AStar.shortestPath(ghostPos, new IntCoordinates(config.getGhostHousePos().x(),config.getGhostHousePos().y()-1), config);

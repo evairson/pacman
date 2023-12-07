@@ -139,7 +139,7 @@ public final class MazeState {
                     //
                     if (((Ghost) critter).isAlive()){
                         ((Ghost) critter).setIsAlive(false);
-                        ((Ghost) critter).setSpeed(critter.getSpeed()*1.5);
+                        ((Ghost) critter).setSpeed(critter.getSpeed()*2);
                         return;
                     }else {
                         return;

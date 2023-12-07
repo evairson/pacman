@@ -59,10 +59,10 @@ public class PinkyAI {
     public static Direction getDirection(MazeConfig config, IntCoordinates pacPos, IntCoordinates ghostPos, Direction pacDir){ //Voir commentaire dans BlinkyAI.java
         if (!Ghost.PINKY.isAlive()) {
             if (Ghost.PINKY.getAlreadyArrivedAtHome()){
-                if (ghostPos.equals(new IntCoordinates(config.getGhostHousePos().x(),config.getGhostHousePos().y()-1))){
+                if (ghostPos.equals(new IntCoordinates(config.getGhostHousePos().x(),config.getGhostHousePos().y()-1)) || ghostPos.equals(new IntCoordinates(config.getGhostHousePos().x(),config.getGhostHousePos().y()-2))){
                     Ghost.PINKY.setIsAlive(true);
                     Ghost.PINKY.setAlreadyArrivedAtHome(false);
-                    Ghost.PINKY.setSpeed(Ghost.PINKY.getSpeed()/1.5);
+                    Ghost.PINKY.setSpeed(Ghost.PINKY.getSpeed()/2);
                     return getDirection(config,pacPos,ghostPos,pacDir);
                 }else{
                     ArrayList<IntCoordinates> path = AStar.shortestPath(ghostPos, new IntCoordinates(config.getGhostHousePos().x(),config.getGhostHousePos().y()-1), config);
@@ -76,7 +76,8 @@ public class PinkyAI {
                 Ghost.PINKY.setAlreadyArrivedAtHome(true);
                 return Direction.NORTH;
             } else if (ghostPos.equals(new IntCoordinates(config.getGhostHousePos().x(),config.getGhostHousePos().y()-1))) {
-                return Direction.SOUTH;
+                Ghost.PINKY.setPos(new RealCoordinates(config.getGhostHousePos().x(),config.getGhostHousePos().y()));
+                return Direction.NONE;
 
             } else{
                 ArrayList<IntCoordinates> path = AStar.shortestPath(ghostPos, new IntCoordinates(config.getGhostHousePos().x(),config.getGhostHousePos().y()-1), config);
