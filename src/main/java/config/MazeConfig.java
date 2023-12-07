@@ -1,7 +1,6 @@
 package config;
 
 import geometry.IntCoordinates;
-import javafx.scene.effect.Light.Point;
 import model.Items.ItemBouleNeige;
 import model.Items.Dot;
 import model.Items.Energizer;
@@ -14,13 +13,6 @@ import java.nio.file.Files;
 import java.io.IOException;
 import java.util.List;
 
-
-import static config.Cell.*;
-
-
-
-
-// tutur : la classe MazeConfig
 public class MazeConfig {
 
     private final Cell[][] grid;
@@ -30,9 +22,7 @@ public class MazeConfig {
         this.grid = new Cell[grid.length][];
         for (int i = 0; i < grid.length; i++) {
             this.grid[i] = new Cell[grid[i].length];
-            if (grid[i].length >= 0) {
-                System.arraycopy(grid[i], 0, this.grid[i], 0, grid[i].length);
-            }
+            System.arraycopy(grid[i], 0, this.grid[i], 0, grid[i].length);
         }
         this.pacManPos = pacManPos;
         this.blinkyPos = blinkyPos;
@@ -187,7 +177,7 @@ public class MazeConfig {
         public static MazeConfig makeGenericExample(int x) throws IOException {
         String currentDirectory = System.getProperty("user.dir"); // Obtient le répertoire de travail actuel
         String filePath = currentDirectory + "/src/main/resources/testMap" + x + ".txt"; // Chemin complet vers le fichier
-        // on changera ça, à terme, mais pour l'instant ça fonctionne donc nickel
+//             String filePath = currentDirectory + "/src/main/resources/RealTestMap" + x + ".txt";
         return txtToMaze(filePath);
     }
 

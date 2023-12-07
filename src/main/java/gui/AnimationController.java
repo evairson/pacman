@@ -3,11 +3,7 @@ package gui;
 import config.MazeConfig;
 import javafx.animation.*;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.effect.GaussianBlur;
 import javafx.scene.layout.*;
@@ -20,13 +16,10 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import javafx.util.Duration;
 import model.Ghost;
 import model.MazeState;
 import java.io.IOException;
-import java.sql.Time;
-import javafx.scene.media.AudioClip;
 
 import java.util.*;
 
@@ -35,20 +28,16 @@ import java.util.*;
  */
 public class AnimationController {
     private List<GraphicsUpdater> graphicsUpdaters;
-    private List<GraphicsUpdater> wallUpdaters;
     private MazeState maze;
     private final Stage primaryStage;
 
-    private final PacmanController pacmanController;
-
-    private PauseMenu pauseMenu;
+    private final PauseMenu pauseMenu;
 
     private GameView gameView;
     private final StackPane gameComponents;
     private boolean isPaused = false;
     private boolean isFancy = false;
-    private double AppScale;
-
+    private final double AppScale;
     private boolean hasntAlreadyWon = true; //Aide à gérer les transitions de niveau
     AudioClip defaultSiren = new AudioClip(getClass().getResource("/audio/assassindelapolice.mp3").toExternalForm());
     private boolean energizedSirenIsPlaying = false;
@@ -57,18 +46,15 @@ public class AnimationController {
 
 
 
-    public AnimationController(List<GraphicsUpdater> graphicsUpdaters, MazeState maze, Stage primaryStage, PacmanController pacmanController, GameView gameView, StackPane root, double AppScale) {
+    public AnimationController(List<GraphicsUpdater> graphicsUpdaters, MazeState maze, Stage primaryStage, GameView gameView, StackPane root, double AppScale) {
         this.graphicsUpdaters = graphicsUpdaters;
         this.maze = maze;
         this.primaryStage = primaryStage;
-        this.pacmanController = pacmanController;
         this.gameView = gameView;
         this.gameComponents = root;
         this.AppScale = AppScale;
         pauseMenu = new PauseMenu(gameView.getMaze(), root,this);
 
-        //Crée la liste des wall à update
-        this.wallUpdaters = new ArrayList<>();
     }
 
     public Stage getPrimaryStage() {
@@ -104,10 +90,6 @@ public class AnimationController {
     public void stopPause(){
         this.playScheduled = true;
         this.setPaused(false);
-    }
-
-    public boolean isFancy() {
-        return isFancy;
     }
 
     public void setFancy(boolean fancy) {
@@ -167,9 +149,7 @@ public class AnimationController {
             TimerTask task = new TimerTask() { //Infâme mais fonctionnel (voir comment utiliser Timeline)
                 @Override
                 public void run() {
-                    Platform.runLater(() -> {
-                        App.restartApplication(stage);
-                    });
+                    Platform.runLater(() -> App.restartApplication(stage));
                 }
             };
 
@@ -298,7 +278,7 @@ public class AnimationController {
     }
 
     public static int getNextLevel(int x){
-        if(x == 2) return 1;
+        if(x == 3) return 1;
         else return ++x;
     }
     /* C'est à chier pour l'instant
