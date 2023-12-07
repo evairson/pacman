@@ -11,15 +11,10 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import model.Critter;
-import model.Ghost;
 import model.Items.FakeEnergizer;
 import model.Items.Inventory;
-import model.Items.ItemTest;
+import model.Items.ItemBouleNeige;
 import model.MazeState;
-import model.PacMan;
-
-import java.util.ArrayList;
 
 public class HUDGraphicsFactory {
     private final double width;
@@ -28,6 +23,7 @@ public class HUDGraphicsFactory {
 
     //--Sprites--
     private final Image fakeEnergizerSprite;
+    private final Image bouleNeigeSprite;
     private final Image noneImage = null;
 
     public HUDGraphicsFactory(double width, double height, double scale){
@@ -36,6 +32,7 @@ public class HUDGraphicsFactory {
         this.scale = scale;
 
         this.fakeEnergizerSprite = new Image("FakeGhost.jpg", 0.35 * this.scale, 0.35 * this.scale, true, false);
+        this.bouleNeigeSprite = new Image("bouleNeige.png", 0.35 * this.scale, 0.35 * this.scale, true, false);
     }
 
     public Text[] initKeybordIndicators(){
@@ -56,6 +53,8 @@ public class HUDGraphicsFactory {
         ImageView[] imageTab = new ImageView[4];
         for(int i = 0; i < 4; i ++){
             imageTab[i] = new ImageView();
+            imageTab[i].setFitHeight(0.35 * this.scale);
+            imageTab[i].setFitWidth(0.35 * this.scale);
         }
         return imageTab;
     }
@@ -76,6 +75,8 @@ public class HUDGraphicsFactory {
         for(int i = 0; i < 4; i ++){
             if(inventory.getNth(i) instanceof FakeEnergizer){
                 imageTab[i].setImage(this.fakeEnergizerSprite);
+            } else if(inventory.getNth(i) instanceof ItemBouleNeige){
+                imageTab[i].setImage(this.bouleNeigeSprite);
             } else {
                 imageTab[i].setImage(noneImage);
             }
