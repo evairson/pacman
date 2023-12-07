@@ -5,6 +5,7 @@ import model.PacMan;
 public class ItemBouleNeige extends Item {
     public ItemBouleNeige(){
         super.setCollectable(true);
+        url="BouleNeige.png";
     }
 
 
