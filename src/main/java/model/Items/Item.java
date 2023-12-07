@@ -1,11 +1,27 @@
 package model.Items;
 
+import javafx.scene.image.ImageView;
+
 public class Item {
     private boolean collectable;
     private boolean active = false;
+    protected String url;
+    protected ImageView image;
 
     public Item(){
         this.collectable = false;
+    }
+
+    public String getUrl(){
+        return url;
+    }
+
+    public ImageView getImage(){
+        return image;
+    }
+
+    public void setImage(ImageView image){
+        this.image = image;
     }
 
     public boolean isCollectable(){

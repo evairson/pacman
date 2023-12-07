@@ -2,7 +2,6 @@ package model.Items;
 
 import model.Ghost;
 import model.PacMan;
-
 import java.util.ArrayList;
 
 public class FakeEnergizer extends Item {
@@ -14,12 +13,12 @@ public class FakeEnergizer extends Item {
         super.setCollectable(true);
         this.frameActivity = 0;
         itemList.add(this);
+        this.url = "FakeGhost.jpg";
     }
 
     public void setActive(boolean b){
         super.setActive(b);
         this.frameActivity = 0;
-
         PacMan.INSTANCE.setFakeEnergized(b);
     }
 
