@@ -125,7 +125,6 @@ public class HUDGraphicsFactory {
 
         hBox.setSpacing(30);
         HBox.setMargin(circlesHealth[0], new Insets(0, 0, 0, 20));
-        System.out.println((this.width / 2) - 200 - 120);
         HBox.setMargin(inventoryDisplay[0], new Insets(0, 0, 0, (this.width / 2) - 200 - 120));
         HBox.setMargin(scoreTxt, new Insets(0, 0, 0, (this.width / 2) - 350));
         hBox.setAlignment(Pos.CENTER);
