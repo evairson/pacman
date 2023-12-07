@@ -73,10 +73,10 @@ public class GhostTest {
 
     @Test
     public void testIsEnergized() {
-        Ghost.energized = true;
+        Ghost.setAllEnergizedValue(true);
         assertTrue(Ghost.BLINKY.isEnergized(), "Le fantôme devrait être energized");
 
-        Ghost.energized = false;
+        Ghost.setAllEnergizedValue(false);
         assertFalse(Ghost.BLINKY.isEnergized(), "Le fantôme ne devrait pas être energized");
     }
 
