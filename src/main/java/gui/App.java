@@ -8,9 +8,11 @@ package gui;
  */
 
 import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.*;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import config.MazeConfig;
@@ -33,7 +35,10 @@ public class App extends Application {
      */
     public void start(Stage primaryStage) throws IOException {
         // Pane est un conteneur qui peut contenir des éléments graphiques
-        Pane root = new Pane();
+        // root est le conteneur principal du jeu (il contient tous les autres conteneurs)
+        var root = new BorderPane();
+        // gamePane est le conteneur de l'écran de jeu
+        var gamePane = new Pane();
         // Scene est un objet qui contient tous les éléments graphiques (ça correspond à la fenêtre qui sera affichée)
         Scene gameScene = new Scene(root);
         if (!MazeConfig.isGameComplete()) { TF2Complete(); }
@@ -71,39 +76,73 @@ public class App extends Application {
         gameScene.setOnKeyPressed(pacmanController::keyPressedHandler);
         gameScene.setOnKeyReleased(pacmanController::keyReleasedHandler);
 
-        MazeState maze = new MazeState(MazeConfig.makeExampleTxt());
+        MazeState maze = new MazeState(MazeConfig.makeGenericExample(1));
 
         //Récupère la taille de l'écran
         Rectangle2D screenBounds = Screen.getPrimary().getBounds();
 
-        //Adapte la taille de l'écran en fonction du nombre de lignes et de colonnes, ainsi que de la taille de l'écran
-        double widthScale = Math.floor(screenBounds.getWidth() / maze.getWidth())/10.0;
-        double heightScale = Math.floor(screenBounds.getHeight() / maze.getHeight())/10.0;
+        //Adapte la taille de la fenêtre de la partie (sans le hud) en fonction du nombre de lignes et de colonnes, ainsi que de la taille de l'écran
+        double widthScale = Math.floor(screenBounds.getWidth() / maze.getWidth());///10.0;
+        double heightScale = Math.floor(screenBounds.getHeight() / maze.getHeight());///10.0;
 
-        double scale = Math.min((int)widthScale,(int)heightScale) * 10.0 - 5;
+        double scale = Math.min(/*(int)*/widthScale, /*(int)*/heightScale);// * 10.0 - 5;
 
-        GameView gameView = new GameView(maze, root, scale);
+        //Conteneur de tout ce qui est la vue du jeu (jeu, menu de pause, etc)
+        StackPane gameComponents = new StackPane();
 
-        AnimationController animationController = new AnimationController(gameView.getGraphicsUpdaters(), gameView.getMaze(), primaryStage, pacmanController,gameView);
+        //Vue de la partie (sans le hud)
+        var gameView = new GameView(maze, gamePane, 0.8*scale);
+
+        gameComponents.getChildren().add(gamePane);
+        StackPane.setAlignment(gamePane,Pos.CENTER);
+
+        //--HUD--
+        Pane hudPane = new Pane();
+        HUDView hudView = new HUDView(maze, hudPane, maze.getWidth() * 0.8 * scale, maze.getHeight() * 0.8 * scale * 0.25, scale); //Dégueu, il faut rendre ça plus dynamique.
+        gameView.getGraphicsUpdaters().add(hudView.getHudUpdater());
+
+        root.setCenter(gameComponents);
+        root.setBottom(hudPane);
+
+        var animationController = new AnimationController(gameView.getGraphicsUpdaters(), gameView.getMaze(), primaryStage, gameView, gameComponents, 0.8*scale);
+        animationController.mainTheme();
         pacmanController.setAnimationController(animationController);
-
         maze.setAnimationController(animationController);
 
         //Empeche de resize la fenetre
         primaryStage.setResizable(false);
 
-        //Permet d'enlever la barre du haut (à voir pour la suite n'ayant pas fait de menu d'options in game ça m'a l'air complexe à rajouter de suite)
+        //Permet d'enlever la barre du haut
         primaryStage.initStyle(StageStyle.UNDECORATED);
 
 
-        MainMenu mainMenu = new MainMenu();
-        primaryStage.setScene(mainMenu.startMenu(primaryStage,gameScene));
+        var mainMenu = new MainMenu();
+        var optionsMenu = new OptionsMenu();
+        primaryStage.setScene(mainMenu.startMenu(primaryStage, gameScene, animationController, optionsMenu));
         primaryStage.show();
-        animationController.createAnimationTimer().start();
+        //primaryStage.setMaximized(true);
     }
 
     private void TF2Complete() {
         System.out.println("Erreur de compilation, fichiers manquants...");
         System.exit(42);
+    }
+
+    public static void restartApplication(Stage stage) {
+        try {
+            // Fermer le stage actuel
+            stage.close();
+
+            // Lancer une nouvelle instance de l'application
+            Platform.runLater(() -> {
+                try {
+                    new App().start(new Stage());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -19,19 +19,17 @@ public class PacmanController {
 
         switch (event.getCode()){
             case ESCAPE -> {
-                if(animationController.isPaused()) {
+                if(animationController.isPaused() && !animationController.isInUnstoppableAnimation()) {
                     animationController.stopPauseMenu();
-                    animationController.unBlurGame();
-                    animationController.playScheduled = true;
-                    animationController.setPaused(false);
                 }
-                else{
+                else if(!animationController.isInUnstoppableAnimation()){
                     animationController.startPauseMenu();
-                    animationController.blurGame();
-                    animationController.pauseScheduled = true;
-                    animationController.setPaused(true);
                 }
             }
+            case A -> { PacMan.INSTANCE.getInventory().getNth(0).setActive(true); PacMan.INSTANCE.getInventory().remove(0);}
+            case Z -> { PacMan.INSTANCE.getInventory().getNth(1).setActive(true); PacMan.INSTANCE.getInventory().remove(1);}
+            case E -> { PacMan.INSTANCE.getInventory().getNth(2).setActive(true); PacMan.INSTANCE.getInventory().remove(2);}
+            case R -> { PacMan.INSTANCE.getInventory().getNth(3).setActive(true); PacMan.INSTANCE.getInventory().remove(3);}
             default -> {
                 PacMan.INSTANCE.setNextDir(
                         switch (event.getCode()) {
