@@ -212,7 +212,7 @@ public final class MazeState {
                 public void run() {
                     CellGraphicsFactory.setFinNiveau(false);
                 }
-            }, 1);
+            }, 3000);
         }
         // TODO: Faire une fonction dans item qui fait tout bien (le ramssage) pour chaque item (pour éviter d'écrire 'if ... instanceof ...') et qui ne met pas grid true si l'item n'est pas ramassé...
         for (var critter : critters) { // Collision PacMan Ghosts

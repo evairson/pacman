@@ -222,7 +222,6 @@ public class AnimationController {
             }));
             timeline.setCycleCount(1);
             timeline.play();
-
         }
         catch (Exception e){
             e.printStackTrace();
