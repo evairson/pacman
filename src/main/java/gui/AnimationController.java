@@ -15,17 +15,18 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.CornerRadii;
+import javafx.scene.media.AudioClip;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
+import model.Ghost;
 import model.MazeState;
 import java.io.IOException;
 import java.sql.Time;
 import javafx.scene.media.AudioClip;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
@@ -183,6 +184,9 @@ public class AnimationController {
     public void win(){
         try {
             //Démarre une pause
+            /*if (isFancy){
+                this.blurGame();
+            }*/ //TODO : revoir ?
             this.startPause();
 
             //Affiche le game over
@@ -199,9 +203,7 @@ public class AnimationController {
             winScreen.setCenter(gameOver);
             gameComponents.getChildren().add(winScreen);
 
-
             CellGraphicsFactory.setFinNiveau(true);
-
 
             //Ferme le programme 3s après la win
             Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(3), event -> {
@@ -221,7 +223,6 @@ public class AnimationController {
             }));
             timeline.setCycleCount(1);
             timeline.play();
-
         }
         catch (Exception e){
             e.printStackTrace();
@@ -258,40 +259,32 @@ public class AnimationController {
                     }
                     long deltaT = now - animationStart;
                     maze.update(deltaT);
-                    for (GraphicsUpdater updater : graphicsUpdaters) {
-                        updater.update();
-                    }
                     animationStart = now;
-
                 }
-
-
-                //Ce morceau de boucle permet de faire clignoter les murs à la win d'un niveau
-                if(isFancy){ //Ne s'active que si on est en mode "fancy"
-                    //La non mise à jour de la variable animationStart permet au jeu de ne pas se dérouler (seuls les murs s'animeront)
-                    for(GraphicsUpdater updater : graphicsUpdaters){
-                        updater.update();
-                    }
+                //Ce morceau de boucle permet de tout mettre à jour
+                //La non mise à jour de la variable animationStart permet au jeu de ne pas se dérouler (seuls les murs s'animeront)
+                for(GraphicsUpdater updater : graphicsUpdaters){
+                    updater.update();
                 }
-
             }
         };
     }
 
     public void transitionLvl() throws IOException {
 
-        MazeState maze = new MazeState(MazeConfig.makeExampleTxt1()); //Crée une nouvelle mazeconfig qui correspond à la nouvelle map
+        MazeState maze = new MazeState(MazeConfig.makeExampleTxt1()); //Crée une nouvelle mazestate qui correspond à la nouvelle map
         maze.setAnimationController(this);
         maze.setLevel(this.maze.getLevel() + 1);
         maze.setScore(this.maze.getScore());
         this.maze = maze;
 
         this.gameView.getGameRoot().getChildren().clear(); //Clear l'ancien panneau de jeu
-
-        GameView gameView1 = new GameView(maze, gameView.getGameRoot(), AppScale);//Crée une nouvelle vue de jeu
+        GameView gameView1 = new GameView(maze, gameView.getGameRoot(), AppScale); //Crée une nouvelle vue de jeu
         this.gameView = gameView1;
+        gameView1.getGraphicsUpdaters().add(this.graphicsUpdaters.get(this.graphicsUpdaters.size() - 1)); // Ajout du hud updater
         this.graphicsUpdaters = gameView1.getGraphicsUpdaters();
         gameComponents.getChildren().add(gameView.getGameRoot()); //Ajoute la nouvelle map à l'affichage
+        Ghost.setAllEnergizedValue(false);
         // ajout vies
 
         this.hasntAlreadyWon = true; //Remet le paramètre pour la transition de level

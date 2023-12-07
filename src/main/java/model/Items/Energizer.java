@@ -9,7 +9,6 @@ import java.util.ArrayList;
 
     /*public boolean special;*/
 public class Energizer extends Item {
-    private static boolean energized;
     public int frameActivity;
     private static final ArrayList<Energizer> itemList = new ArrayList<>();
 
@@ -28,10 +27,10 @@ public class Energizer extends Item {
         return false;
     }
 
-        public /*static*/ void setActive(boolean b){
+        public void setActive(boolean b){
         super.setActive(b);
         this.frameActivity = 0;
         PacMan.INSTANCE.setEnergized(Energizer.isOneActive());
-        Ghost.energized = Energizer.isOneActive();
+        Ghost.setAllEnergizedValue(Energizer.isOneActive());
     }
 }

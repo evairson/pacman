@@ -151,6 +151,4 @@ public final class BouleNeige implements Critter {
             return this.pos;
         }
     }
-
-
 }

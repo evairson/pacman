@@ -10,7 +10,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import model.MazeState;
-
 import java.awt.*;
 import java.awt.event.KeyEvent;
 

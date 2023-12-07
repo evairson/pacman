@@ -2,32 +2,32 @@ package model.Items;
 
 import model.Ghost;
 import model.PacMan;
+import java.util.ArrayList;
 
 public class FakeEnergizer extends Item {
-    
-    private static boolean energized;
-    public boolean special;
-    public static int frameEnergizer;
 
-    public FakeEnergizer(boolean energized , boolean special , int frameEnergizer){
-        this.energized=energized;
-        this.special=special;
-        this.frameEnergizer=frameEnergizer;
-    } 
+    private final static ArrayList<FakeEnergizer> itemList = new ArrayList<>();
+    public int frameActivity;
 
-    public boolean isSpecial(){
-        return this.special;
+    public FakeEnergizer(){
+        super.setCollectable(true);
+        this.frameActivity = 0;
+        itemList.add(this);
+        this.url = "FakeGhost.jpg";
     }
 
-    public static boolean isFakeEnergized(){
-        return energized;
-    }
-
-    public static void setFakeEnergized(boolean b){
-        energized = b;
-        frameEnergizer = 0;
+    public void setActive(boolean b){
+        super.setActive(b);
+        this.frameActivity = 0;
         PacMan.INSTANCE.setFakeEnergized(b);
-        //Ghost.energized = false;
     }
-    
+
+    public static boolean isOneActive(){
+        for(FakeEnergizer e : itemList){
+            if(e != null){
+                if(e.isActive()){ return true; }
+            }
+        }
+        return false;
+    }
 }

@@ -14,9 +14,8 @@ import config.MazeConfig;
 import geometry.IntCoordinates;
 import geometry.RealCoordinates;
 import gui.AnimationController;
-
-import gui.App;
 import gui.CellGraphicsFactory;
+import model.Items.*;
 import javafx.animation.PauseTransition;
 import javafx.util.Duration;
 import model.Items.BouleNeige;
@@ -24,9 +23,6 @@ import model.Items.Dot;
 import model.Items.Energizer;
 import model.Items.FakeEnergizer;
 import model.Items.Item;
-import model.Items.ItemTest;
-import java.sql.SQLOutput;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.io.File;
@@ -35,7 +31,6 @@ import java.util.Scanner;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.io.PrintWriter;
-
 import static model.Ghost.*;
 
 public final class MazeState {
@@ -54,7 +49,7 @@ public final class MazeState {
     private final Map<Critter, RealCoordinates> initialPos;
     private int lives = 3;
 
-    public MazeState(MazeConfig config) {
+    public MazeState(MazeConfig config){
         this.config = config;
         height = config.getHeight();
         width = config.getWidth();
@@ -112,8 +107,6 @@ public final class MazeState {
 
     public void update(long deltaTns) {
 
-        
-
         /**
          * Reponsable de mettre à jour l'état du jeu.
          * Cette méthode est appelée à chaque frame.
@@ -133,47 +126,37 @@ public final class MazeState {
          */
 
         for (Critter critter : critters) {
-
             if(critter != BouleNeige.INSTANCE  || BouleNeige.INSTANCE.isActive()){
-
-            
-            critter.tpToCenter();
-
-
-            if (critter == PacMan.INSTANCE) {
-                Direction nextDir = ((PacMan) critter).getNextDir();
-                if (PacMan.INSTANCE.canSetDirection(nextDir, this.config)) {
+                critter.tpToCenter();
+                if (critter == PacMan.INSTANCE) {
+                    Direction nextDir = ((PacMan) critter).getNextDir();
+                    if (PacMan.INSTANCE.canSetDirection(nextDir, this.config)) {
+                        critter.setPos(critter.getNextPos(deltaTns, nextDir, this.config));
+                        critter.setDirection(nextDir);
+                    } else {
+                        critter.setPos(critter.getNextPos(deltaTns, critter.getDirection(), this.config));
+                    }
+                } else if(critter instanceof Ghost) {
+                    var nextDir = ((Ghost) critter).getNextDir(this.config, PacMan.INSTANCE.currCellI(), PacMan.INSTANCE.getDirection(), PacMan.INSTANCE.isEnergized(), PacMan.INSTANCE.isFakeEnergized());
                     critter.setPos(critter.getNextPos(deltaTns, nextDir, this.config));
                     critter.setDirection(nextDir);
-                } else {
-                    critter.setPos(critter.getNextPos(deltaTns, critter.getDirection(), this.config));
+                } else if(critter == BouleNeige.INSTANCE){
+                    if(critter.getNextPos(deltaTns, BouleNeige.INSTANCE.getDirection(), this.config)==null) {
+                        BouleNeige.INSTANCE.detruire();
+                    } else{
+                        critter.setPos(critter.getNextPos(deltaTns, BouleNeige.INSTANCE.getDirection(), this.config));
+                    }
                 }
-            } else if(critter instanceof Ghost) {
-                var nextDir = ((Ghost) critter).getNextDir(this.config, PacMan.INSTANCE.currCellI(), PacMan.INSTANCE.getDirection(), PacMan.INSTANCE.isEnergized(), PacMan.INSTANCE.isFakeEnergized());
-                critter.setPos(critter.getNextPos(deltaTns, nextDir, this.config));
-                critter.setDirection(nextDir);
             }
-            else if(critter == BouleNeige.INSTANCE){
-                if(critter.getNextPos(deltaTns, BouleNeige.INSTANCE.getDirection(), this.config)==null) {
-                    BouleNeige.INSTANCE.detruire();
-                }
-                else{
-                    critter.setPos(critter.getNextPos(deltaTns, BouleNeige.INSTANCE.getDirection(), this.config));
-                }
-}
-        }
         }
 
         // FIXME Pac-Man rules should somehow be in Pacman class
         var pacPos = PacMan.INSTANCE.getPos().round();
 
-        if (!gridState[pacPos.y()][pacPos.x()]) { // Energizer
-            if (config.getCell(pacPos).initialItem() instanceof Energizer) { /* score energizer */
+        if (!gridState[pacPos.y()][pacPos.x()]) { //Case déjà visitée ?
+            if (config.getCell(pacPos).initialItem() instanceof Energizer) { // La case contient-elle un energizer ?
                 addScore(5);
-                config.getCell(pacPos).initialItem().setActive(true);
-                gridState[pacPos.y()][pacPos.x()] = true;
-            } else if (config.getCell(pacPos).initialItem() instanceof FakeEnergizer) {
-                FakeEnergizer.setFakeEnergized(true);
+                if(!FakeEnergizer.isOneActive()) { config.getCell(pacPos).initialItem().setActive(true); }
                 gridState[pacPos.y()][pacPos.x()] = true;
             } else {
                 if (config.getCell(pacPos).initialItem().isCollectable()) {
@@ -187,68 +170,71 @@ public final class MazeState {
                     addScore(1);
                     gridState[pacPos.y()][pacPos.x()] = true;
                 }
-
-
-
-            /*if(config.getCell(pacPos).initialItem() instanceof Energizer){
-                addScore(5); 
-                Energizer.setEnergized(true);
-                gridState[pacPos.y()][pacPos.x()] = true;
-            } else if(config.getCell(pacPos).initialItem() instanceof ItemTest){
-                if(!PacMan.INSTANCE.getInventory().isFull()){
-                    addScore(10);
-                    PacMan.INSTANCE.getInventory().add(config.getCell(pacPos).initialItem());
-                    //ItemTest.setActive(true);
-                    gridState[pacPos.y()][pacPos.x()] = true;
-                    System.out.println(PacMan.INSTANCE.getInventory());
-                }
-            } else {
->>>>>>> iss33-inventory
-                addScore(1);
-                gridState[pacPos.y()][pacPos.x()] = true;
-            }*/
             }
-            } 
+        }
+        if(BouleNeige.INSTANCE.isActive()){
+            var boulePos = BouleNeige.INSTANCE.getPos().round();
+            if(!gridState[boulePos.y()][boulePos.x()]){
+                if(config.getCell(boulePos).initialItem() instanceof Dot){
+                    config.getCell(boulePos).initialItem().setActive(true);
+                    addScore(1);
+                    gridState[boulePos.y()][boulePos.x()] = true;
+                }
+            }
+        }
+
+        // TODO: Faire une fonction dans item qui fait tout bien (le ramssage) pour chaque item (pour éviter d'écrire 'if ... instanceof ...') et qui ne met pas grid true si l'item n'est pas ramassé...
+        for (var critter : critters) { // Collision PacMan Ghosts
+            if (critter instanceof Ghost && critter.getPos().round().equals(pacPos) && !PacMan.INSTANCE.isFakeEnergized()) {
+                if (PacMan.INSTANCE.isEnergized()) {
+                    addScore(10);
+                    animationController.ghostEatenSound();
+                    resetCritter(critter);
+                } else {
+                    playerLost();
+                    return;
+                }
+            }
             if(BouleNeige.INSTANCE.isActive()){
                 var boulePos = BouleNeige.INSTANCE.getPos().round();
-                if(!gridState[boulePos.y()][boulePos.x()]){
-                    if(config.getCell(boulePos).initialItem() instanceof Dot){
-                        config.getCell(boulePos).initialItem().setActive(true);
-                        addScore(1);
-                        gridState[boulePos.y()][boulePos.x()] = true;
-                    }
+                if(critter instanceof Ghost && critter.getPos().round().equals(boulePos)){
+                    addScore(10);
+                    animationController.ghostEatenSound();
+                    resetCritter(critter);
                 }
             }
-            
-            // TODO: Faire une fonction dans item qui fait tout bien (le ramssage) pour chaque item (pour éviter d'écrire 'if ... instanceof ...') et qui ne met pas grid true si l'item n'est pas ramassé...
-            for (var critter : critters) { // Collision PacMan Ghosts
-                if (critter instanceof Ghost && critter.getPos().round().equals(pacPos) && !PacMan.INSTANCE.isFakeEnergized()) {
-                    if (PacMan.INSTANCE.isEnergized()) {
-                        addScore(10);
-                        animationController.ghostEatenSound();
-                        resetCritter(critter);
-                    } else {
-                        playerLost();
-                        return;
-                    }
+        }
+        if (allDotsEaten() && animationController.hasntAlreadyWon()) {
+            CellGraphicsFactory.setFinNiveau(true);
+            Timer timer = new Timer();
+            timer.schedule(new TimerTask(){
+                @Override
+                public void run() {
+                    CellGraphicsFactory.setFinNiveau(false);
                 }
-                if(BouleNeige.INSTANCE.isActive()){
-                    var boulePos = BouleNeige.INSTANCE.getPos().round();
-                    if(critter instanceof Ghost && critter.getPos().round().equals(boulePos)){
-                        addScore(10);
-                        animationController.ghostEatenSound();
-                        resetCritter(critter);
-                    }
+            }, 3000);
+        }
+        // TODO: Faire une fonction dans item qui fait tout bien (le ramssage) pour chaque item (pour éviter d'écrire 'if ... instanceof ...') et qui ne met pas grid true si l'item n'est pas ramassé...
+        for (var critter : critters) { // Collision PacMan Ghosts
+            if (critter instanceof Ghost && critter.getPos().round().equals(pacPos) && !PacMan.INSTANCE.isFakeEnergized()) {
+                if (PacMan.INSTANCE.isEnergized()) {
+                    addScore(10);
+                    animationController.ghostEatenSound();
+                    resetCritter(critter);
+                } else {
+                    playerLost();
+                    return;
                 }
             }
-            if (allDotsEaten() && animationController.hasntAlreadyWon()) {
-                
-                CellGraphicsFactory.setFinNiveau(true);
-                Timer timer = new Timer();
-                timer.schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-                        CellGraphicsFactory.setFinNiveau(false);
+        }
+        if (allDotsEaten() && animationController.hasntAlreadyWon()) {
+            this.resetItems();
+            CellGraphicsFactory.setFinNiveau(true);
+            Timer timer = new Timer();
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    CellGraphicsFactory.setFinNiveau(false);
 
                         timer.cancel();
                     }
@@ -256,90 +242,94 @@ public final class MazeState {
                   if (level == 2) playerWin();
                   animationController.setHasntAlreadyWon(false);
                   animationController.win();
-                 
+        }
+    }
+
+    public int getHighScore () {
+        try {
+            var scanner = new Scanner(new File(System.getProperty("user.dir") + "/src/main/resources/highscore.txt"));
+            return scanner.nextInt();
+        } catch (FileNotFoundException e) {
+            return -1;
+        }
+    }
+
+    public void setHighScore (int score){
+        try {
+            var writer = new PrintWriter(new File(System.getProperty("user.dir") + "/src/main/resources/highscore.txt"));
+            writer.println(score);
+            writer.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void addScore ( int increment){
+        score += increment;
+    }
+
+    private void playerLost() { //le joueur a perdu au moment où il n'a plus de vie
+        // FIXME: this should be displayed in the JavaFX view, not in the console. A game over screen would be nice too.
+        BouleNeige.INSTANCE.detruire();
+        lives--;
+        if (lives == 0) {
+            if (score > getHighScore()) {
+                setHighScore(score);
             }
-
-            }
-
-        public int getHighScore () {
-            try {
-                var scanner = new Scanner(new File(System.getProperty("user.dir") + "/src/main/resources/highscore.txt"));
-                return scanner.nextInt();
-            } catch (FileNotFoundException e) {
-                return -1;
-            }
+            animationController.gameOver();
         }
+        resetCritters();
+    }
 
-        public void setHighScore (int score){
-            try {
-                var writer = new PrintWriter(new File(System.getProperty("user.dir") + "/src/main/resources/highscore.txt"));
-                writer.println(score);
-                writer.close();
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-        }
+    private void playerWin () {
+        animationController.win();
+    }
 
-        private void addScore ( int increment){
-            score += increment;
-        }
+    private void resetCritter (Critter critter){
+        critter.setDirection(Direction.NONE);
+        critter.setPos(initialPos.get(critter));
+    }
 
-        private void playerLost() { //le joueur a perdu au moment où il n'a plus de vie
-            // FIXME: this should be displayed in the JavaFX view, not in the console. A game over screen would be nice too.
-            BouleNeige.INSTANCE.detruire();
-            lives--;
-            if (lives == 0) {
-                if (score > getHighScore()) {
-                    setHighScore(score);
-                }
-                animationController.gameOver();
-            }
-            resetCritters();
+    private void resetCritters () {
+        for (Critter critter : critters) resetCritter(critter);
+    }
 
-        }
+    public MazeConfig getConfig () {
+        return config;
+    }
 
-        private void playerWin () {
-            animationController.win();
-        }
+    public boolean getGridState (IntCoordinates pos){
+        return gridState[pos.y()][pos.x()];
+    }
 
-        private void resetCritter (Critter critter){
-            critter.setDirection(Direction.NONE);
-            critter.setPos(initialPos.get(critter));
-        }
-
-        private void resetCritters () {
-            for (Critter critter : critters) resetCritter(critter);
-        }
-
-        public MazeConfig getConfig () {
-            return config;
-        }
-
-        public boolean getGridState (IntCoordinates pos){
-            return gridState[pos.y()][pos.x()];
-        }
-
-        public boolean allDotsEaten () {
-            for (boolean[] row : gridState) {
-                for (boolean cell : row) {
-                    if (!cell) {
-                        return false;
-                    }
+    public boolean allDotsEaten () {
+        for (boolean[] row : gridState) {
+            for (boolean cell : row) {
+                if (!cell) {
+                    return false;
                 }
             }
-            return true;
         }
+        return true;
+    }
 
-        public boolean[][] initGridState() {
-            boolean[][] gridState = new boolean[height][width];
-            for (int i = 0; i < height; i++) {
-                for (int j = 0; j < width; j++) {
-                    if (config.getCell(new IntCoordinates(j, i)).initialItem().getClass().equals(Item.class)) {
-                        gridState[i][j] = true;
-                    }
+    public boolean[][] initGridState(){
+        boolean[][] gridState = new boolean[height][width];
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                if (config.getCell(new IntCoordinates(j, i)).initialItem().getClass().equals(Item.class)) {
+                    gridState[i][j] = true;
                 }
             }
-            return gridState;
         }
+        return gridState;
+    }
 
+    public Inventory getInventory(){
+        return PacMan.INSTANCE.getInventory();
+    }
+
+    public void resetItems(){
+        this.config.resetItems();
+    }
 }

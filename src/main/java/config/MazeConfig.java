@@ -134,7 +134,7 @@ public class MazeConfig {
                         (lab[i][j].equals(" . "))? new Dot() :
                                 ((lab[i][j].equals(" E "))? new Energizer() :
                                         ((lab[i][j].equals(" T "))? new ItemTest() :
-                                            ((lab[i][j].equals(" S "))? new FakeEnergizer(false,true,0) :
+                                            ((lab[i][j].equals(" S "))? new FakeEnergizer() :
                                                 ((lab[i][j].equals(" B "))? new ItemBouleNeige() : new Item())))));
             }
         }
@@ -187,7 +187,7 @@ public class MazeConfig {
 
     public static MazeConfig makeExampleTxt() throws IOException {
         String currentDirectory = System.getProperty("user.dir"); // Obtient le répertoire de travail actuel
-        String filePath = currentDirectory + "/src/main/resources/testMap.txt"; // Chemin complet vers le fichier
+        String filePath = currentDirectory + "/src/main/resources/testMap2.txt"; // Chemin complet vers le fichier
         // on changera ça, à terme, mais pour l'instant ça fonctionne donc nickel
         return txtToMaze(filePath);
     }
@@ -204,4 +204,11 @@ public class MazeConfig {
         return file.exists();
     }
 
+    public void resetItems(){
+        for(Cell[] col : grid){
+            for(Cell c : col){
+                c.initialItem().setActive(false);
+            }
+        }
+    }
 }
