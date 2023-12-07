@@ -226,7 +226,9 @@ public class CellGraphicsFactory {
                     setFakeEnergized((FakeEnergizer)cell.initialItem());
                 }
                 for (Node n : group.getChildren()){
-                    n.setVisible(!ItemTest.isOneActive());
+                    if(n!= cell.initialItem().getImage()){
+                        n.setVisible(!ItemTest.isOneActive());
+                    }
                 }
                 //afficher les points si pacman pas passé dessus
                 dot.setVisible(!state.getGridState(pos));
