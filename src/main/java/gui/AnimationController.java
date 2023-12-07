@@ -36,6 +36,7 @@ public class AnimationController {
     private GameView gameView;
     private final StackPane gameComponents;
     private boolean isPaused = false;
+    private boolean isInUnstoppableAnimation = false;
     private boolean isFancy = false;
     private final double AppScale;
     private boolean hasntAlreadyWon = true; //Aide à gérer les transitions de niveau
@@ -92,6 +93,10 @@ public class AnimationController {
         this.setPaused(false);
     }
 
+    public boolean isInUnstoppableAnimation() {
+        return isInUnstoppableAnimation;
+    }
+
     public void setFancy(boolean fancy) {
         isFancy = fancy;
     }
@@ -127,6 +132,7 @@ public class AnimationController {
             }
 
             this.startPause();
+            this.isInUnstoppableAnimation = true;
 
             Font.loadFont(getClass().getResourceAsStream("/fonts/Crackman.otf"), 12);
 
@@ -166,8 +172,8 @@ public class AnimationController {
                 this.blurGame();
             }*/ //TODO : revoir ?
             this.startPause();
-
-            //Affiche le game over
+            this.isInUnstoppableAnimation = true;
+            //Affiche le winscreen
             BorderPane winScreen = new BorderPane();
 
             winScreen.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, CornerRadii.EMPTY, Insets.EMPTY)));
@@ -188,6 +194,7 @@ public class AnimationController {
 
                 gameComponents.getChildren().remove(gameView.getGameRoot());
                 this.stopPause();
+                this.isInUnstoppableAnimation = false;
                 gameComponents.getChildren().remove(winScreen);
                 try {
                     transitionLvl(getNextLevel(this.maze.getLevel()));
