@@ -122,6 +122,9 @@ public enum Ghost implements Critter {
     public boolean isCentered(){
         return (Math.round(this.pos.x()) == this.pos.x()) && (Math.round(this.pos.y()) == this.pos.y());
     }
+    public IntCoordinates toIntCoordinates(){
+        return new IntCoordinates((int)this.pos.x(),(int)this.pos.y());
+    }
 
 
     public RealCoordinates getNextPos(long deltaTns, Direction dir, MazeConfig config){
@@ -134,7 +137,7 @@ public enum Ghost implements Critter {
                             case SOUTH -> RealCoordinates.SOUTH_UNIT;
                             case WEST -> RealCoordinates.WEST_UNIT;
                         }).times(this.getSpeed() * deltaTns * 1E-9));
-                if (!this.isAlive()) {
+                if (!this.isAlive() && (this.toIntCoordinates().equals(new IntCoordinates(config.getGhostHousePos().x(),config.getGhostHousePos().y())) || this.toIntCoordinates().equals(new IntCoordinates((int)config.getGhostHousePos().x(),(int)config.getGhostHousePos().y()-1)))) {
                     return nextPos;
                 }
                 switch (dir) { // Ajustement en fonction des murs, on ne veut pas dépasser un mur
