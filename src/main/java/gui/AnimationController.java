@@ -2,6 +2,7 @@ package gui;
 
 import config.MazeConfig;
 import javafx.animation.*;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -25,6 +26,7 @@ import model.MazeState;
 import java.io.IOException;
 import java.sql.Time;
 import javafx.scene.media.AudioClip;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -34,6 +36,7 @@ import java.util.TimerTask;
  */
 public class AnimationController {
     private List<GraphicsUpdater> graphicsUpdaters;
+    private List<GraphicsUpdater> wallUpdaters;
     private MazeState maze;
     private final Stage primaryStage;
 
@@ -45,9 +48,6 @@ public class AnimationController {
     private final StackPane gameComponents;
     private boolean isPaused = false;
     private boolean isFancy = false;
-
-
-
     private double AppScale;
 
     private boolean hasntAlreadyWon = true; //Aide à gérer les transitions de niveau
@@ -66,7 +66,14 @@ public class AnimationController {
         this.gameView = gameView;
         this.gameComponents = root;
         this.AppScale = AppScale;
-        pauseMenu = new PauseMenu(gameView.getMaze(), root);
+        pauseMenu = new PauseMenu(gameView.getMaze(), root,this);
+
+        //Crée la liste des wall à update
+        this.wallUpdaters = new ArrayList<>();
+    }
+
+    public Stage getPrimaryStage() {
+        return primaryStage;
     }
 
     public void setPaused(boolean paused) {
@@ -154,12 +161,16 @@ public class AnimationController {
             layout.setCenter(gameOver);
             gameComponents.getChildren().add(layout);
 
+            final Stage stage = this.primaryStage;
+
             //Ferme le programme 5s après le game over
             Timer timer = new Timer();
             TimerTask task = new TimerTask() { //Infâme mais fonctionnel (voir comment utiliser Timeline)
                 @Override
                 public void run() {
-                    System.exit(0);
+                    Platform.runLater(() -> {
+                        App.restartApplication(stage);
+                    });
                 }
             };
 
@@ -172,9 +183,9 @@ public class AnimationController {
     public void win(){
         try {
             //Démarre une pause
-            if (isFancy){
+            /*if (isFancy){
                 this.blurGame();
-            }
+            }*/ //TODO : revoir ?
             this.startPause();
 
             //Affiche le game over
@@ -191,9 +202,15 @@ public class AnimationController {
             winScreen.setCenter(gameOver);
             gameComponents.getChildren().add(winScreen);
 
-            //Ferme le programme 5s après la win
-            Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(2), event -> {
-                if(this.maze.getLevel() == 2) System.exit(0);
+            CellGraphicsFactory.setFinNiveau(true);
+
+            //Ferme le programme 3s après la win
+            Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(3), event -> {
+                if(this.maze.getLevel() == 2) {
+                    Platform.runLater(() -> {
+                        App.restartApplication(this.primaryStage);
+                    });
+                }
                 gameComponents.getChildren().remove(gameView.getGameRoot());
                 this.stopPause();
                 gameComponents.getChildren().remove(winScreen);
@@ -241,12 +258,18 @@ public class AnimationController {
                         return;
                     }
                     long deltaT = now - animationStart;
-                    deltaT = now - animationStart;
                     maze.update(deltaT);
                     for (GraphicsUpdater updater : graphicsUpdaters) {
                         updater.update();
                     }
                     animationStart = now;
+                }
+                //Ce morceau de boucle permet de faire clignoter les murs à la win d'un niveau
+                if(isFancy){ //Ne s'active que si on est en mode "fancy"
+                    //La non mise à jour de la variable animationStart permet au jeu de ne pas se dérouler (seuls les murs s'animeront)
+                    for(GraphicsUpdater updater : graphicsUpdaters){
+                        updater.update();
+                    }
                 }
             }
         };
@@ -261,7 +284,6 @@ public class AnimationController {
         this.maze = maze;
 
         this.gameView.getGameRoot().getChildren().clear(); //Clear l'ancien panneau de jeu
-
         GameView gameView1 = new GameView(maze, gameView.getGameRoot(), AppScale); //Crée une nouvelle vue de jeu
         this.gameView = gameView1;
         gameView1.getGraphicsUpdaters().add(this.graphicsUpdaters.get(this.graphicsUpdaters.size() - 1)); // Ajout du hud updater

@@ -58,7 +58,6 @@ public record RealCoordinates(double x, double y) {
         return new RealCoordinates(x, (int) Math.ceil(y));
     }
 
-    // Méthode pour calculer la distance entre deux coordonnées réelles
     public RealCoordinates warp(int width, int height) {
         double rx = (x + width) % width;
         double ry = (y + height) % height;

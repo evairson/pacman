@@ -8,6 +8,7 @@ package gui;
  */
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
@@ -86,7 +87,7 @@ public class App extends Application {
         double widthScale = Math.floor(screenBounds.getWidth() / maze.getWidth());///10.0;
         double heightScale = Math.floor(screenBounds.getHeight() / maze.getHeight());///10.0;
 
-        double scale = Math.min((int)widthScale,(int)heightScale);// * 10.0 - 5;
+        double scale = Math.min(/*(int)*/widthScale, /*(int)*/heightScale);// * 10.0 - 5;
 
         //Conteneur de tout ce qui est la vue du jeu (jeu, menu de pause, etc)
         StackPane gameComponents = new StackPane();
@@ -127,5 +128,23 @@ public class App extends Application {
     private void TF2Complete() {
         System.out.println("Erreur de compilation, fichiers manquants...");
         System.exit(42);
+    }
+
+    public static void restartApplication(Stage stage) {
+        try {
+            // Fermer le stage actuel
+            stage.close();
+
+            // Lancer une nouvelle instance de l'application
+            Platform.runLater(() -> {
+                try {
+                    new App().start(new Stage());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

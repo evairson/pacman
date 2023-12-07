@@ -59,9 +59,9 @@ public class MainMenu implements Menu {
         optionsText.setFont(Font.font("Crackman", 45));
         quitText.setFont(Font.font("Crackman", 50));
 
-        setHoverEffect(playText, "yellow", "black");
-        setHoverEffect(optionsText, "blue", "black");
-        setHoverEffect(quitText, "red", "black");
+        setHoverEffect(playText, Color.YELLOW);
+        setHoverEffect(optionsText, Color.BLUE);
+        setHoverEffect(quitText, Color.RED);
         playText.setOnMouseClicked(event -> {
             primaryStage.setScene(gameScene);
             primaryStage.centerOnScreen();
@@ -88,15 +88,6 @@ public class MainMenu implements Menu {
         Scene scene = new Scene(anchorPane);
 
         return scene;
-    }
-    private void setHoverEffect(Text textNode, String color1, String color2) {
-        textNode.setOnMouseEntered(event -> {
-            textNode.setStyle("-fx-fill: " + color1);
-        });
-
-        textNode.setOnMouseExited(event -> {
-            textNode.setStyle("-fx-fill: " + color2);
-        });
     }
 
 }

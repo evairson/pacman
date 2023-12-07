@@ -47,8 +47,8 @@ public class OptionsMenu implements Menu {
         fancyText.setFont(Font.font("Crackman", 50));
         returnText.setFont(Font.font("Crackman", 56));
 
-        setHoverEffect(fancyText, "green", "black");
-        setHoverEffect(returnText, "red", "black");
+        setHoverEffect(fancyText, Color.GREEN);
+        setHoverEffect(returnText, Color.RED);
         fancyText.setOnMouseClicked(event -> {
             if(!isFancy){
                 fancyText.setText("Fancy");
@@ -78,15 +78,6 @@ public class OptionsMenu implements Menu {
         Scene scene = new Scene(anchorPane);
 
         return scene;
-    }
-    private void setHoverEffect(Text textNode, String color1, String color2) {
-        textNode.setOnMouseEntered(event -> {
-            textNode.setStyle("-fx-fill: " + color1);
-        });
-
-        textNode.setOnMouseExited(event -> {
-            textNode.setStyle("-fx-fill: " + color2);
-        });
     }
 
 }

@@ -14,19 +14,19 @@ import config.MazeConfig;
 import geometry.IntCoordinates;
 import geometry.RealCoordinates;
 import gui.AnimationController;
-
 import gui.CellGraphicsFactory;
 import model.Items.*;
-
-import java.sql.SQLOutput;
-import java.util.Arrays;
+import model.Items.Energizer;
+import model.Items.FakeEnergizer;
+import model.Items.Item;
 import java.util.List;
 import java.util.Map;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.io.PrintWriter;
-
 import static model.Ghost.*;
 
 public final class MazeState {
@@ -173,108 +173,107 @@ public final class MazeState {
             }
         }
         if (allDotsEaten() && animationController.hasntAlreadyWon()) {
-            //System.out.println("caca"); ?????????????????
             this.resetItems();
+            CellGraphicsFactory.setFinNiveau(true);
+            Timer timer = new Timer();
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    CellGraphicsFactory.setFinNiveau(false);
+
+                    timer.cancel();
+                }
+            }, 3000);
             if (level == 2) playerWin();
             animationController.setHasntAlreadyWon(false);
             animationController.win();
         }
     }
 
-        public int getHighScore () {
-            try {
-                var scanner = new Scanner(new File(System.getProperty("user.dir") + "/src/main/resources/highscore.txt"));
-                return scanner.nextInt();
-            } catch (FileNotFoundException e) {
-                return -1;
+    public int getHighScore () {
+        try {
+            var scanner = new Scanner(new File(System.getProperty("user.dir") + "/src/main/resources/highscore.txt"));
+            return scanner.nextInt();
+        } catch (FileNotFoundException e) {
+            return -1;
+        }
+    }
+
+    public void setHighScore (int score){
+        try {
+            var writer = new PrintWriter(new File(System.getProperty("user.dir") + "/src/main/resources/highscore.txt"));
+            writer.println(score);
+            writer.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void addScore ( int increment){
+        score += increment;
+    }
+
+    private void playerLost() { //le joueur a perdu au moment où il n'a plus de vie
+        // FIXME: this should be displayed in the JavaFX view, not in the console. A game over screen would be nice too.
+        lives--;
+        if (lives == 0) {
+            if (score > getHighScore()) {
+                setHighScore(score);
             }
+            animationController.gameOver();
         }
+        resetCritters();
+    }
 
-        public void setHighScore (int score){
-            try {
-                var writer = new PrintWriter(new File(System.getProperty("user.dir") + "/src/main/resources/highscore.txt"));
-                writer.println(score);
-                writer.close();
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-        }
+    private void playerWin () {
+        animationController.win();
+    }
 
-        private void addScore ( int increment){
-            score += increment;
-            displayScore();
-        }
+    private void resetCritter (Critter critter){
+        critter.setDirection(Direction.NONE);
+        critter.setPos(initialPos.get(critter));
+    }
 
-        private void displayScore() {
-            // FIXME: this should be displayed in the JavaFX view, not in the console
-        }
+    private void resetCritters () {
+        for (Critter critter : critters) resetCritter(critter);
+    }
 
-        private void playerLost() { //le joueur a perdu au moment où il n'a plus de vie
-            // FIXME: this should be displayed in the JavaFX view, not in the console. A game over screen would be nice too.
-            lives--;
-            if (lives == 0) {
-                if (score > getHighScore()) {
-                    setHighScore(score);
-                }
-                System.exit(0);
-                animationController.gameOver();
-            }
-            //if (!PacMan.INSTANCE.isFakeEnergized()){
-            resetCritters();
-            //}
+    public MazeConfig getConfig () {
+        return config;
+    }
 
-        }
+    public boolean getGridState (IntCoordinates pos){
+        return gridState[pos.y()][pos.x()];
+    }
 
-        private void playerWin () {
-            animationController.win();
-        }
-
-        private void resetCritter (Critter critter){
-            critter.setDirection(Direction.NONE);
-            critter.setPos(initialPos.get(critter));
-        }
-
-        private void resetCritters () {
-            for (Critter critter : critters) resetCritter(critter);
-        }
-
-        public MazeConfig getConfig () {
-            return config;
-        }
-
-        public boolean getGridState (IntCoordinates pos){
-            return gridState[pos.y()][pos.x()];
-        }
-
-        public boolean allDotsEaten () {
-            for (boolean[] row : gridState) {
-                for (boolean cell : row) {
-                    if (!cell) {
-                        return false;
-                    }
+    public boolean allDotsEaten () {
+        for (boolean[] row : gridState) {
+            for (boolean cell : row) {
+                if (!cell) {
+                    return false;
                 }
             }
-            return true;
         }
+        return true;
+    }
 
-        public boolean[][] initGridState() {
-            boolean[][] gridState = new boolean[height][width];
-            for (int i = 0; i < height; i++) {
-                for (int j = 0; j < width; j++) {
-                    if (config.getCell(new IntCoordinates(j, i)).initialItem().getClass().equals(Item.class)) {
-                        gridState[i][j] = true;
-                    }
+    public boolean[][] initGridState() {
+        boolean[][] gridState = new boolean[height][width];
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                if (config.getCell(new IntCoordinates(j, i)).initialItem().getClass().equals(Item.class)) {
+                    gridState[i][j] = true;
                 }
             }
-            return gridState;
         }
+        return gridState;
+    }
 
-        public Inventory getInventory(){
+    public Inventory getInventory(){
         return PacMan.INSTANCE.getInventory();
     }
 
     public void resetItems(){
         this.config.resetItems();
     }
-
 }
