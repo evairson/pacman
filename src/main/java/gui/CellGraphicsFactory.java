@@ -20,6 +20,7 @@ import model.Items.Item;
 import model.Items.ItemTest;
 import model.MazeState;
 import model.PacMan;
+import model.Items.ItemBouleNeige;
 import model.Items.Dot;
 import model.Items.Energizer;
 import model.Items.FakeEnergizer;
@@ -138,6 +139,7 @@ public class CellGraphicsFactory {
         group.setTranslateX(pos.x()*scale);
         group.setTranslateY(pos.y()*scale);
         Cell cell = state.getConfig().getCell(pos);
+        double taille = scale;
 
         // creer les dots
         Circle dot = new Circle();
@@ -145,22 +147,27 @@ public class CellGraphicsFactory {
 
         double radius =0;
         if(cell.initialItem().getClass() == Dot.class)  radius = scale/20;
-        if((cell.initialItem() instanceof Energizer) || (cell.initialItem() instanceof ItemTest) || (cell.initialItem() instanceof FakeEnergizer)) radius = scale/7;
+        if((cell.initialItem() instanceof Energizer) || (cell.initialItem() instanceof ItemTest)) radius = scale/7;
         dot.setRadius(radius);
 
         dot.setCenterX(scale/2);
         dot.setCenterY(scale/2);
 
-        if(cell.initialItem() instanceof ItemTest) { dot.setFill(Color.RED); }
-        else if (cell.initialItem() instanceof FakeEnergizer) { dot.setFill(Color.GREEN); }
-        else { dot.setFill(Color.WHITE); }
 
-        double taille = scale;
-        choixMur(cell, taille, group);
+        dot.setFill(Color.WHITE);
         
+        choixMur(cell, taille, group);
 
+        
+        
+        if(cell.initialItem() instanceof FakeEnergizer || (cell.initialItem() instanceof ItemBouleNeige)){
+            cell.initialItem().setImage(new ImageView(new Image(cell.initialItem().getUrl(), taille/2, taille/2, true, false))); 
+            group.getChildren().add(cell.initialItem().getImage());
+            cell.initialItem().getImage().setTranslateX(scale/4);
+            cell.initialItem().getImage().setTranslateY(scale/4);
+        }
 
-        if((cell.initialItem() instanceof Energizer) || (cell.initialItem() instanceof ItemTest) || (cell.initialItem() instanceof FakeEnergizer)){
+        if((cell.initialItem() instanceof Energizer) || (cell.initialItem() instanceof ItemTest)){
             ScaleTransition blink = new ScaleTransition(Duration.millis(600), dot);
             blink.setFromX(1);
             blink.setFromY(1);
@@ -176,6 +183,8 @@ public class CellGraphicsFactory {
             long time = System.currentTimeMillis();
             int etatMur =1;
             boolean[] typeMur = typeMur(cell);
+            
+
 
             @Override
             public void update() {
@@ -204,9 +213,9 @@ public class CellGraphicsFactory {
                     }
                 }
 
-                //afficher les points si pacman pas passé dessus
-                dot.setVisible(!state.getGridState(pos));
-
+                
+                
+                
                 if (cell.initialItem() instanceof Energizer){
                     setEnergized((Energizer)cell.initialItem());
                 }
@@ -217,9 +226,18 @@ public class CellGraphicsFactory {
                     setFakeEnergized((FakeEnergizer)cell.initialItem());
                 }
                 for (Node n : group.getChildren()){
-                    n.setVisible(!ItemTest.isOneActive());
+                    if(n!= cell.initialItem().getImage()){
+                        n.setVisible(!ItemTest.isOneActive());
+                    }
                 }
+                //afficher les points si pacman pas passé dessus
                 dot.setVisible(!state.getGridState(pos));
+
+                if((cell.initialItem() instanceof FakeEnergizer || (cell.initialItem() instanceof ItemBouleNeige)) && state.getGridState(pos)){
+                    group.getChildren().remove(cell.initialItem().getImage());
+                }
+
+                
             }
 
             @Override

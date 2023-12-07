@@ -13,6 +13,7 @@ public class FakeEnergizer extends Item {
         this.energized=energized;
         this.special=special;
         this.frameEnergizer=frameEnergizer;
+        url = "FakeGhost.jpg";
     } 
 
     public boolean isSpecial(){
