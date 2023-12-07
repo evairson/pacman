@@ -56,7 +56,7 @@ public class PinkyAI {
         }
     }
 
-    public static Direction getDirection(MazeConfig config, IntCoordinates pacPos, IntCoordinates ghostPos, Direction pacDir){
+    public static Direction getDirection(MazeConfig config, IntCoordinates pacPos, IntCoordinates ghostPos, Direction pacDir){ //Voir commentaire dans BlinkyAI.java
         if (!Ghost.PINKY.isAlive()) {
             if (Ghost.PINKY.getAlreadyArrivedAtHome()){
                 if (ghostPos.equals(new IntCoordinates(config.getGhostHousePos().x(),config.getGhostHousePos().y()-1))){

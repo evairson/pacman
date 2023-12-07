@@ -137,26 +137,20 @@ public final class MazeState {
                     //
                     //
                     //
-                    // resetCritter(critter);
                     if (((Ghost) critter).isAlive()){
-                        /*Timer timer = new Timer();
-                        TimerTask comeBackToLife = new TimerTask() {
-                            @Override
-                            public void run() {
-                                ((Ghost) critter).setIsAlive(true);
-                                //((Ghost) critter).setSpeed(critter.getSpeed()/1.5);
-                                timer.cancel();
-                            }
-                        };*/
                         ((Ghost) critter).setIsAlive(false);
                         ((Ghost) critter).setSpeed(critter.getSpeed()*1.5);
-                        //timer.schedule(comeBackToLife,20000);
+                        return;
                     }else {
-                        ((Ghost) critter).setIsAlive(false);
+                        return;
                     }
                 } else {
-                    playerLost(); 
-                    return;
+                    if (((Ghost) critter).isAlive()){
+                        playerLost();
+                        return;
+                    }else{
+                        return;
+                    }
                 }
             }
         }

@@ -13,7 +13,7 @@ import java.util.Random;
 
 public class InkyAI { //TODO : mettre des commentaires
 
-    public static Direction getDirection(MazeConfig config, IntCoordinates pacPos, IntCoordinates ghostPos, Direction pacDir){
+    public static Direction getDirection(MazeConfig config, IntCoordinates pacPos, IntCoordinates ghostPos, Direction pacDir){ //Voir commentaire dans BlinkyAI.java
         if (!Ghost.INKY.isAlive()) {
             if (Ghost.INKY.getAlreadyArrivedAtHome()){
                 if (ghostPos.equals(new IntCoordinates(config.getGhostHousePos().x(),config.getGhostHousePos().y()-1))){

@@ -29,7 +29,7 @@ public class ClydeAI{
         return !config.getCell(intC).isPipe();
     }
 
-    public static Direction getDirection(MazeConfig config, IntCoordinates intC, Direction defaultDir,IntCoordinates ghostPos) {
+    public static Direction getDirection(MazeConfig config, IntCoordinates intC, Direction defaultDir,IntCoordinates ghostPos) { //Voir commentaire dans BlinkyAI.java
         if (!Ghost.CLYDE.isAlive()) {
             if (Ghost.CLYDE.getAlreadyArrivedAtHome()){
                 if (ghostPos.equals(new IntCoordinates(config.getGhostHousePos().x(),config.getGhostHousePos().y()-1))){
