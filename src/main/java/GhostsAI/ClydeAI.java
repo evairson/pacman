@@ -3,6 +3,7 @@ package GhostsAI;
 import config.Cell;
 import geometry.AStar;
 import geometry.IntCoordinates;
+import geometry.RealCoordinates;
 import model.Direction;
 import model.Ghost;
 
@@ -31,33 +32,16 @@ public class ClydeAI{
 
     public static Direction getDirection(MazeConfig config, IntCoordinates intC, Direction defaultDir,IntCoordinates ghostPos) { //Voir commentaire dans BlinkyAI.java
         if (!Ghost.CLYDE.isAlive()) {
-            if (Ghost.CLYDE.getAlreadyArrivedAtHome()){
-                if (ghostPos.equals(new IntCoordinates(config.getGhostHousePos().x(),config.getGhostHousePos().y()-1))){
-                    Ghost.CLYDE.setIsAlive(true);
-                    Ghost.CLYDE.setAlreadyArrivedAtHome(false);
-                    Ghost.CLYDE.setSpeed(Ghost.CLYDE.getSpeed()/1.5);
-                    return getDirection(config,intC,defaultDir,ghostPos);
-                }else{
-                    ArrayList<IntCoordinates> path = AStar.shortestPath(ghostPos, new IntCoordinates(config.getGhostHousePos().x(),config.getGhostHousePos().y()-1), config);
-                    int pathlen = path.size();
-                    IntCoordinates nextPos = path.get(pathlen-1);
-                    return BlinkyAI.whichDir(ghostPos, nextPos);
-
-                }
-            }
-            if (intC.equals(config.getGhostHousePos())){
-                Ghost.CLYDE.setAlreadyArrivedAtHome(true);
+            if (ghostPos.equals(new IntCoordinates(config.getGhostHousePos().x(),config.getGhostHousePos().y()-1))){
+                Ghost.CLYDE.setPos(new RealCoordinates(config.getGhostHousePos().x(),config.getGhostHousePos().y()));
+                Ghost.CLYDE.setSpeed(Ghost.CLYDE.getSpeed()/1.5);
+                Ghost.CLYDE.setIsAlive(true);
                 return Direction.NORTH;
-            } else if (ghostPos.equals(new IntCoordinates(config.getGhostHousePos().x(),config.getGhostHousePos().y()-1))) {
-                return Direction.SOUTH;
-
-            } else{
+            }else{
                 ArrayList<IntCoordinates> path = AStar.shortestPath(ghostPos, new IntCoordinates(config.getGhostHousePos().x(),config.getGhostHousePos().y()-1), config);
                 int pathlen = path.size();
                 IntCoordinates nextPos = path.get(pathlen-1);
                 return BlinkyAI.whichDir(ghostPos, nextPos);
-
-
             }
         } else {
             if (isInNode(config, intC)) {

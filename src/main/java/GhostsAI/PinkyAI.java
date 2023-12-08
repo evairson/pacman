@@ -58,27 +58,12 @@ public class PinkyAI {
 
     public static Direction getDirection(MazeConfig config, IntCoordinates pacPos, IntCoordinates ghostPos, Direction pacDir){ //Voir commentaire dans BlinkyAI.java
         if (!Ghost.PINKY.isAlive()) {
-            if (Ghost.PINKY.getAlreadyArrivedAtHome()){
-                if (ghostPos.equals(new IntCoordinates(config.getGhostHousePos().x(),config.getGhostHousePos().y()-1))){
-                    Ghost.PINKY.setIsAlive(true);
-                    Ghost.PINKY.setAlreadyArrivedAtHome(false);
-                    Ghost.PINKY.setSpeed(Ghost.PINKY.getSpeed()/1.5);
-                    return getDirection(config,pacPos,ghostPos,pacDir);
-                }else{
-                    ArrayList<IntCoordinates> path = AStar.shortestPath(ghostPos, new IntCoordinates(config.getGhostHousePos().x(),config.getGhostHousePos().y()-1), config);
-                    int pathlen = path.size();
-                    IntCoordinates nextPos = path.get(pathlen-1);
-                    return BlinkyAI.whichDir(ghostPos, nextPos);
-
-                }
-            }
-            if (ghostPos.equals(config.getGhostHousePos())){
-                Ghost.PINKY.setAlreadyArrivedAtHome(true);
+            if (ghostPos.equals(new IntCoordinates(config.getGhostHousePos().x(),config.getGhostHousePos().y()-1))){
+                Ghost.PINKY.setPos(new RealCoordinates(config.getGhostHousePos().x(),config.getGhostHousePos().y()));
+                Ghost.PINKY.setSpeed(Ghost.PINKY.getSpeed()/1.5);
+                Ghost.PINKY.setIsAlive(true);
                 return Direction.NORTH;
-            } else if (ghostPos.equals(new IntCoordinates(config.getGhostHousePos().x(),config.getGhostHousePos().y()-1))) {
-                return Direction.SOUTH;
-
-            } else{
+            }else{
                 ArrayList<IntCoordinates> path = AStar.shortestPath(ghostPos, new IntCoordinates(config.getGhostHousePos().x(),config.getGhostHousePos().y()-1), config);
                 int pathlen = path.size();
                 IntCoordinates nextPos = path.get(pathlen-1);
