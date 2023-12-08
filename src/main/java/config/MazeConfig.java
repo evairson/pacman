@@ -8,10 +8,15 @@ import model.Items.FakeEnergizer;
 import model.Items.Item;
 import model.Items.ItemTest;
 import java.io.File;
+import java.io.InputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.nio.file.Paths;
 import java.nio.file.Files;
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 
 public class MazeConfig {
 
@@ -77,8 +82,8 @@ public class MazeConfig {
      *  On return le MazeConfig construit par le tableau de cellules et les IntCoordinates
      * */
 
-    public static MazeConfig txtToMaze(String filePath) throws IOException {
-        List<String> lines = Files.readAllLines(Paths.get(filePath));
+    public static MazeConfig txtToMaze(File file) throws IOException {
+        List<String> lines = Files.readAllLines(file.toPath());
         int height = lines.size()-5; // les 5 dernières lignes du .txt servent aux positions des personnages
         int width = 2 * ((lines.get(0).length()-1)/4) + 1; // les cases du tableau sont alternativement de largeur 1 et 3
         String[] linesArray = lines.toArray(new String[0]);
@@ -175,15 +180,16 @@ public class MazeConfig {
      *
      */
         public static MazeConfig makeGenericExample(int x) throws IOException {
-        String currentDirectory = System.getProperty("user.dir"); // Obtient le répertoire de travail actuel
-        String filePath = currentDirectory + "/src/main/resources/testMap" + x + ".txt"; // Chemin complet vers le fichier
-//             String filePath = currentDirectory + "/src/main/resources/RealTestMap" + x + ".txt";
-        return txtToMaze(filePath);
+            try {
+            File file = new File(Objects.requireNonNull(MazeConfig.class.getResource("testmap" + x + ".txt")).toURI());
+                return txtToMaze(file);}
+            catch (URISyntaxException | NullPointerException e) { e.printStackTrace(); }
+            return null;
     }
 
     public static boolean isGameComplete() {
-        File file = new File("src/main/resources/pacman/.coconut.jpg");
-        return file.exists();
+        URL file = MazeConfig.class.getResource(".coconut.jpg");
+        return file != null;
     }
 
     public void resetItems(){

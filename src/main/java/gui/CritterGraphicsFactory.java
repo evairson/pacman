@@ -3,15 +3,12 @@ import geometry.RealCoordinates;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.media.AudioClip;
 import model.Critter;
 import model.Ghost;
 import model.PacMan;
 import model.Items.BouleNeige;
 import model.Direction;
 import java.lang.Math;
-import gui.App;
-
 
 
 /**
@@ -60,7 +57,7 @@ public final class CritterGraphicsFactory {
         String url;
         //primaryStage.addKeyListener(new EspaceClickListener());
         if(critter.isFakeEnergized() /*&& clickListener.isEspaceClique()*/ ){
-            url = "FakeGhost.jpg";
+            url = "model/Items/FakeGhost.jpg";
             return url;
         }
         else {
@@ -137,7 +134,7 @@ public final class CritterGraphicsFactory {
         double taille = scale * size;
 
         String url = (critter instanceof PacMan) ? setImgPacman(critter) :
-                     (critter instanceof BouleNeige) ? "bouleNeige.png" :
+                     (critter instanceof BouleNeige) ? "model/Items/bouleNeige.png" :
                 setImgGhost((Ghost)critter, numGhost, setImgGhostNE);
 
         // chargement de l'image à partir du fichier url

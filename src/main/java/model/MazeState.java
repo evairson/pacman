@@ -16,20 +16,16 @@ import geometry.RealCoordinates;
 import gui.AnimationController;
 import gui.CellGraphicsFactory;
 import model.Items.*;
-import javafx.animation.PauseTransition;
-import javafx.util.Duration;
 import model.Items.BouleNeige;
 import model.Items.Dot;
 import model.Items.Energizer;
 import model.Items.FakeEnergizer;
 import model.Items.Item;
-import java.util.List;
-import java.util.Map;
+
+import java.net.URISyntaxException;
+import java.util.*;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.Scanner;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.io.PrintWriter;
 import static model.Ghost.*;
 
@@ -246,29 +242,29 @@ public final class MazeState {
 
     public int getHighScore () {
         try {
-            var scanner = new Scanner(new File(System.getProperty("user.dir") + "/src/main/resources/highscore.txt"));
+            var scanner = new Scanner(new File(Objects.requireNonNull(MazeState.class.getResource("highscore.txt")).toURI()));
             return scanner.nextInt();
-        } catch (FileNotFoundException e) {
-            return -1;
+        } catch (FileNotFoundException | URISyntaxException e) {
+            e.printStackTrace();
         }
+        return 0;
     }
 
     public void setHighScore (int score){
         try {
-            var writer = new PrintWriter(new File(System.getProperty("user.dir") + "/src/main/resources/highscore.txt"));
+            var writer = new PrintWriter(new File(Objects.requireNonNull(MazeState.class.getResource("highscore.txt")).toURI()));
             writer.println(score);
             writer.close();
-        } catch (FileNotFoundException e) {
+        } catch (FileNotFoundException | URISyntaxException e) {
             e.printStackTrace();
         }
     }
 
-    private void addScore ( int increment){
+    private void addScore (int increment){
         score += increment;
     }
 
     private void playerLost() { //le joueur a perdu au moment où il n'a plus de vie
-        // FIXME: this should be displayed in the JavaFX view, not in the console. A game over screen would be nice too.
         BouleNeige.INSTANCE.detruire();
         lives--;
         if (lives == 0) {

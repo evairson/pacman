@@ -31,8 +31,8 @@ public class HUDGraphicsFactory {
         this.width = width;
         this.scale = scale;
 
-        this.fakeEnergizerSprite = new Image("FakeGhost.jpg", 0.35 * this.scale, 0.35 * this.scale, true, false);
-        this.bouleNeigeSprite = new Image("bouleNeige.png", 0.35 * this.scale, 0.35 * this.scale, true, false);
+        this.fakeEnergizerSprite = new Image("model/Items/FakeGhost.jpg", 0.35 * this.scale, 0.35 * this.scale, true, false);
+        this.bouleNeigeSprite = new Image("model/Items/bouleNeige.png", 0.35 * this.scale, 0.35 * this.scale, true, false);
     }
 
     public Text[] initKeybordIndicators(){
@@ -105,7 +105,7 @@ public class HUDGraphicsFactory {
 
         Group group = new Group();
 
-        Font.loadFont(getClass().getResourceAsStream("/fonts/Crackman.otf"), 20);
+        Font.loadFont(getClass().getResourceAsStream("/gui/Crackman.otf"), 20);
 
         Text scoreTxt = new Text();
         scoreTxt.setFill(Color.WHITE);

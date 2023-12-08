@@ -2,10 +2,11 @@ plugins {
     id 'java'
     id 'application'
     id 'org.openjfx.javafxplugin' version '0.1.0'
+    id 'org.beryx.jlink' version '2.25.0'
 }
 
 group 'fr.u-paris.informatique.cproj'
-version '2.0'
+version '9.0'
 
 repositories {
     mavenCentral()
@@ -25,4 +26,13 @@ javafx {
     modules = [ 'javafx.controls', 'javafx.fxml', 'javafx.media' ]
 }
 
-mainClassName = 'gui.App'
+application {
+    mainClass = 'gui.App'
+//    mainModule = 'pacman'
+}
+
+jlink {
+    launcher {
+        name = 'pacman'
+    }
+}

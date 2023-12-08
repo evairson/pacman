@@ -40,9 +40,9 @@ public class AnimationController {
     private boolean isFancy = false;
     private final double AppScale;
     private boolean hasntAlreadyWon = true; //Aide à gérer les transitions de niveau
-    AudioClip defaultSiren = new AudioClip(getClass().getResource("/audio/assassindelapolice.mp3").toExternalForm());
+//    AudioClip defaultSiren = new AudioClip(getClass().getResource("/audio/assassindelapolice.mp3").toExternalForm());
     private boolean energizedSirenIsPlaying = false;
-    AudioClip energizedSiren = new AudioClip(getClass().getResource("/audio/assassindelapolice2.mp3").toExternalForm());
+//    AudioClip energizedSiren = new AudioClip(getClass().getResource("/audio/assassindelapolice2.mp3").toExternalForm());
 
 
 
@@ -134,7 +134,7 @@ public class AnimationController {
             this.startPause();
             this.isInUnstoppableAnimation = true;
 
-            Font.loadFont(getClass().getResourceAsStream("/fonts/Crackman.otf"), 12);
+            Font.loadFont(AnimationController.class.getResourceAsStream("Crackman.otf"), 12);
 
             //Affiche le game over
             BorderPane layout = new BorderPane();
@@ -177,8 +177,6 @@ public class AnimationController {
             BorderPane winScreen = new BorderPane();
 
             winScreen.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, CornerRadii.EMPTY, Insets.EMPTY)));
-
-            Font.loadFont(getClass().getResourceAsStream("/fonts/Crackman.otf"), 12);
 
             Text gameOver = new Text("YOU WIN");
             gameOver.setFill(Color.GREEN);
@@ -253,6 +251,7 @@ public class AnimationController {
 
     public void transitionLvl(int nextLevel) throws IOException {
         MazeState maze = new MazeState(Objects.requireNonNull(MazeConfig.makeGenericExample(nextLevel))); //Crée une nouvelle mazestate qui correspond à la nouvelle map
+        maze.setScore(this.maze.getScore());
         maze.setAnimationController(this);
         maze.setLevel(nextLevel);
         maze.setScore(this.maze.getScore());
@@ -275,12 +274,12 @@ public class AnimationController {
     // Sound controlling methods
 
     public void ghostEatenSound() {
-        AudioClip eaten = new AudioClip(getClass().getResource("/audio/pacManGhostEaten.mp3").toExternalForm());
+        AudioClip eaten = new AudioClip(AnimationController.class.getResource("pacManGhostEaten.mp3").toExternalForm());
         eaten.play();
     }
 
     public void mainTheme() {
-        AudioClip main = new AudioClip(getClass().getResource("/audio/pacmanThemeOriginal.mp3").toExternalForm());
+        AudioClip main = new AudioClip(AnimationController.class.getResource("pacmanThemeOriginal.mp3").toExternalForm());
         main.play();
     }
 
