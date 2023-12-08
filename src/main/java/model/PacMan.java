@@ -2,32 +2,34 @@ package model;
 
 import config.MazeConfig;
 import geometry.IntCoordinates;
-import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 import config.Cell;
 
 import geometry.RealCoordinates;
+import model.Items.Inventory;
 
 /**
  * Implémente PacMan comme un singleton.
- * TODO : ajouter les fonctionnalités suivantes :
  * 1. Gestion du temps d'énergie : un timer qui se décrémente à chaque tick
  *    et qui désactive l'état énergisé quand il atteint 0.
  *    (voir https://stackoverflow.com/questions/4044726/how-to-set-a-timer-in-java)
  *
+ * 
  */
 public final class PacMan implements Critter {
 
     private RealCoordinates pos;
     private Direction direction = Direction.NONE;
     private Direction nextDir = Direction.NONE;
-    //private final double speed = 2.;
     private boolean energized;
+    public boolean fakeEnergized;
 
+    private final Inventory inventory;
     static final double TPINTERVAL = 0.1;
 
     public PacMan() {
+        this.inventory = new Inventory();
     }
 
     public static final PacMan INSTANCE = new PacMan();
@@ -46,6 +48,14 @@ public final class PacMan implements Critter {
         return isEnergized() ? 3.5 : 3.;
     }
 
+    public void setEnergized(boolean b){
+        this.energized = b;
+    }
+
+    public void setFakeEnergized(boolean b){
+        this.fakeEnergized = b;
+    }
+
     public void setPos(RealCoordinates pos) {
         this.pos = pos;
     }
@@ -56,22 +66,31 @@ public final class PacMan implements Critter {
 
     public boolean isEnergized() {
         return energized;
-    } 
+    }
 
-    public void setEnergized() {
+    public Inventory getInventory(){
+        return this.inventory;
+    }
+
+    public boolean isFakeEnergized(){
+        return this.fakeEnergized;
+    }
+
+    /*
+    public void setEnergized() { //active l'energizer pour un temps limité
         PacMan pacman = this;
         Timer t = new Timer();
         TimerTask task = new TimerTask() {
             public void run() {
                 pacman.energized = false;
-                Ghost.energized = false;
+                Ghost.setAllEnergizedValue(false);
                 t.cancel();
             }
         };
         this.energized = true;
-        Ghost.energized = true;
+        Ghost.setAllEnergizedValue(true);
         t.schedule(task, 10000);
-    }
+    }*/
 
     //Methods
     public RealCoordinates currCellR() {
@@ -109,7 +128,6 @@ public final class PacMan implements Critter {
         RealCoordinates currCell = this.currCellR();
         if (this.isGoingToCenter() && this.getPos().dist(currCell) < TPINTERVAL) {
             this.setPos(currCell);
-//            System.out.println(this.currCellR());
         }
     }
 
@@ -138,32 +156,50 @@ public final class PacMan implements Critter {
                         case EAST -> RealCoordinates.EAST_UNIT;
                         case SOUTH -> RealCoordinates.SOUTH_UNIT;
                         case WEST -> RealCoordinates.WEST_UNIT;}).times(this.getSpeed() * deltaTns * 1E-9));
-            switch(dir){ // Ajustement en fonction des murs, on ne veut pas dépasser un mur
-                case WEST :
-                    if(config.getCell(this.currCellI()).westWall()){
+            switch (dir) { // Ajustement en fonction des murs, on ne veut pas dépasser un mur
+                case WEST -> {
+                    if (config.getCell(this.currCellI()).westWall()) {
                         return new RealCoordinates(Math.max(nextPos.x(), Math.floor(this.getPos().x())), this.getPos().y());
                     } else {
+                        if (nextPos.x()<-0.5) {
+                            nextPos = new RealCoordinates((config.getWidth() - TPINTERVAL),this.getPos().y());
+                        }
                         return nextPos;
                     }
-                case EAST :
-                    if(config.getCell(this.currCellI()).eastWall()){
+                }
+                case EAST -> {
+                    if (config.getCell(this.currCellI()).eastWall()) {
                         return new RealCoordinates(Math.min(nextPos.x(), Math.ceil(this.getPos().x())), this.getPos().y());
                     } else {
+                        if (nextPos.x() > config.getWidth() - TPINTERVAL) {
+                            nextPos = new RealCoordinates((-0.5 + TPINTERVAL),this.getPos().y());
+                        }
                         return nextPos;
                     }
-                case NORTH :
-                    if(config.getCell(this.currCellI()).northWall()){
+                }
+                case NORTH -> {
+                    if (config.getCell(this.currCellI()).northWall()) {
                         return new RealCoordinates(this.getPos().x(), Math.max(nextPos.y(), Math.floor(this.getPos().y())));
                     } else {
+                        if (nextPos.y()<-0.5) {
+                            nextPos = new RealCoordinates(this.getPos().x(),(config.getHeight() - TPINTERVAL));
+                        }
                         return nextPos;
                     }
-                case SOUTH :
-                    if(config.getCell(this.currCellI()).southWall()){
+                }
+                case SOUTH -> {
+                    if (config.getCell(this.currCellI()).southWall()) {
                         return new RealCoordinates(this.getPos().x(), Math.min(nextPos.y(), Math.ceil(this.getPos().y())));
                     } else {
+                        if (nextPos.y() > config.getHeight() - TPINTERVAL) {
+                            nextPos = new RealCoordinates(this.getPos().x(),TPINTERVAL);
+                        }
                         return nextPos;
                     }
-                default : return this.getPos();
+                }
+                default -> {
+                    return this.getPos();
+                }
             }
         } else {
             return this.getPos();
