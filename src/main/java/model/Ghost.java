@@ -137,9 +137,9 @@ public enum Ghost implements Critter {
                             case SOUTH -> RealCoordinates.SOUTH_UNIT;
                             case WEST -> RealCoordinates.WEST_UNIT;
                         }).times(this.getSpeed() * deltaTns * 1E-9));
-                if ((this.toIntCoordinates().equals(new IntCoordinates(config.getGhostHousePos().x(),config.getGhostHousePos().y())))) {
+                /*if ((this.toIntCoordinates().equals(new IntCoordinates(config.getGhostHousePos().x(),config.getGhostHousePos().y())))) {
                     return nextPos; //Désactive les murs dans le cas où les fantomes sont morts et qu'ils sont au dessus de la maison des fantomes afin qu'ils puissent y entrer
-                }
+                }*/
                 switch (dir) { // Ajustement en fonction des murs, on ne veut pas dépasser un mur
                     case WEST:
                         if (config.getCell(this.currCellI()).westWall()) {

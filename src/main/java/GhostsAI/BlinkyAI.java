@@ -28,13 +28,12 @@ public class BlinkyAI {
     //Fonction classique commune à toutes les IA : getDirection
     public static Direction getDirection(MazeConfig config, IntCoordinates pacPos, IntCoordinates ghostPos){
         if (!Ghost.BLINKY.isAlive()) {
-            if (ghostPos.equals(new IntCoordinates(config.getGhostHousePos().x(),config.getGhostHousePos().y()-1))){
-                Ghost.BLINKY.setPos(new RealCoordinates(config.getGhostHousePos().x(),config.getGhostHousePos().y()));
+            if (ghostPos.equals(new IntCoordinates(config.getGhostHousePos().x(),config.getGhostHousePos().y()))){
                 Ghost.BLINKY.setSpeed(Ghost.BLINKY.getSpeed()/1.5);
                 Ghost.BLINKY.setIsAlive(true);
                 return Direction.NORTH;
             }else{
-                ArrayList<IntCoordinates> path = AStar.shortestPath(ghostPos, new IntCoordinates(config.getGhostHousePos().x(),config.getGhostHousePos().y()-1), config);
+                ArrayList<IntCoordinates> path = AStar.shortestPath(ghostPos, new IntCoordinates(config.getGhostHousePos().x(),config.getGhostHousePos().y()), config);
                 int pathlen = path.size();
                 IntCoordinates nextPos = path.get(pathlen-1);
                 return whichDir(ghostPos, nextPos);

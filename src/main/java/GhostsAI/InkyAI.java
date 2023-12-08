@@ -15,13 +15,12 @@ public class InkyAI { //TODO : mettre des commentaires
 
     public static Direction getDirection(MazeConfig config, IntCoordinates pacPos, IntCoordinates ghostPos, Direction pacDir){ //Voir commentaire dans BlinkyAI.java
         if (!Ghost.INKY.isAlive()) {
-            if (ghostPos.equals(new IntCoordinates(config.getGhostHousePos().x(),config.getGhostHousePos().y()-1))){
-                Ghost.INKY.setPos(new RealCoordinates(config.getGhostHousePos().x(),config.getGhostHousePos().y()));
+            if (ghostPos.equals(new IntCoordinates(config.getGhostHousePos().x(),config.getGhostHousePos().y()))){
                 Ghost.INKY.setSpeed(Ghost.INKY.getSpeed()/1.5);
                 Ghost.INKY.setIsAlive(true);
                 return Direction.NORTH;
             }else{
-                ArrayList<IntCoordinates> path = AStar.shortestPath(ghostPos, new IntCoordinates(config.getGhostHousePos().x(),config.getGhostHousePos().y()-1), config);
+                ArrayList<IntCoordinates> path = AStar.shortestPath(ghostPos, new IntCoordinates(config.getGhostHousePos().x(),config.getGhostHousePos().y()), config);
                 int pathlen = path.size();
                 IntCoordinates nextPos = path.get(pathlen-1);
                 return BlinkyAI.whichDir(ghostPos, nextPos);
