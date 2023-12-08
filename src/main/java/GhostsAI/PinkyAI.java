@@ -58,33 +58,10 @@ public class PinkyAI {
 
     public static Direction getDirection(MazeConfig config, IntCoordinates pacPos, IntCoordinates ghostPos, Direction pacDir){ //Voir commentaire dans BlinkyAI.java
         if (!Ghost.PINKY.isAlive()) {
-            if (Ghost.PINKY.getAlreadyArrivedAtHome()){
-                if (ghostPos.equals(new IntCoordinates(config.getGhostHousePos().x(),config.getGhostHousePos().y()-1)) || ghostPos.equals(new IntCoordinates(config.getGhostHousePos().x(),config.getGhostHousePos().y()-2))){
-                    Ghost.PINKY.setIsAlive(true);
-                    Ghost.PINKY.setAlreadyArrivedAtHome(false);
-                    Ghost.PINKY.setSpeed(Ghost.PINKY.getSpeed()/2);
-                    return getDirection(config,pacPos,ghostPos,pacDir);
-                }else{
-                    ArrayList<IntCoordinates> path = AStar.shortestPath(ghostPos, new IntCoordinates(config.getGhostHousePos().x(),config.getGhostHousePos().y()-1), config);
-                    int pathlen = path.size();
-                    IntCoordinates nextPos = path.get(pathlen-1);
-                    return BlinkyAI.whichDir(ghostPos, nextPos);
-
-                }
-            }
-            if (ghostPos.equals(config.getGhostHousePos())){
-                Ghost.PINKY.setAlreadyArrivedAtHome(true);
-                return Direction.NORTH;
-            } else if (ghostPos.equals(new IntCoordinates(config.getGhostHousePos().x(),config.getGhostHousePos().y()-1))) {
-                Ghost.PINKY.setPos(new RealCoordinates(config.getGhostHousePos().x(),config.getGhostHousePos().y()));
-                return Direction.NONE;
-
-            } else{
-                ArrayList<IntCoordinates> path = AStar.shortestPath(ghostPos, new IntCoordinates(config.getGhostHousePos().x(),config.getGhostHousePos().y()-1), config);
-                int pathlen = path.size();
-                IntCoordinates nextPos = path.get(pathlen-1);
-                return BlinkyAI.whichDir(ghostPos, nextPos);
-            }
+            ArrayList<IntCoordinates> path = AStar.shortestPath(ghostPos, config.getGhostHousePos(), config);
+            int pathLen = path.size();
+            IntCoordinates nextPos = path.get(pathLen - 1);
+            return BlinkyAI.whichDir(ghostPos, nextPos);
         }else {
             IntCoordinates targetPos = getFrontCell(pacPos, pacDir, config);
             if (((Math.abs(pacPos.x() - ghostPos.x()) <= 2) && (pacPos.y() == ghostPos.y())) || ((Math.abs(pacPos.y() - ghostPos.y()) <= 2) && (pacPos.x() == ghostPos.x()))) {
