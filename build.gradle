@@ -28,7 +28,7 @@ javafx {
 
 application {
     mainClass = 'gui.App'
-    mainModule = 'pacman'
+//    mainModule = 'pacman'
 }
 
 jlink {
