@@ -102,7 +102,7 @@ public final class CritterGraphicsFactory {
 
     public String setImgGhost(Ghost critter, int numghost, String setimgghostNE){
         if (!critter.isAlive()){
-            return "ghost-dead.jpg";
+            return "ghost-dead.png";
         }else {
             if (!critter.isEnergized())
                 return setimgghostNE + getDirectionString(critter) + etatghost + ".png";
