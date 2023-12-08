@@ -22,15 +22,15 @@ public class CritterGraphicsFactoryTest{
             for(String e : etat){
                 facto.setEtatPacman(e);
                 pacman.setDirection(Direction.NORTH);
-                assertEquals(facto.setimgPacman(pacman),"pacman/pacman-haut-"+e+".png");
+                assertEquals(facto.setImgPacman(pacman),"pacman/pacman-haut-"+e+".png");
                 pacman.setDirection(Direction.SOUTH);
-                assertEquals(facto.setimgPacman(pacman),"pacman/pacman-bas-"+e+".png");
+                assertEquals(facto.setImgPacman(pacman),"pacman/pacman-bas-"+e+".png");
                 pacman.setDirection(Direction.WEST);
-                assertEquals(facto.setimgPacman(pacman),"pacman/pacman-gauche-"+e+".png");
+                assertEquals(facto.setImgPacman(pacman),"pacman/pacman-gauche-"+e+".png");
                 pacman.setDirection(Direction.EAST);
-                assertEquals(facto.setimgPacman(pacman),"pacman/pacman-droite-"+e+".png");
+                assertEquals(facto.setImgPacman(pacman),"pacman/pacman-droite-"+e+".png");
                 pacman.setDirection(Direction.NONE);
-                assertEquals(facto.setimgPacman(pacman),"pacman/pacman-rond.png");
+                assertEquals(facto.setImgPacman(pacman),"pacman/pacman-rond.png");
             }
         }    
     }
@@ -43,20 +43,20 @@ public class CritterGraphicsFactoryTest{
             
             for (Ghost critter: critters){
                 critter.setDirection(Direction.NONE);
-                int numGhost = facto.getnumghost(critter);
+                int numGhost = facto.getNumGhost(critter);
             
             for(int j =0; j<2; j++){
                 facto.setEtatghost(j, numGhost);
                 critter.setDirection(Direction.NORTH);
-                assertEquals(facto.setimgghost(critter,numGhost,facto.setimgghostNE(critter)),facto.setimgghostNE(critter)+"haut"+j+".png");
+                assertEquals(facto.setImgGhost(critter,numGhost,facto.setImgGhostNE(critter)),facto.setImgGhostNE(critter)+"haut"+j+".png");
                 critter.setDirection(Direction.SOUTH);
-                assertEquals(facto.setimgghost(critter,numGhost,facto.setimgghostNE(critter)),facto.setimgghostNE(critter)+"bas"+j+".png");
+                assertEquals(facto.setImgGhost(critter,numGhost,facto.setImgGhostNE(critter)),facto.setImgGhostNE(critter)+"bas"+j+".png");
                 critter.setDirection(Direction.WEST);
-                assertEquals(facto.setimgghost(critter,numGhost,facto.setimgghostNE(critter)),facto.setimgghostNE(critter)+"gauche"+j+".png");
+                assertEquals(facto.setImgGhost(critter,numGhost,facto.setImgGhostNE(critter)),facto.setImgGhostNE(critter)+"gauche"+j+".png");
                 critter.setDirection(Direction.EAST);
-                assertEquals(facto.setimgghost(critter,numGhost,facto.setimgghostNE(critter)),facto.setimgghostNE(critter)+"droite"+j+".png");
+                assertEquals(facto.setImgGhost(critter,numGhost,facto.setImgGhostNE(critter)),facto.setImgGhostNE(critter)+"droite"+j+".png");
                 critter.setDirection(Direction.NONE);
-                assertEquals(facto.setimgghost(critter,numGhost,facto.setimgghostNE(critter)),facto.setimgghostNE(critter)+"droite"+j+".png");
+                assertEquals(facto.setImgGhost(critter,numGhost,facto.setImgGhostNE(critter)),facto.setImgGhostNE(critter)+"droite"+j+".png");
             }
         }    
     }

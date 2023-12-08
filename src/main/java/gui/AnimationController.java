@@ -1,46 +1,65 @@
 package gui;
 
-import javafx.animation.AnimationTimer;
+import config.MazeConfig;
+import javafx.animation.*;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
-import javafx.scene.Scene;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.effect.GaussianBlur;
+import javafx.scene.layout.*;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.CornerRadii;
+import javafx.scene.media.AudioClip;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
+import javafx.util.Duration;
+import model.Ghost;
 import model.MazeState;
+import java.io.IOException;
 
-import java.util.List;
+import java.util.*;
 
 /**
  * Cette classe est responsable de la gestion des événements durant l'animation et de l'animation elle-même.
  */
 public class AnimationController {
-    private final List<GraphicsUpdater> graphicsUpdaters;
-    private final MazeState maze;
+    private List<GraphicsUpdater> graphicsUpdaters;
+    private MazeState maze;
     private final Stage primaryStage;
 
-    private final PacmanController pacmanController;
-
-    private PauseMenu pauseMenu;
+    private final PauseMenu pauseMenu;
 
     private GameView gameView;
+    private final StackPane gameComponents;
     private boolean isPaused = false;
+    private boolean isInUnstoppableAnimation = false;
+    private boolean isFancy = false;
+    private final double AppScale;
+    private boolean hasntAlreadyWon = true; //Aide à gérer les transitions de niveau
+    AudioClip defaultSiren = new AudioClip(getClass().getResource("/audio/assassindelapolice.mp3").toExternalForm());
+    private boolean energizedSirenIsPlaying = false;
+    AudioClip energizedSiren = new AudioClip(getClass().getResource("/audio/assassindelapolice2.mp3").toExternalForm());
 
 
 
-    public AnimationController(List<GraphicsUpdater> graphicsUpdaters, MazeState maze, Stage primaryStage, PacmanController pacmanController, GameView gameView) {
+
+    public AnimationController(List<GraphicsUpdater> graphicsUpdaters, MazeState maze, Stage primaryStage, GameView gameView, StackPane root, double AppScale) {
         this.graphicsUpdaters = graphicsUpdaters;
         this.maze = maze;
         this.primaryStage = primaryStage;
-        this.pacmanController = pacmanController;
         this.gameView = gameView;
-        pauseMenu = new PauseMenu(pacmanController,gameView.getMaze());
+        this.gameComponents = root;
+        this.AppScale = AppScale;
+        pauseMenu = new PauseMenu(gameView.getMaze(), root,this);
+
+    }
+
+    public Stage getPrimaryStage() {
+        return primaryStage;
     }
 
     public void setPaused(boolean paused) {
@@ -52,16 +71,52 @@ public class AnimationController {
     }
 
     public void startPauseMenu(){
-        pauseMenu.startMenu();
+        if (isFancy){
+            blurGame();
+        }
+        pauseMenu.startMenu(isFancy);
+        this.startPause();
     }
     public void stopPauseMenu(){
+        if (isFancy){
+            unBlurGame();
+        }
         pauseMenu.stopMenu();
+        this.stopPause();
+    }
+    public void startPause(){
+        this.pauseScheduled = true;
+        this.setPaused(true);
+    }
+    public void stopPause(){
+        this.playScheduled = true;
+        this.setPaused(false);
     }
 
+    public boolean isInUnstoppableAnimation() {
+        return isInUnstoppableAnimation;
+    }
+
+    public void setFancy(boolean fancy) {
+        isFancy = fancy;
+    }
+
+    public boolean hasntAlreadyWon() {
+        return hasntAlreadyWon;
+    }
+
+    public void setHasntAlreadyWon(boolean hasntAlreadyWon) {
+        this.hasntAlreadyWon = hasntAlreadyWon;
+
+    }
+
+    public void setEnergizedSirenIsPlaying(boolean energizedSirenIsPlaying) {
+        this.energizedSirenIsPlaying = energizedSirenIsPlaying;
+    }
 
     public void blurGame(){
         ColorAdjust adj = new ColorAdjust(0, -0.9, -0.5, 0);
-        GaussianBlur blur = new GaussianBlur(55);
+        GaussianBlur blur = new GaussianBlur(10);
         adj.setInput(blur);
         gameView.getGameRoot().setEffect(adj);
     }
@@ -72,37 +127,83 @@ public class AnimationController {
     public void gameOver(){
         try {
             //Démarre une pause
-            this.startPauseMenu();
-            this.blurGame();
-            this.pauseScheduled = true;
-            this.setPaused(true);
-            pauseMenu.getStage().hide();
+            if (isFancy){ //Ne pas appeler blur car pc pas assez puissant => crash
+                this.blurGame();
+            }
+
+            this.startPause();
+            this.isInUnstoppableAnimation = true;
+
+            Font.loadFont(getClass().getResourceAsStream("/fonts/Crackman.otf"), 12);
 
             //Affiche le game over
-            Stage stage = new Stage();
-            stage.initStyle(StageStyle.TRANSPARENT);
             BorderPane layout = new BorderPane();
-            layout.setMinWidth(pauseMenu.getWidth());
-            layout.setMinHeight(pauseMenu.getHeight());
-            layout.setMaxWidth(pauseMenu.getWidth());
-            layout.setMaxHeight(pauseMenu.getHeight());
 
             layout.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, CornerRadii.EMPTY, Insets.EMPTY)));
 
             Text gameOver = new Text("GAME OVER");
             gameOver.setFill(Color.RED);
-            gameOver.setStyle("-fx-font-size: 50;-fx-font-family: Serif");
+            gameOver.setFont(Font.font("Crackman", 50));
 
             layout.setCenter(gameOver);
+            gameComponents.getChildren().add(layout);
 
-            Scene gameOverScene = new Scene(layout);
-            gameOverScene.setFill(Color.TRANSPARENT);
+            final Stage stage = this.primaryStage;
 
-            stage.setScene(gameOverScene);
-            stage.centerOnScreen();
-            stage.setAlwaysOnTop(true);
-            stage.show();
+            //Ferme le programme 3s après le game over
+            Timer timer = new Timer();
+            TimerTask task = new TimerTask() { //Infâme mais fonctionnel (voir comment utiliser Timeline)
+                @Override
+                public void run() {
+                    Platform.runLater(() -> App.restartApplication(stage));
+                }
+            };
 
+            timer.schedule(task,3000);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+    public void win(){
+        try {
+            //Démarre une pause
+            /*if (isFancy){
+                this.blurGame();
+            }*/ //TODO : revoir ?
+            this.startPause();
+            this.isInUnstoppableAnimation = true;
+            //Affiche le winscreen
+            BorderPane winScreen = new BorderPane();
+
+            winScreen.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, CornerRadii.EMPTY, Insets.EMPTY)));
+
+            Font.loadFont(getClass().getResourceAsStream("/fonts/Crackman.otf"), 12);
+
+            Text gameOver = new Text("YOU WIN");
+            gameOver.setFill(Color.GREEN);
+            gameOver.setFont(Font.font("Crackman", 50));
+
+            winScreen.setCenter(gameOver);
+            gameComponents.getChildren().add(winScreen);
+
+            CellGraphicsFactory.setFinNiveau(true);
+
+            //Ferme le programme 3s après la win
+            Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(3), event -> {
+
+                gameComponents.getChildren().remove(gameView.getGameRoot());
+                this.stopPause();
+                this.isInUnstoppableAnimation = false;
+                gameComponents.getChildren().remove(winScreen);
+                try {
+                    transitionLvl(getNextLevel(this.maze.getLevel()));
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }));
+            timeline.setCycleCount(1);
+            timeline.play();
         }
         catch (Exception e){
             e.printStackTrace();
@@ -121,7 +222,6 @@ public class AnimationController {
 
             long animationStart = 0;
 
-
             @Override
             public void handle(long now) { //La fonction handle est celle appelée à chaque frame du jeu
                 if(pauseScheduled){
@@ -139,15 +239,61 @@ public class AnimationController {
                         return;
                     }
                     long deltaT = now - animationStart;
-                    deltaT = now - animationStart;
                     maze.update(deltaT);
-                    for (GraphicsUpdater updater : graphicsUpdaters) {
-                        updater.update();
-                    }
                     animationStart = now;
+                }
+                //Ce morceau de boucle permet de tout mettre à jour
+                //La non mise à jour de la variable animationStart permet au jeu de ne pas se dérouler (seuls les murs s'animeront)
+                for(GraphicsUpdater updater : graphicsUpdaters){
+                    updater.update();
                 }
             }
         };
-
     }
+
+    public void transitionLvl(int nextLevel) throws IOException {
+        MazeState maze = new MazeState(Objects.requireNonNull(MazeConfig.makeGenericExample(nextLevel))); //Crée une nouvelle mazestate qui correspond à la nouvelle map
+        maze.setAnimationController(this);
+        maze.setLevel(nextLevel);
+        maze.setScore(this.maze.getScore());
+        this.maze = maze;
+
+        this.gameView.getGameRoot().getChildren().clear(); //Clear l'ancien panneau de jeu
+        GameView gameView1 = new GameView(maze, gameView.getGameRoot(), AppScale); //Crée une nouvelle vue de jeu
+        this.gameView = gameView1;
+        gameView1.getGraphicsUpdaters().add(this.graphicsUpdaters.get(this.graphicsUpdaters.size() - 1)); // Ajout du hud updater
+        this.graphicsUpdaters = gameView1.getGraphicsUpdaters();
+        gameComponents.getChildren().add(gameView.getGameRoot()); //Ajoute la nouvelle map à l'affichage
+        Ghost.setAllEnergizedValue(false);
+        // ajout vies
+
+        this.hasntAlreadyWon = true; //Remet le paramètre pour la transition de level
+        setPaused(false);
+        this.unBlurGame();
+    }
+
+    // Sound controlling methods
+
+    public void ghostEatenSound() {
+        AudioClip eaten = new AudioClip(getClass().getResource("/audio/pacManGhostEaten.mp3").toExternalForm());
+        eaten.play();
+    }
+
+    public void mainTheme() {
+        AudioClip main = new AudioClip(getClass().getResource("/audio/pacmanThemeOriginal.mp3").toExternalForm());
+        main.play();
+    }
+
+    public static int getNextLevel(int x){
+        if(x == 3) return 1;
+        else return ++x;
+    }
+    /* C'est à chier pour l'instant
+    public void siren() {
+        if (energizedSirenIsPlaying) {
+            defaultSiren.stop();
+        } else {
+            defaultSiren.play();
+        }
+    } */
 }

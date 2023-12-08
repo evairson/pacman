@@ -2,76 +2,92 @@ package gui;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+
+
+import javafx.animation.AnimationTimer;
+import javafx.event.ActionEvent;
+import javafx.event.Event;
+import javafx.event.EventHandler;
+import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.geometry.Rectangle2D;
+import javafx.scene.Parent;
+
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+
+import javafx.scene.text.Font;
+import javafx.stage.Screen;
+
 import javafx.stage.Stage;
+import javafx.scene.text.Text;
+
 
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-
+import java.io.IOException;
+import java.io.InputStream;
 
 
 public class MainMenu implements Menu {
 
-    public Scene startMenu(Stage primaryStage, Scene gameScene) throws FileNotFoundException {
+    public AnchorPane imageAnchor;
 
-        primaryStage.setFullScreen(true);
-        primaryStage.setFullScreenExitHint("");
+    public Scene startMenu(Stage primaryStage, Scene gameScene, AnimationController animationController, OptionsMenu optionsMenu) throws IOException {
 
-        BorderPane layout = new BorderPane();
+        FXMLLoader loader =  new FXMLLoader(getClass().getResource("/fxml/sample.fxml"));
+        AnchorPane anchorPane = loader.load();
 
-        double width = this.getWidth();
-        double height = this.getHeight();
+        ImageView imageView = (ImageView) anchorPane.lookup("#imageMENU");
 
-        layout.setMinWidth(width);
-        layout.setMinHeight(height);
-        layout.setMaxWidth(width);
-        layout.setMaxHeight(height);
-        layout.setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
+        Font.loadFont(getClass().getResourceAsStream("/fonts/Crackman.otf"), 12);
 
-        Button startButton = new Button("Commencer une nouvelle partie");
-        startButton.setWrapText(true);
-        startButton.setStyle("-fx-font-size: 2em;-fx-border-color: black;-fx-font-family: Serif");
-        startButton.setOnAction(event -> {
-            primaryStage.setFullScreen(false);
+        Text playText = (Text) anchorPane.lookup("#play");
+        Text optionsText = (Text) anchorPane.lookup("#options");
+        Text quitText = (Text) anchorPane.lookup("#quit");
+        playText.setStyle("-fx-font-size: 75");
+        optionsText.setStyle("-fx-font-size: 45");
+        quitText.setStyle("-fx-font-size: 50");
 
+        playText.setFont(Font.font("Crackman", 75));
+        optionsText.setFont(Font.font("Crackman", 45));
+        quitText.setFont(Font.font("Crackman", 50));
+
+        setHoverEffect(playText, Color.YELLOW);
+        setHoverEffect(optionsText, Color.BLUE);
+        setHoverEffect(quitText, Color.RED);
+        playText.setOnMouseClicked(event -> {
             primaryStage.setScene(gameScene);
-
             primaryStage.centerOnScreen();
+            animationController.createAnimationTimer().start();
 
-            primaryStage.show();
+        });
+        optionsText.setOnMouseClicked(event -> {
+            try {
+                primaryStage.setScene(optionsMenu.startMenu(primaryStage,gameScene,animationController,this));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+        quitText.setOnMouseClicked(event -> {
+            System.exit(0);
         });
 
-        Button stopButton = new Button("Quitter");
-        stopButton.setWrapText(true);
-        stopButton.setStyle("-fx-font-size: 2em;-fx-border-color: black;-fx-font-family: Serif");
-        stopButton.setOnAction(event -> System.exit(0));
 
+        imageView.fitHeightProperty().bind(anchorPane.heightProperty());
+        imageView.fitWidthProperty().bind(anchorPane.widthProperty());
 
-        Image logoIMG = new Image(new FileInputStream("src/main/resources/logo.png"),width/4,height/4,true,true);
-        ImageView logo = new ImageView(logoIMG);
-        logo.setPreserveRatio(true);
+        imageView.setPreserveRatio(true);
 
+        Scene scene = new Scene(anchorPane);
 
-        VBox vbox = new VBox();
-        vbox.setSpacing(20);
-        vbox.getChildren().addAll(startButton,stopButton);
-        vbox.setAlignment(Pos.TOP_CENTER);
-
-        VBox vbox2 = new VBox();
-        vbox2.getChildren().add(logo);
-        vbox2.getChildren().add(vbox);
-        vbox2.setPadding(new Insets(250));
-        vbox2.setAlignment(Pos.TOP_CENTER);
-
-        layout.setCenter(vbox2);
-
-
-        return new Scene(layout);
+        return scene;
     }
+
 }
