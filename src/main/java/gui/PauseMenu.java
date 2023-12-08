@@ -4,14 +4,11 @@ package gui;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import model.MazeState;
-import java.awt.*;
-import java.awt.event.KeyEvent;
 
 public class PauseMenu implements Menu{
 
@@ -30,7 +27,7 @@ public class PauseMenu implements Menu{
     public void startMenu(boolean isFancy){
         try{
 
-            Font.loadFont(getClass().getResourceAsStream("/fonts/Crackman.otf"), 12);
+            Font.loadFont(getClass().getResourceAsStream("/gui/Crackman.otf"), 12);
 
             BorderPane layout = new BorderPane();
 

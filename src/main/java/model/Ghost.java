@@ -61,7 +61,7 @@ public enum Ghost implements Critter {
 
     @Override
     public double getSpeed(){
-        if(PacMan.INSTANCE.isEnergized()){
+        if(PacMan.INSTANCE.isEnergized() && this.isAlive()){
             return this.speed * 1.5;
         } else {
             return this.speed;
@@ -209,7 +209,7 @@ public enum Ghost implements Critter {
             else{
                 return this.direction;
             }
-        } else if (energized){
+        } else if (energized && this.alive){
             if (this.isCentered()) {
                 return RunAwayAI.getDirection(config, pacPos, this.currCellI());
             } else {

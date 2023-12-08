@@ -24,6 +24,8 @@ import model.Items.Energizer;
 import model.Items.FakeEnergizer;
 import config.Cell;
 
+import java.util.Objects;
+
 public class CellGraphicsFactory {
     private final double scale;
     public static boolean finNiveau;
@@ -33,7 +35,7 @@ public class CellGraphicsFactory {
     }
 
     public void ImageMur(String url, double taille, double translateX, double translateY, Group group) {
-        ImageView mur = new ImageView(new Image("mur/" + url, taille, taille, true, false));
+        ImageView mur = new ImageView(new Image(Objects.requireNonNull(CellGraphicsFactory.class.getResource(url)).toString(), taille, taille, true, false));
         mur.setTranslateX(translateX);
         mur.setTranslateY(translateY);
         group.getChildren().add(mur);
@@ -168,16 +170,14 @@ public class CellGraphicsFactory {
 
         if ((cell.initialItem() instanceof Energizer) || (cell.initialItem() instanceof ItemTest)) {
 
-            if ((cell.initialItem() instanceof Energizer) || (cell.initialItem() instanceof ItemTest) || (cell.initialItem() instanceof FakeEnergizer)) {
-                ScaleTransition blink = new ScaleTransition(Duration.millis(600), dot);
-                blink.setFromX(1);
-                blink.setFromY(1);
-                blink.setToX(0.6);
-                blink.setToY(0.6);
-                blink.setAutoReverse(true);
-                blink.setCycleCount(Timeline.INDEFINITE);
-                blink.play();
-            }
+            ScaleTransition blink = new ScaleTransition(Duration.millis(600), dot);
+            blink.setFromX(1);
+            blink.setFromY(1);
+            blink.setToX(0.6);
+            blink.setToY(0.6);
+            blink.setAutoReverse(true);
+            blink.setCycleCount(Timeline.INDEFINITE);
+            blink.play();
         }
 
         return new GraphicsUpdater() {
@@ -197,7 +197,7 @@ public class CellGraphicsFactory {
                                     if (typeMur[i]) {
                                         typeMur[i] = false;
                                         ImageView mur = (ImageView) m;
-                                        mur.setImage(new Image("mur/" + (changeImage(i, etatMur)), taille, taille, true, false));
+                                        mur.setImage(new Image(Objects.requireNonNull(CellGraphicsFactory.class.getResource((changeImage(i, etatMur)))).toString(), taille, taille, true, false));
                                         i = 4;
                                     } else i++;
                                 }

@@ -31,6 +31,8 @@ public class BlinkyAI {
             if (ghostPos.equals(new IntCoordinates(config.getGhostHousePos().x(),config.getGhostHousePos().y()))){
                 Ghost.BLINKY.setSpeed(Ghost.BLINKY.getSpeed()/1.5);
                 Ghost.BLINKY.setIsAlive(true);
+                System.out.println("Je suis ici");
+                System.out.println(ghostPos);
                 return Direction.NORTH;
             }else{
                 ArrayList<IntCoordinates> path = AStar.shortestPath(ghostPos, new IntCoordinates(config.getGhostHousePos().x(),config.getGhostHousePos().y()), config);

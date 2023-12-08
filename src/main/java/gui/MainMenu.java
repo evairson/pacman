@@ -1,38 +1,20 @@
 package gui;
 
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 
-
-import javafx.animation.AnimationTimer;
-import javafx.event.ActionEvent;
-import javafx.event.Event;
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.geometry.Rectangle2D;
-import javafx.scene.Parent;
 
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 
 import javafx.scene.text.Font;
-import javafx.stage.Screen;
 
 import javafx.stage.Stage;
 import javafx.scene.text.Text;
 
 
-
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 
 
 public class MainMenu implements Menu {
@@ -41,12 +23,12 @@ public class MainMenu implements Menu {
 
     public Scene startMenu(Stage primaryStage, Scene gameScene, AnimationController animationController, OptionsMenu optionsMenu) throws IOException {
 
-        FXMLLoader loader =  new FXMLLoader(getClass().getResource("/fxml/sample.fxml"));
+        FXMLLoader loader =  new FXMLLoader(MainMenu.class.getResource("/fxml/sample.fxml"));
         AnchorPane anchorPane = loader.load();
 
         ImageView imageView = (ImageView) anchorPane.lookup("#imageMENU");
 
-        Font.loadFont(getClass().getResourceAsStream("/fonts/Crackman.otf"), 12);
+        Font.loadFont(getClass().getResourceAsStream("Crackman.otf"), 12);
 
         Text playText = (Text) anchorPane.lookup("#play");
         Text optionsText = (Text) anchorPane.lookup("#options");

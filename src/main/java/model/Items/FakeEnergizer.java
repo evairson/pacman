@@ -13,7 +13,7 @@ public class FakeEnergizer extends Item {
         super.setCollectable(true);
         this.frameActivity = 0;
         itemList.add(this);
-        this.url = "FakeGhost.jpg";
+        this.url = (FakeEnergizer.class.getResource("FakeGhost.jpg")).toString();
     }
 
     public void setActive(boolean b){
