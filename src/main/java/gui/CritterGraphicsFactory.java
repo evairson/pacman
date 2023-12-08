@@ -9,6 +9,7 @@ import model.PacMan;
 import model.Items.BouleNeige;
 import model.Direction;
 import java.lang.Math;
+import java.util.Objects;
 
 
 /**
@@ -57,15 +58,15 @@ public final class CritterGraphicsFactory {
         String url;
         //primaryStage.addKeyListener(new EspaceClickListener());
         if(critter.isFakeEnergized() /*&& clickListener.isEspaceClique()*/ ){
-            url = "model/Items/FakeGhost.jpg";
+            url = Objects.requireNonNull(CritterGraphicsFactory.class.getResource("FakeGhost.jpg")).toString();
             return url;
         }
         else {
             if(critter.getDirection()==Direction.NONE){
-                url = "pacman/pacman-rond.png";
+                url = Objects.requireNonNull(CritterGraphicsFactory.class.getResource("pacman-rond.png")).toString();
             }
             else{
-                url = "pacman/pacman-"+getDirectionString(critter)+"-"+etatPacman+".png";
+                url = Objects.requireNonNull(CritterGraphicsFactory.class.getResource("pacman-"+getDirectionString(critter)+"-"+etatPacman+".png")).toString();
             }
             return url;
         }
@@ -87,10 +88,10 @@ public final class CritterGraphicsFactory {
     // Choix de l'image en fonction du fantôme (sans la direction)
     public String setImgGhostNE(Critter critter){
         String ghost = switch ((Ghost) critter) {
-            case BLINKY -> "ghost-blinky/ghost-blinky-";
-            case CLYDE -> "ghost-clyde/ghost-clyde-";
-            case INKY -> "ghost-inky/ghost-inky-";
-            case PINKY -> "ghost-pinky/ghost-pinky-";
+            case BLINKY -> "ghost-blinky-";
+            case CLYDE -> "ghost-clyde-";
+            case INKY -> "ghost-inky-";
+            case PINKY -> "ghost-pinky-";
         };
         return ghost;
 
@@ -98,9 +99,9 @@ public final class CritterGraphicsFactory {
 
     public String setImgGhost(Ghost critter, int numghost, String setimgghostNE){
         if(!critter.isEnergized()) 
-        return setimgghostNE+getDirectionString(critter)+etatghost+".png";
+        return Objects.requireNonNull(CritterGraphicsFactory.class.getResource(setimgghostNE+getDirectionString(critter)+etatghost+".png")).toString();
         else {
-            return "ghost-blue"+etatghost+".png";
+            return Objects.requireNonNull(CritterGraphicsFactory.class.getResource("ghost-blue"+etatghost+".png")).toString();
 
         }  
     }
@@ -134,7 +135,7 @@ public final class CritterGraphicsFactory {
         double taille = scale * size;
 
         String url = (critter instanceof PacMan) ? setImgPacman(critter) :
-                     (critter instanceof BouleNeige) ? "model/Items/bouleNeige.png" :
+                     (critter instanceof BouleNeige) ? Objects.requireNonNull(CritterGraphicsFactory.class.getResource("bouleNeige.png")).toString() :
                 setImgGhost((Ghost)critter, numGhost, setImgGhostNE);
 
         // chargement de l'image à partir du fichier url

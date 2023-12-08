@@ -181,7 +181,7 @@ public class MazeConfig {
      */
         public static MazeConfig makeGenericExample(int x) throws IOException {
             try {
-            File file = new File(Objects.requireNonNull(MazeConfig.class.getResource("testmap" + x + ".txt")).toURI());
+            File file = new File(Objects.requireNonNull(MazeConfig.class.getResource("testMap" + x + ".txt")).toURI());
                 return txtToMaze(file);}
             catch (URISyntaxException | NullPointerException e) { e.printStackTrace(); }
             return null;

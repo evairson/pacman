@@ -23,12 +23,12 @@ public class MainMenu implements Menu {
 
     public Scene startMenu(Stage primaryStage, Scene gameScene, AnimationController animationController, OptionsMenu optionsMenu) throws IOException {
 
-        FXMLLoader loader =  new FXMLLoader(getClass().getResource("/fxml/sample.fxml"));
+        FXMLLoader loader =  new FXMLLoader(MainMenu.class.getResource("/fxml/sample.fxml"));
         AnchorPane anchorPane = loader.load();
 
         ImageView imageView = (ImageView) anchorPane.lookup("#imageMENU");
 
-        Font.loadFont(getClass().getResourceAsStream("/gui/Crackman.otf"), 12);
+        Font.loadFont(getClass().getResourceAsStream("Crackman.otf"), 12);
 
         Text playText = (Text) anchorPane.lookup("#play");
         Text optionsText = (Text) anchorPane.lookup("#options");

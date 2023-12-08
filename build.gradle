@@ -6,7 +6,7 @@ plugins {
 }
 
 group 'fr.u-paris.informatique.cproj'
-version '9.0'
+version '42.0'
 
 repositories {
     mavenCentral()
@@ -28,7 +28,7 @@ javafx {
 
 application {
     mainClass = 'gui.App'
-//    mainModule = 'pacman'
+    mainModule = 'pacman'
 }
 
 jlink {
