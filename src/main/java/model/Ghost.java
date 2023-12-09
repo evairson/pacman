@@ -225,8 +225,10 @@ public enum Ghost implements Critter {
                     }
                 case BLINKY:
                     if (this.isCentered()) {
+                        //System.out.println(this.currCellR() +"Je veux les coordonnées réelles");
                         return BlinkyAI.getDirection(config, pacPos, this.currCellI());
                     } else {
+                        //System.out.println(this.currCellI());
                         return this.direction;
                     }
                 case PINKY:

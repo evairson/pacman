@@ -27,15 +27,14 @@ public class BlinkyAI {
 
     //Fonction classique commune à toutes les IA : getDirection
     public static Direction getDirection(MazeConfig config, IntCoordinates pacPos, IntCoordinates ghostPos){
-        if (!Ghost.BLINKY.isAlive()) {
-            if (ghostPos.equals(new IntCoordinates(config.getGhostHousePos().x(),config.getGhostHousePos().y()))){
-                Ghost.BLINKY.setSpeed(Ghost.BLINKY.getSpeed()/1.5);
+        if (!Ghost.BLINKY.isAlive() && ghostPos.equals(Ghost.BLINKY.toIntCoordinates())) {
+            if (ghostPos.equals(config.getGhostHousePos())){
+                Ghost.BLINKY.setSpeed(Ghost.BLINKY.getSpeed()/2);
                 Ghost.BLINKY.setIsAlive(true);
-                System.out.println("Je suis ici");
-                System.out.println(ghostPos);
+                //System.out.println(ghostPos+"Je suis iiiiiiiiiiiiiiiiiiiiiiiiiiiicccccccccccccccccciiiiiiiiiiiiiiiii");
                 return Direction.NORTH;
             }else{
-                ArrayList<IntCoordinates> path = AStar.shortestPath(ghostPos, new IntCoordinates(config.getGhostHousePos().x(),config.getGhostHousePos().y()), config);
+                ArrayList<IntCoordinates> path = AStar.shortestPath(ghostPos, config.getGhostHousePos(), config);
                 int pathlen = path.size();
                 IntCoordinates nextPos = path.get(pathlen-1);
                 return whichDir(ghostPos, nextPos);
@@ -44,6 +43,7 @@ public class BlinkyAI {
             ArrayList<IntCoordinates> path = AStar.shortestPath(ghostPos, pacPos, config);
             int pathLen = path.size();
             IntCoordinates nextPos = path.get(pathLen-1);
+            System.out.println(nextPos);
             return whichDir(ghostPos, nextPos);
         }
     }

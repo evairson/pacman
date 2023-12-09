@@ -190,7 +190,7 @@ public final class MazeState {
                     addScore(10);
                     animationController.ghostEatenSound();
                     ((Ghost) critter).setIsAlive(false);
-                    ((Ghost) critter).setSpeed(critter.getSpeed()*1.5);
+                    ((Ghost) critter).setSpeed(critter.getSpeed()*2);
                 } else {
                     if (((Ghost) critter).isAlive()) {
                         playerLost();
@@ -204,7 +204,7 @@ public final class MazeState {
                     addScore(10);
                     animationController.ghostEatenSound();
                     ((Ghost) critter).setIsAlive(false);
-                    ((Ghost) critter).setSpeed(critter.getSpeed()*1.5);
+                    ((Ghost) critter).setSpeed(critter.getSpeed()*2);
                 }
             }
         }

@@ -57,13 +57,13 @@ public class PinkyAI {
     }
 
     public static Direction getDirection(MazeConfig config, IntCoordinates pacPos, IntCoordinates ghostPos, Direction pacDir){ //Voir commentaire dans BlinkyAI.java
-        if (!Ghost.PINKY.isAlive()) {
-            if (ghostPos.equals(new IntCoordinates(config.getGhostHousePos().x(),config.getGhostHousePos().y()))){
-                Ghost.PINKY.setSpeed(Ghost.PINKY.getSpeed()/1.5);
+        if (!Ghost.PINKY.isAlive() && ghostPos.equals(Ghost.PINKY.toIntCoordinates())) {
+            if (ghostPos.equals(config.getGhostHousePos())){
+                Ghost.PINKY.setSpeed(Ghost.PINKY.getSpeed()/2);
                 Ghost.PINKY.setIsAlive(true);
                 return Direction.NORTH;
             }else{
-                ArrayList<IntCoordinates> path = AStar.shortestPath(ghostPos, new IntCoordinates(config.getGhostHousePos().x(),config.getGhostHousePos().y()), config);
+                ArrayList<IntCoordinates> path = AStar.shortestPath(ghostPos,config.getGhostHousePos(), config);
                 int pathlen = path.size();
                 IntCoordinates nextPos = path.get(pathlen-1);
                 return BlinkyAI.whichDir(ghostPos, nextPos);
