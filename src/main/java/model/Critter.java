@@ -27,20 +27,6 @@ public interface Critter {
 
     //Methods
 
-    /**
-     * @param deltaTNanoSeconds time since the last update in nanoseconds
-     * @return the next position if there is no wall
-     */
-    default RealCoordinates nextPos(long deltaTNanoSeconds) {
-        return getPos().plus((switch (getDirection()) {
-            case NONE -> RealCoordinates.ZERO;
-            case NORTH -> RealCoordinates.NORTH_UNIT;
-            case EAST -> RealCoordinates.EAST_UNIT;
-            case SOUTH -> RealCoordinates.SOUTH_UNIT;
-            case WEST -> RealCoordinates.WEST_UNIT;
-        }).times(getSpeed() * deltaTNanoSeconds * 1E-9));
-    }
-
     RealCoordinates currCellR(); // Renvoie les coordonnées REELLES de la cellule sur laquelle le critter est.
 
     IntCoordinates currCellI(); // Renvoie les coordonnées ENTIERES de la cellule sur la laquelle le critter est.
@@ -52,9 +38,6 @@ public interface Critter {
     boolean isCenteredDir(Direction dir); // Vérifie que le critter est centré sur l'axe sur lequel on ne se déplace pas.
 
     boolean isCentered();
-
-    
-    // Vérifie que le critter est au centre de la cellule.
 
     RealCoordinates getNextPos(long deltaTns, Direction dir, MazeConfig config); // Calcule la position suivante si le critter va dans la direction dir.
 

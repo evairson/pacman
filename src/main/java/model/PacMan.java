@@ -76,22 +76,6 @@ public final class PacMan implements Critter {
         return this.fakeEnergized;
     }
 
-    /*
-    public void setEnergized() { //active l'energizer pour un temps limité
-        PacMan pacman = this;
-        Timer t = new Timer();
-        TimerTask task = new TimerTask() {
-            public void run() {
-                pacman.energized = false;
-                Ghost.setAllEnergizedValue(false);
-                t.cancel();
-            }
-        };
-        this.energized = true;
-        Ghost.setAllEnergizedValue(true);
-        t.schedule(task, 10000);
-    }*/
-
     //Methods
     public RealCoordinates currCellR() {
         return new RealCoordinates(Math.round((float) this.getPos().x()), Math.round((float) this.getPos().y()));

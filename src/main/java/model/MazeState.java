@@ -260,11 +260,11 @@ public final class MazeState {
         }
     }
 
-    private void addScore (int increment){
+    public void addScore(int increment){
         score += increment;
     }
 
-    private void playerLost() { //le joueur a perdu au moment où il n'a plus de vie
+    public void playerLost() { //le joueur a perdu au moment où il n'a plus de vie
         BouleNeige.INSTANCE.detruire();
         lives--;
         if (lives == 0) {
@@ -276,16 +276,12 @@ public final class MazeState {
         resetCritters();
     }
 
-    private void playerWin () {
-        animationController.win();
-    }
-
-    private void resetCritter (Critter critter){
+    public void resetCritter(Critter critter){
         critter.setDirection(Direction.NONE);
         critter.setPos(initialPos.get(critter));
     }
 
-    private void resetCritters () {
+    public void resetCritters() {
         for (Critter critter : critters) resetCritter(critter);
     }
 
@@ -326,5 +322,13 @@ public final class MazeState {
 
     public void resetItems(){
         this.config.resetItems();
+    }
+
+    public AnimationController getAnimationController() {
+        return this.animationController;
+    }
+
+    public void setLives(int i) {
+        this.lives = i;
     }
 }
