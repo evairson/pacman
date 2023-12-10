@@ -8,11 +8,8 @@ import model.Items.FakeEnergizer;
 import model.Items.Item;
 import model.Items.ItemTest;
 import java.io.File;
-import java.io.InputStream;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.nio.file.Paths;
 import java.nio.file.Files;
 import java.io.IOException;
 import java.util.List;
@@ -199,4 +196,22 @@ public class MazeConfig {
             }
         }
     }
+
+    public static MazeConfig mockExample() {
+        return new MazeConfig(new Cell[][]{
+                {Cell.create(true, false, false, false, new Dot()), Cell.create(true, false, true, false, new Dot()), Cell.create(true, false, true, false, new Dot()), Cell.create(true, false, true, false, new Dot()), Cell.create(true, false, true, false, new Dot()), Cell.create(true, false, false, false, new Dot())},
+                {Cell.create(false, true, false, true, new Dot()), Cell.create(true, false, false, true, new Item()), Cell.create(true, false, false, false, new Item()), Cell.create(true, false, false, false, new Item()), Cell.create(true, true, false, false, new Item()), Cell.create(false, true, false, true, new Dot())},
+                {Cell.create(false, true, false, true, new Dot()), Cell.create(false, false, false, true, new Item()), Cell.create(false, false, false, false, new Item()), Cell.create(false, false, false, false, new Item()), Cell.create(false, true, false, false, new Item()), Cell.create(false, true, false, true, new Dot())},
+                {Cell.create(false, true, false, true, new Dot()), Cell.create(false, false, false, true, new Item()), Cell.create(false, false, false, false, new Item()), Cell.create(false, false, false, false, new Item()), Cell.create(false, true, false, false, new Item()), Cell.create(false, true, false, true, new Dot())},
+                {Cell.create(false, true, false, true, new Dot()), Cell.create(false, false, true, true, new Item()), Cell.create(false, false, true, false, new Item()), Cell.create(false, false, true, false, new Item()), Cell.create(false, true, true, false, new Item()), Cell.create(false, true, false, true, new Dot())},
+                {Cell.create(false, false, true, true, new Dot()), Cell.create(true, false, true, false, new Dot()), Cell.create(true, false, true, false, new Dot()), Cell.create(true, false, true, false, new Dot()), Cell.create(true, false, true, false, new Dot()), Cell.create(false, true, true, false, new Dot())}
+        },
+                new IntCoordinates(3, 0),
+                new IntCoordinates(0, 3),
+                new IntCoordinates(3, 5),
+                new IntCoordinates(5, 5),
+                new IntCoordinates(5, 1)
+        );
+    }
+
 }
