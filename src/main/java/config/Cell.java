@@ -14,4 +14,6 @@ public record Cell(boolean northWall, boolean eastWall, boolean southWall, boole
         return (northWall && southWall && !eastWall && !westWall) ||
                 (eastWall && westWall && !northWall && !southWall);
     }
+
+
 }

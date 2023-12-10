@@ -2,6 +2,7 @@ package config;
 
 import geometry.IntCoordinates;
 import model.Items.ItemBouleNeige;
+import model.Direction;
 import model.Items.Dot;
 import model.Items.Energizer;
 import model.Items.FakeEnergizer;
@@ -62,6 +63,33 @@ public class MazeConfig {
 
     public int getHeight() {
         return grid.length;
+    }
+
+    public boolean isWarp(Cell c, Direction d){
+        switch(d){
+            case NORTH : for(Cell cell : grid[0]){
+                            if(cell== c && !c.northWall()){
+                                return true;
+                            }
+                        } break;
+            case SOUTH :  for(Cell cell : grid[grid.length-1]){
+                            if(cell== c && !c.southWall()){
+                                return true;
+                            }
+                        } break;
+            case WEST :  for(int i = 0; i < grid.length; i++){
+                            if(grid[i][0]== c && !c.westWall()){
+                                return true;
+                            }
+                        } break;
+            case EAST :  for(int i = 0; i < grid.length; i++){
+                            if(grid[i][grid[0].length-1]== c && !c.eastWall()){
+                                return true;
+                            }
+                        } break;
+            case NONE : return false;
+        }
+        return false;
     }
 
     public Cell getCell(IntCoordinates pos) {
