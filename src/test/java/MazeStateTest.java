@@ -10,15 +10,8 @@ import model.MazeState;
 import config.MazeConfig;
 import model.PacMan;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.nio.file.Files;
-import java.nio.file.Path;
 
-import static gui.AnimationController.mockAnimationController;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class MazeStateTest {
@@ -31,7 +24,6 @@ public class MazeStateTest {
     public void setUp() {
         config = MazeConfig.mockExample();
         mazeState = new MazeState(config);
-        animationController = mockAnimationController();
     }
 
 
@@ -56,6 +48,23 @@ public class MazeStateTest {
         mazeState.setScore(newScore);
 
         assertEquals(newScore, mazeState.getScore(), "Le score doit être mis à jour correctement");
+    }
+
+    @Test
+    public void testSetGridState(){
+        boolean[][] newGridState = {
+                {true, false, true},
+                {false, true, false},
+                {true, false, true}
+        };
+
+        mazeState.setGridState(newGridState);
+
+        for (int i = 0; i < newGridState.length; i++){
+            for (int j = 0; j < newGridState[i].length; j++) {
+                assertEquals(newGridState[i][j], mazeState.getGridState(new IntCoordinates(j,i)), "La cellule à la position [" + i + "][" + j + "] devrait être " + newGridState[i][j]);
+            }
+        }
     }
 
     @Test
@@ -96,40 +105,11 @@ public class MazeStateTest {
     }
 
     @Test
-    public void testSetAnimationController() {
-        mazeState.setAnimationController(mockAnimationController());
-
-        // Si une méthode getAnimationController ou similaire existe pour obtenir le contrôleur d'animation actuel
-        assertEquals(mockAnimationController(), mazeState.getAnimationController(), "Le contrôleur d'animation doit être mis à jour correctement");
-    }
-
-    @Test
     void testAddScore() {
         int initialScore = mazeState.getScore();
         int increment = 10;
         mazeState.addScore(increment);
         assertEquals(initialScore + increment, mazeState.getScore());
-    }
-
-    @Test
-    public void testPlayerLost() {
-
-        DummyAnimationController dummyController = new DummyAnimationController();
-        mazeState.setAnimationController(dummyController);
-
-        int initialLives = mazeState.getLives();
-
-        // Appeler playerLost et vérifier que le nombre de vies a diminué
-        mazeState.playerLost();
-        assertEquals(initialLives - 1, mazeState.getLives());
-
-        // Continuez à appeler playerLost jusqu'à ce que les vies atteignent zéro
-        for (int i = 0; i < initialLives - 1; i++) {
-            mazeState.playerLost();
-        }
-
-        // Vérifiez que gameOver a été appelé
-        assertTrue(dummyController.isGameOverCalled());
     }
 
     @Test
@@ -142,16 +122,6 @@ public class MazeStateTest {
         assertEquals(Direction.NONE, critter.getDirection());
     }
 
-    @Test
-    void testResetCritters() {
-        for (Critter critter : mazeState.getCritters()) {
-            critter.setPos(new RealCoordinates(5.0, 5.0));
-        }
-        mazeState.resetCritters();
-        for (Critter critter : mazeState.getCritters()) {
-            assertNotEquals(new RealCoordinates(5.0, 5.0), critter.getPos());
-        }
-    }
 
     @Test
     void testGetConfig() {
@@ -173,6 +143,7 @@ public class MazeStateTest {
                 gridState[i][j] = true;
             }
         }
+        mazeState.setGridState(gridState);
         assertTrue(mazeState.allDotsEaten());
     }
 

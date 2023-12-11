@@ -61,6 +61,10 @@ public final class MazeState {
         resetCritters();
     }
 
+    public void setGridState(boolean[][] gridState) {
+        this.gridState = gridState;
+    }
+
     public List<Critter> getCritters() {
         return critters;
     }
