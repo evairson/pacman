@@ -11,6 +11,7 @@ package model;
  */
 
 import config.MazeConfig;
+import java.util.Map;
 import geometry.IntCoordinates;
 import geometry.RealCoordinates;
 import gui.AnimationController;
@@ -21,7 +22,6 @@ import model.Items.Dot;
 import model.Items.Energizer;
 import model.Items.FakeEnergizer;
 import model.Items.Item;
-
 import java.net.URISyntaxException;
 import java.util.*;
 import java.io.File;
@@ -148,6 +148,8 @@ public final class MazeState {
                     }
                 }
             }
+
+            
         }
 
         // FIXME Pac-Man rules should somehow be in Pacman class

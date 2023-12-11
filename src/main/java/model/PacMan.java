@@ -22,9 +22,8 @@ public final class PacMan implements Critter {
     private RealCoordinates pos;
     private Direction direction = Direction.NONE;
     private Direction nextDir = Direction.NONE;
-    private boolean energized;
+    private boolean energized; //FIXME : remettre a false
     public boolean fakeEnergized;
-
     private final Inventory inventory;
     static final double TPINTERVAL = 0.1;
 

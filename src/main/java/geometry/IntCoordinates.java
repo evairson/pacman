@@ -11,6 +11,10 @@ public record IntCoordinates(int x, int y) {
     public boolean equals(IntCoordinates coordinates){
         return (this.x == coordinates.x) && (this.y == coordinates.y);
     }
+
+    public RealCoordinates round_v2(){
+        return new RealCoordinates((double) this.x(), (double) this.y());
+    }
 }
 
 
