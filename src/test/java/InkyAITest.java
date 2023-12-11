@@ -30,9 +30,20 @@ public class InkyAITest {
 
         assertTrue(possibleDirections.contains(direction));
 
+        IntCoordinates ghostBlin = new IntCoordinates(0,4);
+        IntCoordinates ghostPink = new IntCoordinates(0,2);
+
         // Test si la direction renvoyée correspond à celle de Blinky ou Pinky dans certains cas
-        Direction directionBlinky = BlinkyAI.getDirection(config, pacPos, ghostPos);
-        Direction directionPinky = PinkyAI.getDirection(config, pacPos, ghostPos, pacDir);
-        assertTrue(direction.equals(directionBlinky) || direction.equals(directionPinky));
+        Direction directionBlinky = BlinkyAI.getDirection(config, pacPos, ghostBlin);
+        Direction finalDir;
+        switch(directionBlinky){
+            case NORTH -> { finalDir = Direction.SOUTH; }
+            case SOUTH -> { finalDir = Direction.NORTH; }
+            case WEST -> { finalDir = Direction.EAST; }
+            case EAST -> { finalDir = Direction.WEST; }
+            default -> { finalDir = Direction.NONE; }
+        }
+        Direction directionPinky = PinkyAI.getDirection(config, pacPos, ghostPink, pacDir);
+        assertTrue(direction.equals(finalDir) || direction.equals(directionPinky));
     }
 }
