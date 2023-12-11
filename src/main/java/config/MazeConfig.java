@@ -1,16 +1,23 @@
 package config;
 
 import geometry.IntCoordinates;
+import model.Items.ItemBouleNeige;
+import model.Items.Dot;
+import model.Items.Energizer;
+import model.Items.FakeEnergizer;
+import model.Items.Item;
+import model.Items.ItemTest;
+import java.io.File;
+import java.io.InputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.nio.file.Paths;
 import java.nio.file.Files;
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 
-import static config.Cell.*;
-import static config.Cell.Content.*;
-
-
-// tutur : la classe MazeConfig
 public class MazeConfig {
 
     private final Cell[][] grid;
@@ -20,9 +27,7 @@ public class MazeConfig {
         this.grid = new Cell[grid.length][];
         for (int i = 0; i < grid.length; i++) {
             this.grid[i] = new Cell[grid[i].length];
-            if (grid[i].length >= 0) {
-                System.arraycopy(grid[i], 0, this.grid[i], 0, grid[i].length);
-            }
+            System.arraycopy(grid[i], 0, this.grid[i], 0, grid[i].length);
         }
         this.pacManPos = pacManPos;
         this.blinkyPos = blinkyPos;
@@ -77,8 +82,8 @@ public class MazeConfig {
      *  On return le MazeConfig construit par le tableau de cellules et les IntCoordinates
      * */
 
-    public static MazeConfig txtToMaze(String filePath) throws IOException {
-        List<String> lines = Files.readAllLines(Paths.get(filePath));
+    public static MazeConfig txtToMaze(File file) throws IOException {
+        List<String> lines = Files.readAllLines(file.toPath());
         int height = lines.size()-5; // les 5 dernières lignes du .txt servent aux positions des personnages
         int width = 2 * ((lines.get(0).length()-1)/4) + 1; // les cases du tableau sont alternativement de largeur 1 et 3
         String[] linesArray = lines.toArray(new String[0]);
@@ -106,7 +111,7 @@ public class MazeConfig {
     /** stringToCell prend en entrée un tableau de String "lab" contenant les données des murs et contenus d'un labyrinthe
      *  renvoie le tableau de cellules "grid" correspondant à ce labyrinthe
      *
-     *  Les indices chelous de la double boucle for sont expliqués par la manière dont on va parcourir le tableau :
+     *  Les indices de la double boucle for sont expliqués par la manière dont on va parcourir le tableau :
      *      -les cases d'indice [pair][pair] de lab contiennent uniquement des coins '+'
      *      -les cases d'indice [pair][impair] et [impair][pair] contiennent les murs
      *      -les cases d'indice [impair][impair] contiennent le contenu d'une cellule
@@ -120,7 +125,12 @@ public class MazeConfig {
         for (int i = 1; i < lab.length; i+=2) {
             for (int j = 1; j < lab[0].length; j+=2) {
                 grid[i/2][j/2] = Cell.create(lab[i-1][j].equals("---"),lab[i][j+1].equals("|"),lab[i+1][j].equals("---"),
-                        lab[i][j-1].equals("|"),(lab[i][j].equals(" . "))? DOT : ((lab[i][j].equals(" E "))? ENERGIZER : NOTHING));
+                        lab[i][j-1].equals("|"),
+                        (lab[i][j].equals(" . "))? new Dot() :
+                                ((lab[i][j].equals(" E "))? new Energizer() :
+                                        ((lab[i][j].equals(" T "))? new ItemTest() :
+                                            ((lab[i][j].equals(" S "))? new FakeEnergizer() :
+                                                ((lab[i][j].equals(" B "))? new ItemBouleNeige() : new Item())))));
             }
         }
         return grid;
@@ -166,38 +176,27 @@ public class MazeConfig {
      *          </ul>
      *
      *
-     *  2. On pourrait alors utiliser la fonction suivante pour lire un labyrinthe à partir d'un fichier :
-     *     <pre>
-     *         public static MazeConfig readFromFile(String filename) {
-     *         // EN COURS DE DEBUGGAGE TODO
-     *         }
-     *     </pre>
      *  3. Ajout d'une méthode de lecture de fichier dans la classe {@link MazeConfig}
      *
      */
-
-    public static MazeConfig makeExample1() {
-        return new MazeConfig(new Cell[][]{
-                {nTee(ENERGIZER),    hPipe(DOT),     hPipe(DOT),     hPipe(DOT),     hPipe(DOT),     nTee(DOT)},
-                {vPipe(DOT),    seVee(NOTHING), nTee(NOTHING),  nTee(NOTHING),  swVee(NOTHING), vPipe(DOT)},
-                {vPipe(DOT),     wTee(NOTHING),  open(NOTHING),  open(NOTHING),  eTee(NOTHING),  vPipe(DOT)},
-                {vPipe(DOT),    wTee(NOTHING),  open(NOTHING),  open(NOTHING),  eTee(NOTHING),  vPipe(DOT)},
-                {vPipe(DOT),    neVee(NOTHING), sTee(NOTHING),  sTee(NOTHING),   nwVee(NOTHING), vPipe(DOT)},
-                {neVee(DOT),    hPipe(DOT),     hPipe(DOT),     hPipe(DOT),     hPipe(DOT),     nwVee(DOT)}
-        },
-                new IntCoordinates(3, 0),
-                new IntCoordinates(0, 3),
-                new IntCoordinates(3, 5),
-                new IntCoordinates(5, 5),
-                new IntCoordinates(5, 1)
-        );
+        public static MazeConfig makeGenericExample(int x) throws IOException {
+            try {
+            File file = new File(Objects.requireNonNull(MazeConfig.class.getResource("testMap" + x + ".txt")).toURI());
+                return txtToMaze(file);}
+            catch (URISyntaxException | NullPointerException e) { e.printStackTrace(); }
+            return null;
     }
 
-    public static MazeConfig makeExampleTxt() throws IOException {
-        String currentDirectory = System.getProperty("user.dir"); // Obtient le répertoire de travail actuel
-        String filePath = currentDirectory + "/src/main/resources/testMap.txt"; // Chemin complet vers le fichier
-        // on changera ça, à terme, mais pour l'instant ça fonctionne donc nickel
-        return txtToMaze(filePath);
+    public static boolean isGameComplete() {
+        URL file = MazeConfig.class.getResource(".coconut.jpg");
+        return file != null;
     }
 
+    public void resetItems(){
+        for(Cell[] col : grid){
+            for(Cell c : col){
+                c.initialItem().setActive(false);
+            }
+        }
+    }
 }

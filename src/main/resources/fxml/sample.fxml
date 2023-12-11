@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.effect.Glow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane maxHeight="720" maxWidth="1280" minHeight="720" minWidth="1280" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.MainMenu">
+   <children>
+      <ImageView fx:id="imageMENU">
+         <image>
+            <Image url="@../menusPng/imageMainMenu.png" />
+         </image>
+      </ImageView>
+      <Text id="play" fx:id="play" layoutX="360" layoutY="425" rotate="-1.0" strokeType="OUTSIDE" strokeWidth="0.0" text="PLAY" wrappingWidth="191.53350830078125">
+         <effect>
+            <Glow level="0.97" />
+         </effect>
+      </Text>
+      <Text id="quit" fx:id="quit" layoutX="900.0" layoutY="453.0" rotate="-3.0" strokeType="OUTSIDE" strokeWidth="0.0" text="QUIT" wrappingWidth="141.31156469881535">
+         <effect>
+            <Glow level="0.97" />
+         </effect>
+      </Text>
+      <Text id="options" fx:id="options" layoutX="600.0" layoutY="292.0" rotate="9.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Options" wrappingWidth="239.18685913085938" >
+         <effect>
+            <Glow level="0.97" />
+         </effect>
+      </Text>
+   </children>
+</AnchorPane>

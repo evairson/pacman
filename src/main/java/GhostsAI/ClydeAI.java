@@ -1,7 +1,6 @@
 package GhostsAI;
 
 import geometry.IntCoordinates;
-import geometry.RealCoordinates;
 import model.Direction;
 
 import java.util.Random;

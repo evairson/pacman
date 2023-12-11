@@ -8,9 +8,9 @@ import java.util.LinkedList;
 import java.util.PriorityQueue;
 import java.util.Comparator;
 
-public class AStar {
+public class AStar { //TODO : mettre des commentaires
 
-    static Comparator<Noeud> comparator = new Comparator<Noeud>() {
+    public static Comparator<Noeud> comparator = new Comparator<Noeud>() {
         @Override
         public int compare(Noeud n1, Noeud n2){
             if(n1.getHeuristique() == n2.getHeuristique()){
@@ -70,7 +70,6 @@ public class AStar {
                     openList.add(v);
                 }
             }
-            //System.out.println("derchos " + u);
             closedList.add(u);
         }
         return null;

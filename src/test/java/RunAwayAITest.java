@@ -1,12 +1,19 @@
-import static org.junit.Assert.*;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+import GhostsAI.RunAwayAI;
+import model.Direction;
+import org.junit.jupiter.api.Test;
 import geometry.IntCoordinates;
 import config.MazeConfig;
-import model.Cell;
+
+import java.io.IOException;
+import java.util.ArrayList;
 
 public class RunAwayAITest {
-    public void testVoisinsLesPlusLoin() {
-        MazeConfig config = MazeConfig.makeExample1();
+
+    public void testVoisinsLesPlusLoin() throws IOException {
+        MazeConfig config = MazeConfig.makeGenericExample(1);
+        assert config != null;
         IntCoordinates pacmanPos = config.getPacManPos();
         IntCoordinates ghostPos = config.getBlinkyPos();
 
@@ -18,10 +25,11 @@ public class RunAwayAITest {
         assertTrue(result.contains(new IntCoordinates(3, 2)));
     }
     
-    public void testVoisinsPlusProchesDesPlusLoins() {
-        MazeConfig config = makeExample1();
-        IntCoordinates pacmanPos = config.pacManPos;
-        IntCoordinates ghostPos = config.blinkyPos;
+    public void testVoisinsPlusProchesDesPlusLoins() throws IOException {
+        MazeConfig config = MazeConfig.makeGenericExample(1);
+        assert config != null;
+        IntCoordinates pacmanPos = config.getPacManPos();
+        IntCoordinates ghostPos = config.getBlinkyPos();
 
         ArrayList<IntCoordinates> result = RunAwayAI.voisins_plus_proches_des_plus_loins(pacmanPos, ghostPos, config);
 
@@ -33,13 +41,14 @@ public class RunAwayAITest {
     }
 
     @Test
-    public void testGetDirection() {
-        MazeConfig config = makeExample1();
-        IntCoordinates pacmanPos = config.pacManPos;
-        IntCoordinates ghostPos = config.blinkyPos;
+    public void testGetDirection() throws IOException {
+        MazeConfig config = MazeConfig.makeGenericExample(1);
+        assert config != null;
+        IntCoordinates pacmanPos = config.getPacManPos();
+        IntCoordinates ghostPos = config.getBlinkyPos();
 
         Direction result = RunAwayAI.getDirection(config, pacmanPos, ghostPos);
 
-        assertEquals(Direction.UP, result);
+        assertEquals(Direction.NORTH, result);
     }
 }
