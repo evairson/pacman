@@ -145,7 +145,6 @@ public final class BouleNeige implements Critter {
                         return null;
                     } else {
                         if (config.isWarp(config.getCell(this.currCellI()),dir)  && Math.round(nextPos.x())>= config.getWidth()) {
-                            System.out.println("warp");
                             if(warp>2){
                                 detruire();
                             }
