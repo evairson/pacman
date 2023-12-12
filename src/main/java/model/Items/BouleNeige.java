@@ -125,24 +125,36 @@ public final class BouleNeige implements Critter {
                     if(config.getCell(this.currCellI()).westWall()){
                         return null;
                     } else {
+                        if (config.isWarp(config.getCell(this.currCellI()),dir) && Math.round(nextPos.x())<=0) {
+                            nextPos = new RealCoordinates((config.getWidth() - 0.6),this.getPos().y()); // Warp !!!
+                        }
                         return nextPos;
                     }
                 case EAST :
                     if(config.getCell(this.currCellI()).eastWall()){
                         return null;
                     } else {
+                        if (config.isWarp(config.getCell(this.currCellI()),dir)  && Math.round(nextPos.x())>= config.getWidth()) {
+                            nextPos = new RealCoordinates((TPINTERVAL),this.getPos().y());
+                        }
                         return nextPos;
                     }
                 case NORTH :
                     if(config.getCell(this.currCellI()).northWall()){
                         return null;
                     } else {
+                        if (config.isWarp(config.getCell(this.currCellI()),dir) && Math.round(nextPos.y())<=0) {
+                            nextPos = new RealCoordinates(this.getPos().x(),(config.getHeight() - 0.6));
+                        }
                         return nextPos;
                     }
                 case SOUTH :
                     if(config.getCell(this.currCellI()).southWall()){
                         return null;
                     } else {
+                        if (config.isWarp(config.getCell(this.currCellI()),dir) && Math.round(nextPos.y())>=config.getHeight()) {
+                            nextPos = new RealCoordinates(this.getPos().x(),TPINTERVAL);
+                        }
                         return nextPos;
                     }
                 default : return this.pos;
