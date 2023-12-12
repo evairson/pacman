@@ -33,15 +33,6 @@ public final class CritterGraphicsFactory {
     private static long time;
     private final double offsetX = 0.01; 
     private final double offsetY = 0.05;
-        
-
-    public void setEtatPacman(String e){ //permet de changer l'etat pour les tests
-        etatPacman = e;
-    }
-
-    public void setEtatghost(int i, int n){
-        etatghost = i;
-    }
 
 
     public CritterGraphicsFactory(double scale) { // constructeur
@@ -74,7 +65,7 @@ public final class CritterGraphicsFactory {
     }
 
     // Trouve la direction des critters
-    private String getDirectionString(Critter critter){
+    public String getDirectionString(Critter critter){
         String direction = switch(critter.getDirection()){
             case EAST -> "droite";
             case WEST -> "gauche";

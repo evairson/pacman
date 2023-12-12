@@ -248,4 +248,8 @@ public enum Ghost implements Critter {
             }
         }
     }
+
+    public void setEnergized(boolean b) {
+        this.energized = b;
+    }
 }

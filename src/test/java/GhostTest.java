@@ -1,7 +1,5 @@
 import geometry.IntCoordinates;
 import model.Direction;
-import model.Items.Dot;
-import model.Items.Item;
 import model.PacMan;
 import org.junit.jupiter.api.Test;
 
@@ -9,7 +7,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import model.Ghost;
 import geometry.RealCoordinates;
 import config.MazeConfig;
-import config.Cell;
 
 public class GhostTest {
 
@@ -125,29 +122,11 @@ public class GhostTest {
         assertTrue(ghost.isCenteredDir(Direction.NORTH), "Ne doit pas être centré en x pour la direction Nord");
     }
 
-    public static MazeConfig mockExample() {
-        return new MazeConfig(new Cell[][]{
-                {Cell.create(true, false, false, false, new Dot()), Cell.create(true, false, true, false, new Dot()), Cell.create(true, false, true, false, new Dot()), Cell.create(true, false, true, false, new Dot()), Cell.create(true, false, true, false, new Dot()), Cell.create(true, false, false, false, new Dot())},
-                {Cell.create(false, true, false, true, new Dot()), Cell.create(true, false, false, true, new Item()), Cell.create(true, false, false, false, new Item()), Cell.create(true, false, false, false, new Item()), Cell.create(true, true, false, false, new Item()), Cell.create(false, true, false, true, new Dot())},
-                {Cell.create(false, true, false, true, new Dot()), Cell.create(false, false, false, true, new Item()), Cell.create(false, false, false, false, new Item()), Cell.create(false, false, false, false, new Item()), Cell.create(false, true, false, false, new Item()), Cell.create(false, true, false, true, new Dot())},
-                {Cell.create(false, true, false, true, new Dot()), Cell.create(false, false, false, true, new Item()), Cell.create(false, false, false, false, new Item()), Cell.create(false, false, false, false, new Item()), Cell.create(false, true, false, false, new Item()), Cell.create(false, true, false, true, new Dot())},
-                {Cell.create(false, true, false, true, new Dot()), Cell.create(false, false, true, true, new Item()), Cell.create(false, false, true, false, new Item()), Cell.create(false, false, true, false, new Item()), Cell.create(false, true, true, false, new Item()), Cell.create(false, true, false, true, new Dot())},
-                {Cell.create(false, false, true, true, new Dot()), Cell.create(true, false, true, false, new Dot()), Cell.create(true, false, true, false, new Dot()), Cell.create(true, false, true, false, new Dot()), Cell.create(true, false, true, false, new Dot()), Cell.create(false, true, true, false, new Dot())}
-        },
-                new IntCoordinates(3, 0),
-                new IntCoordinates(0, 3),
-                new IntCoordinates(3, 5),
-                new IntCoordinates(5, 5),
-                new IntCoordinates(5, 1),
-                new IntCoordinates(5,6)
-        );
-    }
-
 
     @Test
     public void testGetNextPos() {
         // Création du mock de MazeConfig
-        MazeConfig mazeConfig = mockExample();
+        MazeConfig mazeConfig = MazeConfig.mockExample();
 
         // Création et configuration d'un fantôme
         Ghost ghost = Ghost.BLINKY;

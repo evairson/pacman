@@ -13,7 +13,7 @@ public class AStarTest {
     @Test
     public void testShortestPath() {
         // Initialisation du labyrinthe (MazeConfig)
-        MazeConfig mazeConfig = GhostTest.mockExample();
+        MazeConfig mazeConfig = MazeConfig.mockExample();
 
         // Définition des points de départ et d'arrivée
         IntCoordinates start = new IntCoordinates(0, 0); // Exemple de coordonnées de départ

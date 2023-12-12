@@ -6,7 +6,7 @@ plugins {
 }
 
 group 'fr.u-paris.informatique.cproj'
-version '42.0'
+version '9.2'
 
 repositories {
     mavenCentral()
@@ -16,9 +16,20 @@ dependencies {
     testImplementation('org.junit.jupiter:junit-jupiter:5.8.2')
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+
+    // Dépendances pour TestFX
+    testImplementation 'org.testfx:testfx-core:4.0.16-alpha'
+    testImplementation 'org.testfx:testfx-junit5:4.0.16-alpha'
+
 }
 test {
     useJUnitPlatform()
+}
+
+jar {
+    manifest {
+        attributes ('Main-Class' : 'gui.App')
+    }
 }
 
 javafx {
@@ -28,7 +39,7 @@ javafx {
 
 application {
     mainClass = 'gui.App'
-//    mainModule = 'pacman'
+    mainModule = 'pacman'
 }
 
 jlink {

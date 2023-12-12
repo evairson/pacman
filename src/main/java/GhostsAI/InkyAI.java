@@ -11,7 +11,7 @@ import model.Ghost;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class InkyAI { //TODO : mettre des commentaires
+public class InkyAI {
 
     public static Direction getDirection(MazeConfig config, IntCoordinates pacPos, IntCoordinates ghostPos, Direction pacDir){ //Voir commentaire dans BlinkyAI.java
         if (!Ghost.INKY.isAlive() && ghostPos.equals(Ghost.INKY.toIntCoordinates())) {

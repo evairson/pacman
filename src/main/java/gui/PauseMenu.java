@@ -75,13 +75,13 @@ public class PauseMenu implements Menu{
             lives.setFont(Font.font("Crackman", fontScale));
 
 
-            Text highScore = new Text("High Score : " + String.valueOf(maze.getHighScore()));
-            highScore.setFill(Color.GREEN);
-            highScore.setFont(Font.font("Crackman", fontScale));
+//            Text highScore = new Text("High Score : " + String.valueOf(maze.getHighScore()));
+//            highScore.setFill(Color.GREEN);
+//            highScore.setFont(Font.font("Crackman", fontScale));
 
 
             VBox components = new VBox();
-            components.getChildren().addAll(score,lives, highScore);
+            components.getChildren().addAll(score,lives);//, highScore);
             components.setSpacing((30*root.getHeight())/1020);
             components.setAlignment(Pos.CENTER);
 

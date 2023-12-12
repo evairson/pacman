@@ -7,14 +7,12 @@ import model.Items.Energizer;
 import model.Items.FakeEnergizer;
 import model.Items.Item;
 import model.Items.ItemTest;
-import java.io.File;
-import java.io.InputStream;
-import java.net.URI;
-import java.net.URISyntaxException;
+
+import java.io.*;
 import java.net.URL;
-import java.nio.file.Paths;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -95,6 +93,7 @@ public class MazeConfig {
      * */
 
 
+
     public static MazeConfig txtToMaze(File file) throws IOException {
         List<String> lines = Files.readAllLines(file.toPath());
         int height = lines.size()-6; // les 5 dernières lignes du .txt servent aux positions des personnages
@@ -114,8 +113,17 @@ public class MazeConfig {
         }
         IntCoordinates[] pos = new IntCoordinates[6];
         String[] split;
+
         for (int i = 0; i < 6; i++) { // on crée les IntCoordinates des 5 persos à partir des 5 dernières lignes
-            split = linesArray[i+height].split(",");
+            //The current line we're looking at
+            String currentLine = linesArray[i+height];
+            if(i == 4){
+                split = currentLine.split(",");
+            }
+            //Remove the last character of the current line if it's '\n' (was causing errors)
+            else{
+                split = currentLine.substring(0,currentLine.length() - 1).split(",");
+            }
             pos[i] = new IntCoordinates(Integer.parseInt(split[0].substring(3)),Integer.parseInt(split[1]));
         }
         return new MazeConfig(stringToCell(lab),pos[0],pos[1],pos[2],pos[3],pos[4],pos[5]);
@@ -193,14 +201,17 @@ public class MazeConfig {
      *
      */
 
-
-
-        public static MazeConfig makeGenericExample(int x) throws IOException {
-            try {
-            File file = new File(Objects.requireNonNull(MazeConfig.class.getResource("testMap" + x + ".txt")).toURI());
-                return txtToMaze(file);}
-            catch (URISyntaxException | NullPointerException e) { e.printStackTrace(); }
-            return null;
+    public static MazeConfig makeGenericExample(int x) throws IOException {
+        try {
+            InputStream file = Objects.requireNonNull(MazeConfig.class.getResourceAsStream("testMap" + x + ".txt"));
+            byte[] buffer = file.readAllBytes();
+            return txtToMaze(convert(buffer));}
+        catch ( NullPointerException e) { e.printStackTrace(); }
+        return null;
+    }
+    public static List<String> convert(byte[] bytes) {
+        String stringData = new String(bytes, StandardCharsets.UTF_8);
+        return Arrays.asList(stringData.split("\n"));
     }
 
     public static boolean isGameComplete() {
@@ -215,4 +226,23 @@ public class MazeConfig {
             }
         }
     }
+
+    public static MazeConfig mockExample() {
+        return new MazeConfig(new Cell[][]{
+                {Cell.create(true, false, false, false, new Dot()), Cell.create(true, false, true, false, new Dot()), Cell.create(true, false, true, false, new Dot()), Cell.create(true, false, true, false, new Dot()), Cell.create(true, false, true, false, new Dot()), Cell.create(true, false, false, false, new Dot())},
+                {Cell.create(false, true, false, true, new Dot()), Cell.create(true, false, false, true, new Item()), Cell.create(true, false, false, false, new Item()), Cell.create(true, false, false, false, new Item()), Cell.create(true, true, false, false, new Item()), Cell.create(false, true, false, true, new Dot())},
+                {Cell.create(false, true, false, true, new Dot()), Cell.create(false, false, false, true, new Item()), Cell.create(false, false, false, false, new Item()), Cell.create(false, false, false, false, new Item()), Cell.create(false, true, false, false, new Item()), Cell.create(false, true, false, true, new Dot())},
+                {Cell.create(false, true, false, true, new Dot()), Cell.create(false, false, false, true, new Item()), Cell.create(false, false, false, false, new Item()), Cell.create(false, false, false, false, new Item()), Cell.create(false, true, false, false, new Item()), Cell.create(false, true, false, true, new Dot())},
+                {Cell.create(false, true, false, true, new Dot()), Cell.create(false, false, true, true, new Item()), Cell.create(false, false, true, false, new Item()), Cell.create(false, false, true, false, new Item()), Cell.create(false, true, true, false, new Item()), Cell.create(false, true, false, true, new Dot())},
+                {Cell.create(false, false, true, true, new Dot()), Cell.create(true, false, true, false, new Dot()), Cell.create(true, false, true, false, new Dot()), Cell.create(true, false, true, false, new Dot()), Cell.create(true, false, true, false, new Dot()), Cell.create(false, true, true, false, new Dot())}
+        },
+                new IntCoordinates(3, 0),
+                new IntCoordinates(0, 3),
+                new IntCoordinates(3, 5),
+                new IntCoordinates(5, 5),
+                new IntCoordinates(5, 1),
+                new IntCoordinates(9,6)
+        );
+    }
+
 }
