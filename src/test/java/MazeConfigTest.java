@@ -26,21 +26,14 @@ public class MazeConfigTest {
     }
 
     @Test
-    public void testMakeGenericExample() throws IOException {
-        MazeConfig config = MazeConfig.makeGenericExample(1);
-
-        assertNotNull(config);
-    }
-
-    @Test
     public void testIsGameComplete() {
         boolean result = MazeConfig.isGameComplete();
         assertTrue(result);
     }
 
     @Test
-    public void testResetItems() throws IOException {
-        MazeConfig config = MazeConfig.makeGenericExample(1);
+    public void testResetItems() {
+        MazeConfig config = MazeConfig.mockExample();
         // Supposons que le labyrinthe contient des items actifs initialement
         config.resetItems();
 

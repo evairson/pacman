@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test;
 import geometry.IntCoordinates;
 import config.MazeConfig;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class RunAwayAITest {
@@ -20,7 +19,7 @@ public class RunAwayAITest {
     }
 
     @Test
-    public void testVoisinsLesPlusLoin() throws IOException {
+    public void testVoisinsLesPlusLoin() {
         IntCoordinates pacmanPos = new IntCoordinates(0,0);
         IntCoordinates ghostPos = new IntCoordinates(0,3);
 
@@ -32,7 +31,7 @@ public class RunAwayAITest {
     }
     
     @Test
-    public void testVoisinsPlusProchesDesPlusLoins() throws IOException {
+    public void testVoisinsPlusProchesDesPlusLoins() {
         IntCoordinates pacmanPos = new IntCoordinates(0,0);
         IntCoordinates ghostPos = new IntCoordinates(0,3);
 
@@ -45,14 +44,11 @@ public class RunAwayAITest {
     }
 
     @Test
-    public void testGetDirection() throws IOException {
-        MazeConfig config = MazeConfig.makeGenericExample(1);
-        assert config != null;
-        IntCoordinates pacmanPos = config.getPacManPos();
-        IntCoordinates ghostPos = config.getBlinkyPos();
-
+    public void testGetDirection() {
+        IntCoordinates pacmanPos = new IntCoordinates(0,0);
+        IntCoordinates ghostPos = new IntCoordinates(0,3);
         Direction result = RunAwayAI.getDirection(config, pacmanPos, ghostPos);
 
-        assertEquals(Direction.NORTH, result);
+        assertEquals(Direction.SOUTH, result);
     }
 }

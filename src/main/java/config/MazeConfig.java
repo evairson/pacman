@@ -121,7 +121,7 @@ public class MazeConfig {
             }
             //Remove the last character of the current line if it's '\n' (was causing errors)
             else{
-                split = currentLine.substring(0,currentLine.length() - 1).split(",");
+                split = currentLine.substring(0,currentLine.length()).split(",");
             }
             pos[i] = new IntCoordinates(Integer.parseInt(split[0].substring(3)),Integer.parseInt(split[1]));
         }
