@@ -94,8 +94,7 @@ public class MazeConfig {
 
 
 
-    public static MazeConfig txtToMaze(File file) throws IOException {
-        List<String> lines = Files.readAllLines(file.toPath());
+    public static MazeConfig txtToMaze(List<String> lines) throws IOException {
         int height = lines.size()-6; // les 5 dernières lignes du .txt servent aux positions des personnages
         int width = 2 * ((lines.get(0).length()-1)/4) + 1; // les cases du tableau sont alternativement de largeur 1 et 3
         String[] linesArray = lines.toArray(new String[0]);
