@@ -7,11 +7,11 @@ import model.Items.Energizer;
 import model.Items.FakeEnergizer;
 import model.Items.Item;
 import model.Items.ItemTest;
-import java.io.File;
-import java.net.URISyntaxException;
+
+import java.io.*;
 import java.net.URL;
-import java.nio.file.Files;
-import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -79,8 +79,7 @@ public class MazeConfig {
      *  On return le MazeConfig construit par le tableau de cellules et les IntCoordinates
      * */
 
-    public static MazeConfig txtToMaze(File file) throws IOException {
-        List<String> lines = Files.readAllLines(file.toPath());
+    public static MazeConfig txtToMaze(List<String> lines) throws IOException {
         int height = lines.size()-5; // les 5 dernières lignes du .txt servent aux positions des personnages
         int width = 2 * ((lines.get(0).length()-1)/4) + 1; // les cases du tableau sont alternativement de largeur 1 et 3
         String[] linesArray = lines.toArray(new String[0]);
@@ -176,12 +175,17 @@ public class MazeConfig {
      *  3. Ajout d'une méthode de lecture de fichier dans la classe {@link MazeConfig}
      *
      */
-        public static MazeConfig makeGenericExample(int x) throws IOException {
-            try {
-            File file = new File(Objects.requireNonNull(MazeConfig.class.getResource("testMap" + x + ".txt")).toURI());
-                return txtToMaze(file);}
-            catch (URISyntaxException | NullPointerException e) { e.printStackTrace(); }
-            return null;
+    public static MazeConfig makeGenericExample(int x) throws IOException {
+        try {
+            InputStream file = Objects.requireNonNull(MazeConfig.class.getResourceAsStream("testMap" + x + ".txt"));
+            byte[] buffer = file.readAllBytes();
+            return txtToMaze(convert(buffer));}
+        catch ( NullPointerException e) { e.printStackTrace(); }
+        return null;
+    }
+    public static List<String> convert(byte[] bytes) {
+        String stringData = new String(bytes, StandardCharsets.UTF_8);
+        return Arrays.asList(stringData.split("\n"));
     }
 
     public static boolean isGameComplete() {

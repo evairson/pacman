@@ -6,7 +6,7 @@ plugins {
 }
 
 group 'fr.u-paris.informatique.cproj'
-version '42.0'
+version '9.2'
 
 repositories {
     mavenCentral()
@@ -26,6 +26,12 @@ test {
     useJUnitPlatform()
 }
 
+jar {
+    manifest {
+        attributes ('Main-Class' : 'gui.App')
+    }
+}
+
 javafx {
     version = "17"
     modules = [ 'javafx.controls', 'javafx.fxml', 'javafx.media' ]
@@ -33,7 +39,7 @@ javafx {
 
 application {
     mainClass = 'gui.App'
-//    mainModule = 'pacman'
+    mainModule = 'pacman'
 }
 
 jlink {

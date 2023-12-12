@@ -3,15 +3,13 @@ import config.MazeConfig;
 import geometry.IntCoordinates;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
-import java.io.File;
 import java.io.IOException;
 
 public class MazeConfigTest {
 
     @Test
     public void testTxtToMaze() throws IOException {
-        File file = new File("/Users/Forsythe/Desktop/dev_start_jetbrains/IdeaProjects/cproj-vendredi-groupe1/src/main/resources/config/testMap1.txt");
-        MazeConfig config = MazeConfig.txtToMaze(file);
+        MazeConfig config = MazeConfig.makeGenericExample(1);
 
         assertNotNull(config);
         // Peut-être considérer d'autres assertions basées sur le contenu attendu du fichier testMap.txt ?? difficile pour le moment
