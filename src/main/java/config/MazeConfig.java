@@ -79,7 +79,7 @@ public class MazeConfig {
      *  On return le MazeConfig construit par le tableau de cellules et les IntCoordinates
      * */
 
-    public static MazeConfig txtToMaze(List<String> lines) throws IOException {
+    public static MazeConfig txtToMaze(List<String> lines) {
         int height = lines.size()-5; // les 5 dernières lignes du .txt servent aux positions des personnages
         int width = 2 * ((lines.get(0).length()-1)/4) + 1; // les cases du tableau sont alternativement de largeur 1 et 3
         String[] linesArray = lines.toArray(new String[0]);
@@ -98,7 +98,15 @@ public class MazeConfig {
         IntCoordinates[] pos = new IntCoordinates[5];
         String[] split;
         for (int i = 0; i < 5; i++) { // on crée les IntCoordinates des 5 persos à partir des 5 dernières lignes
-            split = linesArray[i+height].split(",");
+            //The current line we're looking at
+            String currentLine = linesArray[i+height];
+            if(i == 4){
+                split = currentLine.split(",");
+            }
+            //Remove the last character of the current line if it's '\n' (was causing errors)
+            else{
+                split = currentLine.substring(0,currentLine.length() - 1).split(",");
+            }
             pos[i] = new IntCoordinates(Integer.parseInt(split[0].substring(3)),Integer.parseInt(split[1]));
         }
         return new MazeConfig(stringToCell(lab),pos[0],pos[1],pos[2],pos[3],pos[4]);
