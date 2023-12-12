@@ -13,6 +13,7 @@ public final class BouleNeige implements Critter {
     private Direction direction;
     private final double speed = 5;
     private boolean active;
+    private int warp;
 
     private static final double TPINTERVAL = 0.02;
 
@@ -26,6 +27,7 @@ public final class BouleNeige implements Critter {
         pos = PacMan.INSTANCE.getPos();
         direction = PacMan.INSTANCE.getDirection();
         active = true;
+        warp = 0;
     }
 
     public void detruire(){
@@ -126,7 +128,15 @@ public final class BouleNeige implements Critter {
                         return null;
                     } else {
                         if (config.isWarp(config.getCell(this.currCellI()),dir) && Math.round(nextPos.x())<=0) {
-                            nextPos = new RealCoordinates((config.getWidth() - 0.6),this.getPos().y()); // Warp !!!
+                            if(warp>2){
+                                detruire();
+                            }
+                            else {
+
+                                nextPos = new RealCoordinates((config.getWidth() - 0.6),this.getPos().y()); // Warp !!!
+                        
+                                warp ++;
+                            }
                         }
                         return nextPos;
                     }
@@ -135,7 +145,16 @@ public final class BouleNeige implements Critter {
                         return null;
                     } else {
                         if (config.isWarp(config.getCell(this.currCellI()),dir)  && Math.round(nextPos.x())>= config.getWidth()) {
-                            nextPos = new RealCoordinates((TPINTERVAL),this.getPos().y());
+                            System.out.println("warp");
+                            if(warp>2){
+                                detruire();
+                            }
+                            else {
+
+                                nextPos = new RealCoordinates((TPINTERVAL),this.getPos().y());
+
+                                warp++;
+                            }
                         }
                         return nextPos;
                     }
@@ -144,8 +163,15 @@ public final class BouleNeige implements Critter {
                         return null;
                     } else {
                         if (config.isWarp(config.getCell(this.currCellI()),dir) && Math.round(nextPos.y())<=0) {
-                            nextPos = new RealCoordinates(this.getPos().x(),(config.getHeight() - 0.6));
-                        }
+                            if(warp>2){
+                                detruire();
+                            }
+                            else {
+                                
+                                nextPos = new RealCoordinates(this.getPos().x(),(config.getHeight() - 0.6));
+                                warp++;
+                            }
+                           }
                         return nextPos;
                     }
                 case SOUTH :
@@ -153,7 +179,13 @@ public final class BouleNeige implements Critter {
                         return null;
                     } else {
                         if (config.isWarp(config.getCell(this.currCellI()),dir) && Math.round(nextPos.y())>=config.getHeight()) {
-                            nextPos = new RealCoordinates(this.getPos().x(),TPINTERVAL);
+                            if(warp>2){
+                                detruire();
+                            }
+                            else {
+                                nextPos = new RealCoordinates(this.getPos().x(),TPINTERVAL);
+                                warp++;
+                            }
                         }
                         return nextPos;
                     }
