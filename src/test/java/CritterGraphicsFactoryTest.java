@@ -17,7 +17,6 @@ public class CritterGraphicsFactoryTest extends ApplicationTest {
         pacman.setDirection(Direction.EAST);
 
         String expectedUrl = Objects.requireNonNull(CritterGraphicsFactory.class.getResource("pacman-droite-rond.png")).toString();
-        System.out.println("derchos : " + expectedUrl);
         String actualUrl = factory.setImgPacman(pacman);
 
         assertEquals(expectedUrl, actualUrl);
