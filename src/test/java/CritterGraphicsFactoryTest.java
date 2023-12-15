@@ -1,64 +1,88 @@
-//import org.junit.jupiter.api.Test;
-//
-//import gui.CritterGraphicsFactory;
-//import model.Direction;
-//import model.Ghost;
-//import model.PacMan;
-//import static org.junit.jupiter.api.Assertions.assertEquals;
-//
-//import java.util.List;
-//
-//public class CritterGraphicsFactoryTest{
-//
-//    @Test
-//    public void setimgPacmanTest(){
-//        for(double i = 50; i <300;i+=0.5){
-//            CritterGraphicsFactory facto = new CritterGraphicsFactory(i);
-//            PacMan pacman = new PacMan();
-//
-//            String[] etat = {"ferme","ouvert"};
-//            for(String e : etat){
-//                facto.setEtatPacman(e);
-//                pacman.setDirection(Direction.NORTH);
-//                assertEquals(facto.setImgPacman(pacman),"pacman/pacman-haut-"+e+".png");
-//                pacman.setDirection(Direction.SOUTH);
-//                assertEquals(facto.setImgPacman(pacman),"pacman/pacman-bas-"+e+".png");
-//                pacman.setDirection(Direction.WEST);
-//                assertEquals(facto.setImgPacman(pacman),"pacman/pacman-gauche-"+e+".png");
-//                pacman.setDirection(Direction.EAST);
-//                assertEquals(facto.setImgPacman(pacman),"pacman/pacman-droite-"+e+".png");
-//                pacman.setDirection(Direction.NONE);
-//                assertEquals(facto.setImgPacman(pacman), "gui/pacman-rond.png");
-//            }
-//        }
-//    }
-//
-//    @Test
-//    public void setimgghostTest(){
-//        List<Ghost> critters = List.of(Ghost.CLYDE, Ghost.BLINKY, Ghost.INKY, Ghost.PINKY);
-//        for(double i = 50; i <300;i+=0.5){
-//            CritterGraphicsFactory facto = new CritterGraphicsFactory(i);
-//
-//            for (Ghost critter: critters){
-//                critter.setDirection(Direction.NONE);
-//                int numGhost = facto.getNumGhost(critter);
-//
-//            for(int j =0; j<2; j++){
-//                facto.setEtatghost(j, numGhost);
-//                critter.setDirection(Direction.NORTH);
-//                assertEquals(facto.setImgGhost(critter,numGhost,facto.setImgGhostNE(critter)),facto.setImgGhostNE(critter)+"haut"+j+".png");
-//                critter.setDirection(Direction.SOUTH);
-//                assertEquals(facto.setImgGhost(critter,numGhost,facto.setImgGhostNE(critter)),facto.setImgGhostNE(critter)+"bas"+j+".png");
-//                critter.setDirection(Direction.WEST);
-//                assertEquals(facto.setImgGhost(critter,numGhost,facto.setImgGhostNE(critter)),facto.setImgGhostNE(critter)+"gauche"+j+".png");
-//                critter.setDirection(Direction.EAST);
-//                assertEquals(facto.setImgGhost(critter,numGhost,facto.setImgGhostNE(critter)),facto.setImgGhostNE(critter)+"droite"+j+".png");
-//                critter.setDirection(Direction.NONE);
-//                assertEquals(facto.setImgGhost(critter,numGhost,facto.setImgGhostNE(critter)),facto.setImgGhostNE(critter)+"droite"+j+".png");
-//            }
-//        }
-//    }
-//    }
-//
-//
-//}
+import gui.CritterGraphicsFactory;
+import org.testfx.framework.junit5.ApplicationTest;
+import gui.GraphicsUpdater;
+import model.*;
+import javafx.scene.Node;
+import javafx.scene.image.ImageView;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+import java.util.Objects;
+
+public class CritterGraphicsFactoryTest extends ApplicationTest {
+
+    CritterGraphicsFactory factory = new CritterGraphicsFactory(1.0);
+    @Test
+    public void testSetImgPacman() {
+        PacMan pacman = new PacMan();
+        pacman.setDirection(Direction.EAST);
+
+        String expectedUrl = Objects.requireNonNull(CritterGraphicsFactory.class.getResource("pacman-droite-rond.png")).toString();
+        String actualUrl = factory.setImgPacman(pacman);
+
+        assertEquals(expectedUrl, actualUrl);
+    }
+
+    @Test
+    public void testMakeGraphics() {
+        PacMan pacman = new PacMan();
+
+        GraphicsUpdater updater = factory.makeGraphics(pacman);
+        Node node = updater.getNode();
+
+        interact(() -> { // utilisé pour s'assurer que les assertions sont exécutées dans le thread de l'application JavaFX
+            assertNotNull(node);
+            assertTrue(node instanceof ImageView);
+        });
+    }
+
+    @Test
+    public void testGetDirectionString() {
+        PacMan pacman = new PacMan();
+        pacman.setDirection(Direction.EAST);
+        assertEquals("droite", factory.getDirectionString(pacman));
+
+        pacman.setDirection(Direction.WEST);
+        assertEquals("gauche", factory.getDirectionString(pacman));
+
+        pacman.setDirection(Direction.NORTH);
+        assertEquals("haut", factory.getDirectionString(pacman));
+
+        pacman.setDirection(Direction.SOUTH);
+        assertEquals("bas", factory.getDirectionString(pacman));
+
+        pacman.setDirection(Direction.NONE);
+        assertEquals("droite", factory.getDirectionString(pacman)); // Cas par défaut
+    }
+
+    @Test
+    public void testSetImgGhostNE() {
+        assertEquals("ghost-blinky-", factory.setImgGhostNE(Ghost.BLINKY));
+        assertEquals("ghost-clyde-", factory.setImgGhostNE(Ghost.CLYDE));
+        assertEquals("ghost-inky-", factory.setImgGhostNE(Ghost.INKY));
+        assertEquals("ghost-pinky-", factory.setImgGhostNE(Ghost.PINKY));
+    }
+
+    @Test
+    public void testSetImgGhost() {
+        String imgGhostNE = "ghost-blinky-";
+        Ghost ghost = Ghost.BLINKY;
+        ghost.setDirection(Direction.EAST);
+        ghost.setEnergized(false);
+        assertEquals(Objects.requireNonNull(CritterGraphicsFactory.class.getResource(imgGhostNE + "droite1.png")).toString(),
+                factory.setImgGhost(ghost, 0, imgGhostNE));
+
+        ghost.setEnergized(true);
+        assertEquals(Objects.requireNonNull(CritterGraphicsFactory.class.getResource("ghost-blue1.png")).toString(),
+                factory.setImgGhost(ghost, 0, imgGhostNE));
+    }
+
+    @Test
+    public void testGetNumGhost() {
+        assertEquals(0, factory.getNumGhost(Ghost.BLINKY));
+        assertEquals(1, factory.getNumGhost(Ghost.CLYDE));
+        assertEquals(2, factory.getNumGhost(Ghost.INKY));
+        assertEquals(3, factory.getNumGhost(Ghost.PINKY));
+    }
+
+
+}

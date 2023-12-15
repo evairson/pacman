@@ -6,7 +6,7 @@ import model.Direction;
 
 import java.util.Random;
 
-public class InkyAI { //TODO : mettre des commentaires
+public class InkyAI {
 
     public static Direction getDirection(MazeConfig config, IntCoordinates pacPos, IntCoordinates ghostPos, Direction pacDir){
         Random rd = new Random();

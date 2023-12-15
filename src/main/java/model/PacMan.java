@@ -22,9 +22,8 @@ public final class PacMan implements Critter {
     private RealCoordinates pos;
     private Direction direction = Direction.NONE;
     private Direction nextDir = Direction.NONE;
-    private boolean energized;
+    private boolean energized; //FIXME : remettre a false
     public boolean fakeEnergized;
-
     private final Inventory inventory;
     static final double TPINTERVAL = 0.1;
 
@@ -75,22 +74,6 @@ public final class PacMan implements Critter {
     public boolean isFakeEnergized(){
         return this.fakeEnergized;
     }
-
-    /*
-    public void setEnergized() { //active l'energizer pour un temps limité
-        PacMan pacman = this;
-        Timer t = new Timer();
-        TimerTask task = new TimerTask() {
-            public void run() {
-                pacman.energized = false;
-                Ghost.setAllEnergizedValue(false);
-                t.cancel();
-            }
-        };
-        this.energized = true;
-        Ghost.setAllEnergizedValue(true);
-        t.schedule(task, 10000);
-    }*/
 
     //Methods
     public RealCoordinates currCellR() {

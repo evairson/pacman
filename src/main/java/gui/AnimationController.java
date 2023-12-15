@@ -287,6 +287,19 @@ public class AnimationController {
         if(x == 3) return 1;
         else return ++x;
     }
+
+    public static AnimationController mockAnimationController() {
+        List<GraphicsUpdater> mockGraphicsUpdaters = Collections.emptyList(); // Liste vide pour simplifier
+        MazeState mockMazeState = new MazeState(MazeConfig.mockExample()); // Utiliser MazeConfig.mockExample pour créer un état de labyrinthe
+        Stage mockPrimaryStage = new Stage(); // Stage vide
+        StackPane mockRoot = new StackPane();
+        Pane mockPane = new StackPane(); // Pane vide pour la structure de l'interface utilisateur
+        double appScale = 1.0; // Valeur par défaut pour l'échelle de l'application
+        GameView mockGameView = new GameView(mockMazeState, mockPane, appScale); // Instance de GameView avec dépendances mockées
+
+        return new AnimationController(mockGraphicsUpdaters, mockMazeState, mockPrimaryStage, mockGameView, mockRoot, appScale);
+    }
+
     /* C'est à chier pour l'instant
     public void siren() {
         if (energizedSirenIsPlaying) {

@@ -10,7 +10,7 @@ public class NoeudTest {
     @Test
     public void testGetVoisins() {
         // Configuration initiale
-        MazeConfig config = GhostTest.mockExample();
+        MazeConfig config = MazeConfig.mockExample();
         Noeud noeud = new Noeud(new IntCoordinates(1, 1), null);
 
         // Obtenir les voisins

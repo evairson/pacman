@@ -3,6 +3,7 @@ package geometry;
 import config.MazeConfig;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.PriorityQueue;
 import java.util.Comparator;
@@ -72,6 +73,21 @@ public class AStar { //TODO : mettre des commentaires
             closedList.add(u);
         }
         return null;
+    }
+
+    public static ArrayList<IntCoordinates> buildPath(Noeud startNode, Noeud endNode) {
+        ArrayList<IntCoordinates> path = new ArrayList<>();
+        Noeud current = endNode;
+
+        while (current != null && !current.equals(startNode)) {
+            path.add(current.getCoordinates());
+            current = current.getParent();
+        }
+
+        // Inversez le chemin, car nous l'avons construit à l'envers
+        Collections.reverse(path);
+
+        return path;
     }
 }
 

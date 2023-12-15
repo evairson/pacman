@@ -11,6 +11,8 @@ package model;
  */
 
 import config.MazeConfig;
+
+import java.util.Map;
 import geometry.IntCoordinates;
 import geometry.RealCoordinates;
 import gui.AnimationController;
@@ -21,12 +23,8 @@ import model.Items.Dot;
 import model.Items.Energizer;
 import model.Items.FakeEnergizer;
 import model.Items.Item;
-
-import java.net.URISyntaxException;
 import java.util.*;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
+
 import static model.Ghost.*;
 
 public final class MazeState {
@@ -59,6 +57,10 @@ public final class MazeState {
                 PINKY, config.getPinkyPos().toRealCoordinates(1.0)
         );
         resetCritters();
+    }
+
+    public void setGridState(boolean[][] gridState) {
+        this.gridState = gridState;
     }
 
     public List<Critter> getCritters() {
@@ -144,6 +146,8 @@ public final class MazeState {
                     }
                 }
             }
+
+            
         }
 
         // FIXME Pac-Man rules should somehow be in Pacman class
@@ -197,6 +201,7 @@ public final class MazeState {
                     addScore(10);
                     animationController.ghostEatenSound();
                     resetCritter(critter);
+
                 }
             }
         }
@@ -235,58 +240,48 @@ public final class MazeState {
                         timer.cancel();
                     }
                   }, 3000);
+                    BouleNeige.INSTANCE.detruire();
                   animationController.setHasntAlreadyWon(false);
                   animationController.win();
         }
     }
 
-    public int getHighScore () {
-        try {
-            var scanner = new Scanner(new File(Objects.requireNonNull(MazeState.class.getResource("highscore.txt")).toURI()));
-            return scanner.nextInt();
-        } catch (FileNotFoundException | URISyntaxException e) {
-            e.printStackTrace();
-        }
-        return 0;
-    }
+//    public int getHighScore () {
+//            var scanner = new Scanner(Objects.requireNonNull(MazeState.class.getResourceAsStream("highscore.txt")));
+//            return scanner.nextInt();
+//    }
+//
+//    public void setHighScore (int score) throws IOException {
+//        System.out.println(score);
+//            var writer = new PrintWriter(MazeConfig.convertInputStreamToOutputStream(Objects.requireNonNull(MazeState.class.getResourceAsStream("highscore.txt"))));
+//            writer.println(score);
+//            writer.close();
+//    }
 
-    public void setHighScore (int score){
-        try {
-            var writer = new PrintWriter(new File(Objects.requireNonNull(MazeState.class.getResource("highscore.txt")).toURI()));
-            writer.println(score);
-            writer.close();
-        } catch (FileNotFoundException | URISyntaxException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void addScore (int increment){
+    public void addScore(int increment){
         score += increment;
     }
 
-    private void playerLost() { //le joueur a perdu au moment où il n'a plus de vie
+    public void playerLost() { //le joueur a perdu au moment où il n'a plus de vie
         BouleNeige.INSTANCE.detruire();
         lives--;
         if (lives == 0) {
-            if (score > getHighScore()) {
-                setHighScore(score);
-            }
+//            if (score > getHighScore()) {
+//                setHighScore(score);
+//            }
             animationController.gameOver();
         }
         resetCritters();
     }
 
-    private void playerWin () {
-        animationController.win();
-    }
-
-    private void resetCritter (Critter critter){
+    public void resetCritter(Critter critter){
         critter.setDirection(Direction.NONE);
         critter.setPos(initialPos.get(critter));
     }
 
-    private void resetCritters () {
+    public void resetCritters() {
         for (Critter critter : critters) resetCritter(critter);
+        BouleNeige.INSTANCE.detruire();
     }
 
     public MazeConfig getConfig () {
@@ -326,5 +321,13 @@ public final class MazeState {
 
     public void resetItems(){
         this.config.resetItems();
+    }
+
+    public AnimationController getAnimationController() {
+        return this.animationController;
+    }
+
+    public void setLives(int i) {
+        this.lives = i;
     }
 }

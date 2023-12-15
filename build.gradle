@@ -6,19 +6,47 @@ plugins {
 }
 
 group 'fr.u-paris.informatique.cproj'
-version '42.0'
+version '9.2'
 
 repositories {
     mavenCentral()
 }
 
 dependencies {	
-    testImplementation('org.junit.jupiter:junit-jupiter:5.8.2')
+
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+
+    // Dépendances pour TestFX
+    testImplementation('org.junit.jupiter:junit-jupiter:5.8.2')
+    testImplementation 'org.testfx:testfx-core:4.0.16-alpha'
+    testImplementation 'org.testfx:testfx-junit5:4.0.16-alpha'
+    testImplementation "org.openjfx:javafx-base:17.0.1"
+    testImplementation 'org.testfx:openjfx-monocle:jdk-12.0.1+2'
+
 }
 test {
     useJUnitPlatform()
+
+    // Configure pour un environnement headless
+    systemProperty 'testfx.robot', 'glass'
+    systemProperty 'testfx.headless', 'true'
+    systemProperty 'prism.order', 'sw'
+    systemProperty 'prism.text', 't2k'
+    systemProperty 'java.awt.headless', 'true'
+
+    // Options supplémentaires pour les tests (facultatif)
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
+}
+tasks.withType(JavaCompile) {
+    options.release = 17
+}
+jar {
+    manifest {
+        attributes ('Main-Class' : 'gui.App')
+    }
 }
 
 javafx {
@@ -28,7 +56,7 @@ javafx {
 
 application {
     mainClass = 'gui.App'
-//    mainModule = 'pacman'
+    mainModule = 'pacman'
 }
 
 jlink {
