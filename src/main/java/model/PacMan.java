@@ -2,12 +2,10 @@ package model;
 
 import config.MazeConfig;
 import geometry.IntCoordinates;
-import java.util.Timer;
-import java.util.TimerTask;
 import config.Cell;
-
 import geometry.RealCoordinates;
 import model.Items.Inventory;
+
 
 /**
  * Implémente PacMan comme un singleton.
