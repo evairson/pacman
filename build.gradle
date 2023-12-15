@@ -40,7 +40,9 @@ test {
         events "passed", "skipped", "failed"
     }
 }
-
+tasks.withType(JavaCompile) {
+    options.release = 17
+}
 jar {
     manifest {
         attributes ('Main-Class' : 'gui.App')

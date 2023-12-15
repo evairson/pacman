@@ -201,6 +201,7 @@ public final class MazeState {
                     addScore(10);
                     animationController.ghostEatenSound();
                     resetCritter(critter);
+
                 }
             }
         }
@@ -239,6 +240,7 @@ public final class MazeState {
                         timer.cancel();
                     }
                   }, 3000);
+                    BouleNeige.INSTANCE.detruire();
                   animationController.setHasntAlreadyWon(false);
                   animationController.win();
         }
@@ -279,6 +281,7 @@ public final class MazeState {
 
     public void resetCritters() {
         for (Critter critter : critters) resetCritter(critter);
+        BouleNeige.INSTANCE.detruire();
     }
 
     public MazeConfig getConfig () {
