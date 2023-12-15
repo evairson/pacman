@@ -34,6 +34,7 @@ public class AnimationController {
     private final PauseMenu pauseMenu;
 
     private GameView gameView;
+    private HUDView hudView;
     private final StackPane gameComponents;
     private boolean isPaused = false;
     private boolean isInUnstoppableAnimation = false;
@@ -47,13 +48,14 @@ public class AnimationController {
 
 
 
-    public AnimationController(List<GraphicsUpdater> graphicsUpdaters, MazeState maze, Stage primaryStage, GameView gameView, StackPane root, double AppScale) {
+    public AnimationController(List<GraphicsUpdater> graphicsUpdaters, MazeState maze, Stage primaryStage, GameView gameView, StackPane root, HUDView hudView, double AppScale) {
         this.graphicsUpdaters = graphicsUpdaters;
         this.maze = maze;
         this.primaryStage = primaryStage;
         this.gameView = gameView;
         this.gameComponents = root;
         this.AppScale = AppScale;
+        this.hudView = hudView;
         pauseMenu = new PauseMenu(gameView.getMaze(), root,this);
 
     }
@@ -255,7 +257,12 @@ public class AnimationController {
         maze.setAnimationController(this);
         maze.setLevel(nextLevel);
         maze.setScore(this.maze.getScore());
+        maze.setLives(this.maze.getLives());
         this.maze = maze;
+        this.graphicsUpdaters.remove(this.hudView.getHudUpdater());
+        this.hudView.changeMaze(this.maze);
+        this.graphicsUpdaters.add(this.hudView.getHudUpdater());
+
 
         this.gameView.getGameRoot().getChildren().clear(); //Clear l'ancien panneau de jeu
         GameView gameView1 = new GameView(maze, gameView.getGameRoot(), AppScale); //Crée une nouvelle vue de jeu
@@ -288,7 +295,7 @@ public class AnimationController {
         else return ++x;
     }
 
-    public static AnimationController mockAnimationController() {
+    /*public static AnimationController mockAnimationController() {
         List<GraphicsUpdater> mockGraphicsUpdaters = Collections.emptyList(); // Liste vide pour simplifier
         MazeState mockMazeState = new MazeState(MazeConfig.mockExample()); // Utiliser MazeConfig.mockExample pour créer un état de labyrinthe
         Stage mockPrimaryStage = new Stage(); // Stage vide
@@ -298,7 +305,7 @@ public class AnimationController {
         GameView mockGameView = new GameView(mockMazeState, mockPane, appScale); // Instance de GameView avec dépendances mockées
 
         return new AnimationController(mockGraphicsUpdaters, mockMazeState, mockPrimaryStage, mockGameView, mockRoot, appScale);
-    }
+    }*/
 
     /* C'est à chier pour l'instant
     public void siren() {
