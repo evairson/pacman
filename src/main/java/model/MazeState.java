@@ -215,30 +215,9 @@ public final class MazeState {
                 }
             }
         }
-        if (allDotsEaten() && animationController.hasntAlreadyWon()) {
-            CellGraphicsFactory.setFinNiveau(true);
-            Timer timer = new Timer();
-            timer.schedule(new TimerTask(){
-                @Override
-                public void run() {
-                    CellGraphicsFactory.setFinNiveau(false);
-                }
-            }, 3000);
-        }
         // TODO: Faire une fonction dans item qui fait tout bien (le ramssage) pour chaque item (pour éviter d'écrire 'if ... instanceof ...') et qui ne met pas grid true si l'item n'est pas ramassé...
-       /* for (var critter : critters) { // Collision PacMan Ghosts
-            if (critter instanceof Ghost && critter.getPos().round().equals(pacPos) && !PacMan.INSTANCE.isFakeEnergized()) {
-                if (PacMan.INSTANCE.isEnergized()) {
-                    addScore(10);
-                    animationController.ghostEatenSound();
 
-                } else {
-                    playerLost();
-                    return;
-                }
-            }
-        }*/
-        /*if (allDotsEaten() && animationController.hasntAlreadyWon()) {
+        if (allDotsEaten() && animationController.hasntAlreadyWon()) {
             this.resetItems();
             CellGraphicsFactory.setFinNiveau(true);
             Timer timer = new Timer();
@@ -253,7 +232,7 @@ public final class MazeState {
                     BouleNeige.INSTANCE.detruire();
                   animationController.setHasntAlreadyWon(false);
                   animationController.win();
-        }*/
+        }
     }
 
 //    public int getHighScore () {
