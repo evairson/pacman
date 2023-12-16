@@ -7,7 +7,7 @@ import java.io.IOException;
 
 public class MazeConfigTest {
 
-    /*@Test
+    @Test
     public void testTxtToMaze() throws IOException {
         MazeConfig config = MazeConfig.makeGenericExample(1);
 
@@ -46,5 +46,5 @@ public class MazeConfigTest {
                 }
             }
         }
-    }*/
+    }
 }

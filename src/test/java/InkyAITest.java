@@ -11,7 +11,7 @@ import java.util.Set;
 
 public class InkyAITest {
 
-    /*@Test
+    @Test
     public void testGetDirection() {
         MazeConfig config = MazeConfig.mockExample();
         IntCoordinates pacPos = new IntCoordinates(0,0); // Position de Pac-Man
@@ -45,5 +45,5 @@ public class InkyAITest {
         }
         Direction directionPinky = PinkyAI.getDirection(config, pacPos, ghostPink, pacDir);
         assertTrue(direction.equals(finalDir) || direction.equals(directionPinky));
-    }*/
+    }
 }

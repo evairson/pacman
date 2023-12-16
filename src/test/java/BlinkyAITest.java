@@ -7,8 +7,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class BlinkyAITest {
 
-    //@Test
-    /*public void testWhichDir() {
+    @Test
+    public void testWhichDir() {
         assertEquals(Direction.NORTH, BlinkyAI.whichDir(new IntCoordinates(1, 1), new IntCoordinates(1, 0)));
         assertEquals(Direction.SOUTH, BlinkyAI.whichDir(new IntCoordinates(1, 1), new IntCoordinates(1, 2)));
         assertEquals(Direction.EAST, BlinkyAI.whichDir(new IntCoordinates(1, 1), new IntCoordinates(2, 1)));
@@ -25,6 +25,6 @@ public class BlinkyAITest {
         Direction direction = BlinkyAI.getDirection(config, pacPos, ghostPos);
 
         assertEquals(direction, Direction.NORTH);
-    }*/
+    }
 
 }

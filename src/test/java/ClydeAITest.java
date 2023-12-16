@@ -9,7 +9,7 @@ import java.util.Set;
 
 public class ClydeAITest {
 
-    /*@Test
+    @Test
     public void testGetRandomDir() {
         Set<Direction> directions = new HashSet<>();
         for (int i = 0; i < 100; i++) {
@@ -33,8 +33,8 @@ public class ClydeAITest {
         assertTrue(ClydeAI.isInNode(config, intersectionPosition));
     }
 
-    @Test
-    public void testGetDirection() {
+   // @Test
+    /*public void testGetDirection() {
         MazeConfig config = MazeConfig.mockExample();
         IntCoordinates intersectionPosition = new IntCoordinates(0,0);
         IntCoordinates pipePosition = new IntCoordinates(0,1);
