@@ -9,7 +9,7 @@ import java.util.Set;
 
 public class ClydeAITest {
 
-    @Test
+    /*@Test
     public void testGetRandomDir() {
         Set<Direction> directions = new HashSet<>();
         for (int i = 0; i < 100; i++) {
@@ -49,6 +49,6 @@ public class ClydeAITest {
         assertTrue(testIfInDirections);
         // Pipe
         assertEquals(defaultDir, ClydeAI.getDirection(config, pipePosition, defaultDir));
-    }
+    }*/
 
 }

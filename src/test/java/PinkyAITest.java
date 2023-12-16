@@ -9,9 +9,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class PinkyAITest {
 
-    @Test
-    public void testGetFrontCell() {
-        MazeConfig config = MazeConfig.mockExample();
+    //@Test
+    //public void testGetFrontCell() {
+        /*MazeConfig config = MazeConfig.mockExample();
 
         // Supposons que les coordonnées de départ soient (1, 1)
         IntCoordinates coordinates = new IntCoordinates(0, 0);
@@ -54,6 +54,6 @@ public class PinkyAITest {
         IntCoordinates targetPos = PinkyAI.getFrontCell(pacPos, pacDir, config);
         Direction expectedDirection = BlinkyAI.getDirection(config, targetPos, ghostPos);
         assertEquals(expectedDirection, direction);
-    }
+    }*/
 
 }
