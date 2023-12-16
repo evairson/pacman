@@ -33,8 +33,8 @@ public class ClydeAITest {
         assertTrue(ClydeAI.isInNode(config, intersectionPosition));
     }
 
-   // @Test
-    /*public void testGetDirection() {
+   @Test
+    public void testGetDirection() {
         MazeConfig config = MazeConfig.mockExample();
         IntCoordinates intersectionPosition = new IntCoordinates(0,0);
         IntCoordinates pipePosition = new IntCoordinates(0,1);
@@ -45,10 +45,10 @@ public class ClydeAITest {
         directions.add(Direction.NORTH);
         directions.add(Direction.SOUTH);
         directions.add(Direction.WEST);
-        boolean testIfInDirections = directions.contains(ClydeAI.getDirection(config, intersectionPosition, defaultDir));
+        boolean testIfInDirections = directions.contains(ClydeAI.getDirection(config, intersectionPosition, defaultDir,pipePosition));
         assertTrue(testIfInDirections);
         // Pipe
-        assertEquals(defaultDir, ClydeAI.getDirection(config, pipePosition, defaultDir));
-    }*/
+        assertEquals(defaultDir, ClydeAI.getDirection(config, pipePosition, defaultDir,intersectionPosition));
+    }
 
 }
