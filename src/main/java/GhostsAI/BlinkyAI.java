@@ -4,6 +4,8 @@ import geometry.*;
 import model.Direction;
 import config.MazeConfig;
 import java.util.ArrayList;
+import model.Ghost;
+import config.*;
 
 public class BlinkyAI {
 
@@ -25,10 +27,24 @@ public class BlinkyAI {
 
     //Fonction classique commune à toutes les IA : getDirection
     public static Direction getDirection(MazeConfig config, IntCoordinates pacPos, IntCoordinates ghostPos){
-        ArrayList<IntCoordinates> path = AStar.shortestPath(ghostPos, pacPos, config);
-        int pathLen = path.size();
-        IntCoordinates nextPos = path.get(pathLen-1);
-        return whichDir(ghostPos, nextPos);
+        if (!Ghost.BLINKY.isAlive() && ghostPos.equals(Ghost.BLINKY.toIntCoordinates())) {
+            if (ghostPos.equals(config.getGhostHousePos())){
+                Ghost.BLINKY.setSpeed(Ghost.BLINKY.getSpeed()/2);
+                Ghost.BLINKY.setIsAlive(true);
+                return Direction.NORTH;
+            }else{
+                ArrayList<IntCoordinates> path = AStar.shortestPath(ghostPos, config.getGhostHousePos(), config);
+                int pathlen = path.size();
+                IntCoordinates nextPos = path.get(pathlen-1);
+                return whichDir(ghostPos, nextPos);
+            }
+        }else{
+            ArrayList<IntCoordinates> path = AStar.shortestPath(ghostPos, pacPos, config);
+            int pathLen = path.size();
+            IntCoordinates nextPos = path.get(pathLen-1);
+            System.out.println(nextPos);
+            return whichDir(ghostPos, nextPos);
+        }
     }
 
 }

@@ -88,14 +88,18 @@ public final class CritterGraphicsFactory {
 
     }
 
-    public String setImgGhost(Ghost critter, int numghost, String setimgghostNE){
-        if(!critter.isEnergized()) 
-        return Objects.requireNonNull(CritterGraphicsFactory.class.getResource(setimgghostNE+getDirectionString(critter)+etatghost+".png")).toString();
-        else {
-            return Objects.requireNonNull(CritterGraphicsFactory.class.getResource("ghost-blue"+etatghost+".png")).toString();
 
-        }  
+    public String setImgGhost(Ghost critter, int numghost, String setimgghostNE){
+        if (!critter.isAlive()){
+            return "ghost-dead.png";
+        }
+        if(!critter.isEnergized()) {
+            return Objects.requireNonNull(CritterGraphicsFactory.class.getResource(setimgghostNE + getDirectionString(critter) + etatghost + ".png")).toString();
+        }else {
+            return Objects.requireNonNull(CritterGraphicsFactory.class.getResource("ghost-blue" + etatghost + ".png")).toString();
+        }
     }
+
 
     // Choix du numéro des fantômes
     public int getNumGhost(Critter critter){

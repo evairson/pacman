@@ -6,8 +6,10 @@ import model.Items.Item;
 
 public record Cell(boolean northWall, boolean eastWall, boolean southWall, boolean westWall, Item initialItem) {
 
+
     public static Cell create(boolean northWall, boolean eastWall, boolean southWall, boolean westWall, Item initialItem) {
         return new Cell(northWall,eastWall,southWall,westWall,initialItem);
+
     }
 
     public boolean isPipe(){

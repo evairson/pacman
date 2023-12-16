@@ -122,6 +122,7 @@ public class GhostTest {
         assertTrue(ghost.isCenteredDir(Direction.NORTH), "Ne doit pas être centré en x pour la direction Nord");
     }
 
+
     @Test
     public void testGetNextPos() {
         // Création du mock de MazeConfig

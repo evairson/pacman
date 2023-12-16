@@ -10,6 +10,9 @@ package model;
  * - la position initiale de chaque élément du labyrinthe
  */
 
+
+import config.Cell;
+import geometry.*;
 import config.MazeConfig;
 
 import java.util.Map;
@@ -23,6 +26,10 @@ import model.Items.Dot;
 import model.Items.Energizer;
 import model.Items.FakeEnergizer;
 import model.Items.Item;
+
+
+import java.net.URISyntaxException;
+
 import java.util.*;
 
 import static model.Ghost.*;
@@ -186,22 +193,25 @@ public final class MazeState {
         // TODO: Faire une fonction dans item qui fait tout bien (le ramssage) pour chaque item (pour éviter d'écrire 'if ... instanceof ...') et qui ne met pas grid true si l'item n'est pas ramassé...
         for (var critter : critters) { // Collision PacMan Ghosts
             if (critter instanceof Ghost && critter.getPos().round().equals(pacPos) && !PacMan.INSTANCE.isFakeEnergized()) {
-                if (PacMan.INSTANCE.isEnergized()) {
+                if (PacMan.INSTANCE.isEnergized() && ((Ghost) critter).isAlive()) {
                     addScore(10);
                     animationController.ghostEatenSound();
-                    resetCritter(critter);
+                    ((Ghost) critter).setIsAlive(false);
+                    ((Ghost) critter).setSpeed(critter.getSpeed()*2);
                 } else {
-                    playerLost();
-                    return;
+                    if (((Ghost) critter).isAlive()) {
+                        playerLost();
+                        return;
+                    }
                 }
             }
             if(BouleNeige.INSTANCE.isActive()){
                 var boulePos = BouleNeige.INSTANCE.getPos().round();
-                if(critter instanceof Ghost && critter.getPos().round().equals(boulePos)){
+                if(critter instanceof Ghost && critter.getPos().round().equals(boulePos) && ((Ghost) critter).isAlive()){
                     addScore(10);
                     animationController.ghostEatenSound();
-                    resetCritter(critter);
-
+                    ((Ghost) critter).setIsAlive(false);
+                    ((Ghost) critter).setSpeed(critter.getSpeed()*2);
                 }
             }
         }
@@ -216,19 +226,19 @@ public final class MazeState {
             }, 3000);
         }
         // TODO: Faire une fonction dans item qui fait tout bien (le ramssage) pour chaque item (pour éviter d'écrire 'if ... instanceof ...') et qui ne met pas grid true si l'item n'est pas ramassé...
-        for (var critter : critters) { // Collision PacMan Ghosts
+       /* for (var critter : critters) { // Collision PacMan Ghosts
             if (critter instanceof Ghost && critter.getPos().round().equals(pacPos) && !PacMan.INSTANCE.isFakeEnergized()) {
                 if (PacMan.INSTANCE.isEnergized()) {
                     addScore(10);
                     animationController.ghostEatenSound();
-                    resetCritter(critter);
+
                 } else {
                     playerLost();
                     return;
                 }
             }
-        }
-        if (allDotsEaten() && animationController.hasntAlreadyWon()) {
+        }*/
+        /*if (allDotsEaten() && animationController.hasntAlreadyWon()) {
             this.resetItems();
             CellGraphicsFactory.setFinNiveau(true);
             Timer timer = new Timer();
@@ -243,7 +253,7 @@ public final class MazeState {
                     BouleNeige.INSTANCE.detruire();
                   animationController.setHasntAlreadyWon(false);
                   animationController.win();
-        }
+        }*/
     }
 
 //    public int getHighScore () {
