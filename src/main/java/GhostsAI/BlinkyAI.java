@@ -42,7 +42,6 @@ public class BlinkyAI {
             ArrayList<IntCoordinates> path = AStar.shortestPath(ghostPos, pacPos, config);
             int pathLen = path.size();
             IntCoordinates nextPos = path.get(pathLen-1);
-            System.out.println(nextPos);
             return whichDir(ghostPos, nextPos);
         }
     }
