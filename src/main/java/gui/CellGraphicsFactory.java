@@ -18,6 +18,7 @@ import model.Ghost;
 import model.Items.ItemTest;
 import model.MazeState;
 import model.PacMan;
+import model.Items.Item;
 import model.Items.ItemBouleNeige;
 import model.Items.Dot;
 import model.Items.Energizer;
@@ -216,9 +217,17 @@ public class CellGraphicsFactory {
                 if (cell.initialItem() instanceof ItemTest) {
                     setActiveItemTest((ItemTest) cell.initialItem());
                 }
-                if (cell.initialItem() instanceof FakeEnergizer) {
+                /*if (cell.initialItem() instanceof FakeEnergizer) {
                     setActiveFakeEnergizer((FakeEnergizer) cell.initialItem());
+                }*/
+                if(pos.x() == 0 && pos.y() == 0){
+                    for(Item i : PacMan.INSTANCE.getInventory().getUsed()){
+                        if (i instanceof FakeEnergizer) {
+                            setActiveFakeEnergizer((FakeEnergizer) i);
+                        }
+                    }
                 }
+
                 for (Node n : group.getChildren()) {
                     if (n != cell.initialItem().getImage()) {
                         n.setVisible(!ItemTest.isOneActive());

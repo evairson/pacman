@@ -1,15 +1,13 @@
 package gui;
 
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
 import model.MazeState;
 
 public class HUDView {
-    private final MazeState maze;
+    private MazeState maze;
     private final Pane hudRoot;
     private GraphicsUpdater hudUpdater;
+    private final HUDGraphicsFactory hudGraphicsFactory;
 
     public HUDView(MazeState maze, Pane hudRoot, double width, double height, double scale){
         this.maze = maze;
@@ -20,9 +18,9 @@ public class HUDView {
         hudRoot.setStyle("-fx-background-color: #000000");
         //hudRoot.setBorder(new Border(new BorderStroke(Color.BLUE, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(2))));
 
-        HUDGraphicsFactory hudFactory = new HUDGraphicsFactory(width, height, scale);
+        this.hudGraphicsFactory = new HUDGraphicsFactory(width, height, scale);
 
-        this.setGraphics(hudFactory.makeGraphics(maze));
+        this.setGraphics(this.hudGraphicsFactory.makeGraphics(maze));
     }
 
     public void setGraphics(GraphicsUpdater updater){
@@ -32,5 +30,11 @@ public class HUDView {
 
     public GraphicsUpdater getHudUpdater(){
         return this.hudUpdater;
+    }
+
+    public void changeMaze(MazeState maze){
+        this.hudRoot.getChildren().remove(this.hudUpdater.getNode());
+        this.maze = maze;
+        this.setGraphics(this.hudGraphicsFactory.makeGraphics(maze));
     }
 }
