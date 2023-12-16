@@ -192,26 +192,18 @@ public final class MazeState {
 
         // TODO: Faire une fonction dans item qui fait tout bien (le ramssage) pour chaque item (pour éviter d'écrire 'if ... instanceof ...') et qui ne met pas grid true si l'item n'est pas ramassé...
         for (var critter : critters) { // Collision PacMan Ghosts
-            if (critter instanceof Ghost && critter.getPos().round().equals(pacPos) && !PacMan.INSTANCE.isFakeEnergized()) {
-                if (PacMan.INSTANCE.isEnergized() && ((Ghost) critter).isAlive()) {
+            if (critter instanceof Ghost && ((critter.getPos().round().equals(pacPos) && !PacMan.INSTANCE.isFakeEnergized()) ||
+            (BouleNeige.INSTANCE.isActive() && critter.getPos().round().equals(BouleNeige.INSTANCE.getPos().round())))) {
+                if ((PacMan.INSTANCE.isEnergized() || critter.getPos().round().equals(BouleNeige.INSTANCE.getPos().round())) && ((Ghost) critter).isAlive()) {
                     addScore(10);
                     animationController.ghostEatenSound();
                     ((Ghost) critter).setIsAlive(false);
                     ((Ghost) critter).setSpeed(critter.getSpeed()*2);
                 } else {
-                    if (((Ghost) critter).isAlive()) {
+                    if (((Ghost) critter).isAlive() && critter.getPos().round().equals(pacPos)) {
                         playerLost();
                         return;
                     }
-                }
-            }
-            if(BouleNeige.INSTANCE.isActive()){
-                var boulePos = BouleNeige.INSTANCE.getPos().round();
-                if(critter instanceof Ghost && critter.getPos().round().equals(boulePos) && ((Ghost) critter).isAlive()){
-                    addScore(10);
-                    animationController.ghostEatenSound();
-                    ((Ghost) critter).setIsAlive(false);
-                    ((Ghost) critter).setSpeed(critter.getSpeed()*2);
                 }
             }
         }
