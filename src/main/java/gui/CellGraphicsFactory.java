@@ -217,9 +217,9 @@ public class CellGraphicsFactory {
                 if (cell.initialItem() instanceof ItemTest) {
                     setActiveItemTest((ItemTest) cell.initialItem());
                 }
-                /*if (cell.initialItem() instanceof FakeEnergizer) {
+                if (cell.initialItem() instanceof FakeEnergizer) {
                     setActiveFakeEnergizer((FakeEnergizer) cell.initialItem());
-                }*/
+                }
                 if(pos.x() == 0 && pos.y() == 0){
                     for(Item i : PacMan.INSTANCE.getInventory().getUsed()){
                         if (i instanceof FakeEnergizer) {
