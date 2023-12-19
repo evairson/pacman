@@ -7,9 +7,12 @@ import model.Direction;
 import java.util.Random;
 
 public class InkyAI {
+    private static Random rd = new Random();
 
+    public static void setRd(Random random){
+        rd = random;
+    }
     public static Direction getDirection(MazeConfig config, IntCoordinates pacPos, IntCoordinates ghostPos, Direction pacDir){
-        Random rd = new Random();
         int n = rd.nextInt(4);
         if (n == 0) {
             Direction tempDir = BlinkyAI.getDirection(config, pacPos, ghostPos);
