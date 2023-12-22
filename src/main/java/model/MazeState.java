@@ -194,7 +194,7 @@ public final class MazeState {
         for (var critter : critters) { // Collision PacMan Ghosts
             if (critter instanceof Ghost && ((critter.getPos().round().equals(pacPos) && !PacMan.INSTANCE.isFakeEnergized()) ||
             (BouleNeige.INSTANCE.isActive() && critter.getPos().round().equals(BouleNeige.INSTANCE.getPos().round())))) {
-                if ((PacMan.INSTANCE.isEnergized() || critter.getPos().round().equals(BouleNeige.INSTANCE.getPos().round())) && ((Ghost) critter).isAlive()) {
+                if ((PacMan.INSTANCE.isEnergized() || (BouleNeige.INSTANCE.isActive() && critter.getPos().round().equals(BouleNeige.INSTANCE.getPos().round()))) && ((Ghost) critter).isAlive()) {
                     addScore(10);
                     animationController.ghostEatenSound();
                     ((Ghost) critter).setIsAlive(false);
