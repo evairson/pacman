@@ -157,7 +157,6 @@ public final class MazeState {
             
         }
 
-        // FIXME Pac-Man rules should somehow be in Pacman class
         var pacPos = PacMan.INSTANCE.getPos().round();
 
         if (!gridState[pacPos.y()][pacPos.x()]) { //Case déjà visitée ?

@@ -4,7 +4,17 @@ import model.Ghost;
 import model.PacMan;
 import java.util.ArrayList;
 
-public class FakeEnergizer extends Item {
+/**
+ * @see Item
+ * 
+ * Cette Item permet de se transformer pendant un certain temps en fantôme 
+ * afin de ne plus être suivi par les autres fantômes
+ * Changement de l'apparence de pacMan 
+ * Item Collectable
+ * 
+ */
+
+public class FakeEnergizer extends Item { // TODO: changer le nom de la classe peut compréhensible
 
     private final static ArrayList<FakeEnergizer> itemList = new ArrayList<>();
     public int frameActivity;

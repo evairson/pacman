@@ -2,6 +2,17 @@ package model.Items;
 
 import javafx.scene.image.ImageView;
 
+/**
+ * Pacman peut récolter et utiliser des items 
+ * Les items basiques sont les energizers et les pac-gommes qui sont activés automatiquement 
+ * @see Energizer
+ * @see Dot
+ * Certains items sont collectables dans l'inventaire pour les utiliser plus tard
+ * @see ItemBouleNeige
+ * @see FakeEnergizer
+ * 
+ */
+
 public class Item {
     private boolean collectable;
     private boolean active = false;

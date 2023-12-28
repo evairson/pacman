@@ -3,7 +3,16 @@ package model.Items;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
-public class ItemTest extends Item{
+/**
+ * @see Item
+ * 
+ * Cette item est un faux energizer et handicap le joueur quand il le récupère
+ * Les murs sont alors invisibles (mais toujours présents)
+ * Il n'est pas collectable et s'active directement en le récupérant
+ * 
+ */
+
+public class ItemTest extends Item{ // TODO : changer nom classe
 
     private final static ArrayList<ItemTest> itemList = new ArrayList<>();
     public int frameActivity;
