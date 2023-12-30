@@ -9,7 +9,7 @@ import javafx.scene.image.ImageView;
  * @see Dot
  * Certains items sont collectables dans l'inventaire pour les utiliser plus tard
  * @see ItemBouleNeige
- * @see FakeEnergizer
+ * @see PacManGhost
  * 
  */
 

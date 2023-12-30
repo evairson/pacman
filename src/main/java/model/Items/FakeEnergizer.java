@@ -1,35 +1,39 @@
 package model.Items;
 
-import model.Ghost;
-import model.PacMan;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**
  * @see Item
  * 
- * Cette Item permet de se transformer pendant un certain temps en fantôme 
- * afin de ne plus être suivi par les autres fantômes
- * Changement de l'apparence de pacMan 
- * Item Collectable
+ * Cette item est un faux energizer et handicap le joueur quand il le récupère
+ * Les murs sont alors invisibles (mais toujours présents)
+ * Il n'est pas collectable et s'active directement en le récupérant
  * 
  */
 
-public class FakeEnergizer extends Item { // TODO: changer le nom de la classe peut compréhensible
+public class FakeEnergizer extends Item{ 
 
     private final static ArrayList<FakeEnergizer> itemList = new ArrayList<>();
     public int frameActivity;
 
     public FakeEnergizer(){
-        super.setCollectable(true);
+        super.setCollectable(false);
         this.frameActivity = 0;
         itemList.add(this);
-        this.url = (FakeEnergizer.class.getResource("FakeGhost.jpg")).toString();
     }
+
+    /*public boolean isCollectable(){
+        return super.isCollectable();
+    }
+
+    public boolean isActive(){
+        return super.isActive();
+    }*/
 
     public void setActive(boolean b){
         super.setActive(b);
         this.frameActivity = 0;
-        PacMan.INSTANCE.setFakeEnergized(b);
     }
 
     public static boolean isOneActive(){
@@ -39,5 +43,9 @@ public class FakeEnergizer extends Item { // TODO: changer le nom de la classe p
             }
         }
         return false;
+    }
+
+    public String toString(){
+        return "itemtest";
     }
 }

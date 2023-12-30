@@ -5,9 +5,9 @@ import model.Items.ItemBouleNeige;
 import model.Direction;
 import model.Items.Dot;
 import model.Items.Energizer;
-import model.Items.FakeEnergizer;
+import model.Items.PacManGhost;
 import model.Items.Item;
-import model.Items.ItemTest;
+import model.Items.FakeEnergizer;
 
 import java.io.*;
 import java.net.URL;
@@ -177,8 +177,8 @@ public class MazeConfig {
                         lab[i][j-1].equals("|"),
                         (lab[i][j].equals(" . "))? new Dot() :
                                 ((lab[i][j].equals(" E "))? new Energizer() :
-                                        ((lab[i][j].equals(" T "))? new ItemTest() :
-                                            ((lab[i][j].equals(" S "))? new FakeEnergizer() :
+                                        ((lab[i][j].equals(" T "))? new FakeEnergizer() :
+                                            ((lab[i][j].equals(" S "))? new PacManGhost() :
                                                 ((lab[i][j].equals(" B "))? new ItemBouleNeige() : new Item())))));
             }
         }
