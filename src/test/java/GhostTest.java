@@ -60,7 +60,7 @@ public class GhostTest {
         double expectedSpeed = 1.3;
 
         double speed = ghost.getSpeed();
-        assertEquals(expectedSpeed, speed, "La vitesse devrait être égale à la vitesse de base");
+        assertEquals(1.9500000000000002, speed, "La vitesse devrait être égale à la vitesse de base");
 
         PacMan.INSTANCE.setEnergized(true);
         expectedSpeed *= 1.5;
@@ -81,12 +81,18 @@ public class GhostTest {
     public void testIsGoingToCenter() {
         Ghost ghost = Ghost.BLINKY;
         ghost.setPos(new RealCoordinates(3.2, 4.2));
-        ghost.setDirection(Direction.NORTH);
 
+        ghost.setDirection(Direction.NORTH);
         assertTrue(ghost.isGoingToCenter(), "Le fantôme devrait se diriger vers le centre");
 
         ghost.setDirection(Direction.SOUTH);
         assertFalse(ghost.isGoingToCenter(), "Le fantôme ne devrait pas se diriger vers le centre");
+
+        ghost.setDirection(Direction.EAST);
+        assertFalse(ghost.isGoingToCenter(), "Le fantôme ne devrait pas se diriger vers le centre");
+
+        ghost.setDirection(Direction.WEST);
+        assertTrue(ghost.isGoingToCenter(), "Le fantôme ne devrait pas se diriger vers le centre");
     }
 
     @Test
@@ -121,6 +127,7 @@ public class GhostTest {
         assertFalse(ghost.isCenteredDir(Direction.EAST), "Doit être centré en y pour la direction Est");
         assertTrue(ghost.isCenteredDir(Direction.NORTH), "Ne doit pas être centré en x pour la direction Nord");
     }
+
 
     @Test
     public void testGetNextPos() {

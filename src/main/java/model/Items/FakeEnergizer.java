@@ -1,25 +1,39 @@
 package model.Items;
 
-import model.Ghost;
-import model.PacMan;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
-public class FakeEnergizer extends Item {
+/**
+ * @see Item
+ * 
+ * Cette item est un faux energizer et handicap le joueur quand il le récupère
+ * Les murs sont alors invisibles (mais toujours présents)
+ * Il n'est pas collectable et s'active directement en le récupérant
+ * 
+ */
 
-    private final static ArrayList<FakeEnergizer> itemList = new ArrayList<>();
+public class FakeEnergizer extends Item{ 
+
+    public final static ArrayList<FakeEnergizer> itemList = new ArrayList<>();
     public int frameActivity;
 
     public FakeEnergizer(){
-        super.setCollectable(true);
+        super.setCollectable(false);
         this.frameActivity = 0;
         itemList.add(this);
-        this.url = (FakeEnergizer.class.getResource("FakeGhost.jpg")).toString();
     }
+
+    /*public boolean isCollectable(){
+        return super.isCollectable();
+    }
+
+    public boolean isActive(){
+        return super.isActive();
+    }*/
 
     public void setActive(boolean b){
         super.setActive(b);
         this.frameActivity = 0;
-        PacMan.INSTANCE.setFakeEnergized(b);
     }
 
     public static boolean isOneActive(){
@@ -29,5 +43,9 @@ public class FakeEnergizer extends Item {
             }
         }
         return false;
+    }
+
+    public String toString(){
+        return "itemtest";
     }
 }

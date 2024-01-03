@@ -2,19 +2,21 @@ package model;
 
 import config.MazeConfig;
 import geometry.IntCoordinates;
-import java.util.Timer;
-import java.util.TimerTask;
 import config.Cell;
-
 import geometry.RealCoordinates;
 import model.Items.Inventory;
 
+
 /**
  * Implémente PacMan comme un singleton.
- * 1. Gestion du temps d'énergie : un timer qui se décrémente à chaque tick
- *    et qui désactive l'état énergisé quand il atteint 0.
- *    (voir https://stackoverflow.com/questions/4044726/how-to-set-a-timer-in-java)
- *
+ * 
+ * pacMan a une position et une direction 
+ * Il peut être en mode energizer ou fakeEnergizer quand il utilise un item
+ * La direction est contrôlé dans la classe PacmanControler
+ * @see PacmanController
+ * De plus pacman contient un inventaire pour pouvoir utiliser des items
+ * @see Inventory
+ * @see Item
  * 
  */
 public final class PacMan implements Critter {
@@ -22,7 +24,7 @@ public final class PacMan implements Critter {
     private RealCoordinates pos;
     private Direction direction = Direction.NONE;
     private Direction nextDir = Direction.NONE;
-    private boolean energized; //FIXME : remettre a false
+    private boolean energized; 
     public boolean fakeEnergized;
     private final Inventory inventory;
     static final double TPINTERVAL = 0.1;
@@ -144,8 +146,8 @@ public final class PacMan implements Critter {
                     if (config.getCell(this.currCellI()).westWall()) {
                         return new RealCoordinates(Math.max(nextPos.x(), Math.floor(this.getPos().x())), this.getPos().y());
                     } else {
-                        if (nextPos.x()<-0.5) {
-                            nextPos = new RealCoordinates((config.getWidth() - TPINTERVAL),this.getPos().y());
+                        if (config.isWarp(config.getCell(this.currCellI()),dir) && Math.round(nextPos.x())<=0) {
+                            nextPos = new RealCoordinates((config.getWidth() - 0.6),this.getPos().y()); // Warp !!!
                         }
                         return nextPos;
                     }
@@ -154,8 +156,8 @@ public final class PacMan implements Critter {
                     if (config.getCell(this.currCellI()).eastWall()) {
                         return new RealCoordinates(Math.min(nextPos.x(), Math.ceil(this.getPos().x())), this.getPos().y());
                     } else {
-                        if (nextPos.x() > config.getWidth() - TPINTERVAL) {
-                            nextPos = new RealCoordinates((-0.5 + TPINTERVAL),this.getPos().y());
+                        if (config.isWarp(config.getCell(this.currCellI()),dir)  && Math.round(nextPos.x())>= config.getWidth()) {
+                            nextPos = new RealCoordinates((TPINTERVAL),this.getPos().y());
                         }
                         return nextPos;
                     }
@@ -164,8 +166,8 @@ public final class PacMan implements Critter {
                     if (config.getCell(this.currCellI()).northWall()) {
                         return new RealCoordinates(this.getPos().x(), Math.max(nextPos.y(), Math.floor(this.getPos().y())));
                     } else {
-                        if (nextPos.y()<-0.5) {
-                            nextPos = new RealCoordinates(this.getPos().x(),(config.getHeight() - TPINTERVAL));
+                        if (config.isWarp(config.getCell(this.currCellI()),dir) && Math.round(nextPos.y())<=0) {
+                            nextPos = new RealCoordinates(this.getPos().x(),(config.getHeight() - 0.6));
                         }
                         return nextPos;
                     }
@@ -174,7 +176,7 @@ public final class PacMan implements Critter {
                     if (config.getCell(this.currCellI()).southWall()) {
                         return new RealCoordinates(this.getPos().x(), Math.min(nextPos.y(), Math.ceil(this.getPos().y())));
                     } else {
-                        if (nextPos.y() > config.getHeight() - TPINTERVAL) {
+                        if (config.isWarp(config.getCell(this.currCellI()),dir) && Math.round(nextPos.y())>=config.getHeight()) {
                             nextPos = new RealCoordinates(this.getPos().x(),TPINTERVAL);
                         }
                         return nextPos;
@@ -204,6 +206,7 @@ public final class PacMan implements Critter {
     public void setNextDir(Direction dir){
         this.nextDir = dir;
     }
+
     public Direction getNextDir(){
         if(this.isCenteredDir(nextDir)){
             return nextDir;

@@ -15,13 +15,14 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.util.Duration;
 import model.Ghost;
-import model.Items.ItemTest;
+import model.Items.FakeEnergizer;
 import model.MazeState;
 import model.PacMan;
+import model.Items.Item;
 import model.Items.ItemBouleNeige;
 import model.Items.Dot;
 import model.Items.Energizer;
-import model.Items.FakeEnergizer;
+import model.Items.PacManGhost;
 import config.Cell;
 
 import java.util.Objects;
@@ -115,7 +116,7 @@ public class CellGraphicsFactory {
         }
     }
 
-    public void setActiveItemTest(ItemTest t) {
+    public void setActiveItemTest(FakeEnergizer t) {
         if (t.isActive()) {
             t.frameActivity++;
             if (t.frameActivity > 500) {
@@ -124,7 +125,7 @@ public class CellGraphicsFactory {
         }
     }
 
-    public void setActiveFakeEnergizer(FakeEnergizer e) {
+    public void setActiveFakeEnergizer(PacManGhost e) {
         if (e.isActive()) {
             e.frameActivity++;
             if (e.frameActivity > 500) {
@@ -146,7 +147,7 @@ public class CellGraphicsFactory {
 
         double radius = 0;
         if (cell.initialItem().getClass() == Dot.class) radius = scale / 20;
-        if ((cell.initialItem() instanceof Energizer) || (cell.initialItem() instanceof ItemTest)) radius = scale / 7;
+        if ((cell.initialItem() instanceof Energizer) || (cell.initialItem() instanceof FakeEnergizer)) radius = scale / 7;
         dot.setRadius(radius);
 
         dot.setCenterX(scale / 2);
@@ -161,14 +162,14 @@ public class CellGraphicsFactory {
 
         choixMur(cell, taille, group);
 
-        if (cell.initialItem() instanceof FakeEnergizer || (cell.initialItem() instanceof ItemBouleNeige)) {
+        if (cell.initialItem() instanceof PacManGhost || (cell.initialItem() instanceof ItemBouleNeige)) {
             cell.initialItem().setImage(new ImageView(new Image(cell.initialItem().getUrl(), taille / 2, taille / 2, true, false)));
             group.getChildren().add(cell.initialItem().getImage());
             cell.initialItem().getImage().setTranslateX(scale / 4);
             cell.initialItem().getImage().setTranslateY(scale / 4);
         }
 
-        if ((cell.initialItem() instanceof Energizer) || (cell.initialItem() instanceof ItemTest)) {
+        if ((cell.initialItem() instanceof Energizer) || (cell.initialItem() instanceof FakeEnergizer)) {
 
             ScaleTransition blink = new ScaleTransition(Duration.millis(600), dot);
             blink.setFromX(1);
@@ -213,20 +214,28 @@ public class CellGraphicsFactory {
                 if (cell.initialItem() instanceof Energizer) {
                     setEnergized((Energizer) cell.initialItem());
                 }
-                if (cell.initialItem() instanceof ItemTest) {
-                    setActiveItemTest((ItemTest) cell.initialItem());
-                }
                 if (cell.initialItem() instanceof FakeEnergizer) {
-                    setActiveFakeEnergizer((FakeEnergizer) cell.initialItem());
+                    setActiveItemTest((FakeEnergizer) cell.initialItem());
                 }
+                if (cell.initialItem() instanceof PacManGhost) {
+                    setActiveFakeEnergizer((PacManGhost) cell.initialItem());
+                }
+                if(pos.x() == 0 && pos.y() == 0){
+                    for(Item i : PacMan.INSTANCE.getInventory().getUsed()){
+                        if (i instanceof PacManGhost) {
+                            setActiveFakeEnergizer((PacManGhost) i);
+                        }
+                    }
+                }
+
                 for (Node n : group.getChildren()) {
                     if (n != cell.initialItem().getImage()) {
-                        n.setVisible(!ItemTest.isOneActive());
+                        n.setVisible(!FakeEnergizer.isOneActive());
                     }
                 }
                 //afficher les points si pacman pas passé dessus
                 dot.setVisible(!state.getGridState(pos));
-                if ((cell.initialItem() instanceof FakeEnergizer || (cell.initialItem() instanceof ItemBouleNeige)) && state.getGridState(pos)) {
+                if ((cell.initialItem() instanceof PacManGhost || (cell.initialItem() instanceof ItemBouleNeige)) && state.getGridState(pos)) {
                     group.getChildren().remove(cell.initialItem().getImage());
                 }
             }

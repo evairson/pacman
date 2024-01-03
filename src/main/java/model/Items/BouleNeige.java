@@ -8,11 +8,25 @@ import model.Direction;
 import model.MazeState;
 import model.PacMan;
 
+/**
+ * @see Critter
+ * 
+ * Ce critter est implémenter dès le départ dans le jeu mais n'est visible que lorsque pacMan utilise l'item
+ * @see ItemBouleNeige
+ * La boule de neige va tout droit dans la même direction de pacman au moment du lancer jusqu'à croiser un mur
+ * Elle tue les ennemis sur son passage et recolte les pac-gommes
+ * 
+ * 
+ */
+
+
+
 public final class BouleNeige implements Critter {
     private RealCoordinates pos;
     private Direction direction;
     private final double speed = 5;
     private boolean active;
+    private int warp;
 
     private static final double TPINTERVAL = 0.02;
 
@@ -26,6 +40,7 @@ public final class BouleNeige implements Critter {
         pos = PacMan.INSTANCE.getPos();
         direction = PacMan.INSTANCE.getDirection();
         active = true;
+        warp = 0;
     }
 
     public void detruire(){
@@ -62,6 +77,7 @@ public final class BouleNeige implements Critter {
     @Override
     public void tpToCenter(){
         RealCoordinates currCell = this.currCellR();
+        double test = this.pos.dist(currCell);
         if(this.isGoingToCenter() && this.pos.dist(currCell) < TPINTERVAL) {
             this.setPos(currCell);
         }
@@ -125,24 +141,65 @@ public final class BouleNeige implements Critter {
                     if(config.getCell(this.currCellI()).westWall()){
                         return null;
                     } else {
+                        if (config.isWarp(config.getCell(this.currCellI()),dir) && Math.round(nextPos.x())<=0) {
+                            if(warp>2){
+                                detruire();
+                            }
+                            else {
+
+                                nextPos = new RealCoordinates((config.getWidth() - 0.6),this.getPos().y()); // Warp !!!
+                        
+                                warp ++;
+                            }
+                        }
                         return nextPos;
                     }
                 case EAST :
                     if(config.getCell(this.currCellI()).eastWall()){
                         return null;
                     } else {
+                        if (config.isWarp(config.getCell(this.currCellI()),dir)  && Math.round(nextPos.x())>= config.getWidth()) {
+                            if(warp>2){
+                                detruire();
+                            }
+                            else {
+
+                                nextPos = new RealCoordinates((TPINTERVAL),this.getPos().y());
+
+                                warp++;
+                            }
+                        }
                         return nextPos;
                     }
                 case NORTH :
                     if(config.getCell(this.currCellI()).northWall()){
                         return null;
                     } else {
+                        if (config.isWarp(config.getCell(this.currCellI()),dir) && Math.round(nextPos.y())<=0) {
+                            if(warp>2){
+                                detruire();
+                            }
+                            else {
+                                
+                                nextPos = new RealCoordinates(this.getPos().x(),(config.getHeight() - 0.6));
+                                warp++;
+                            }
+                           }
                         return nextPos;
                     }
                 case SOUTH :
                     if(config.getCell(this.currCellI()).southWall()){
                         return null;
                     } else {
+                        if (config.isWarp(config.getCell(this.currCellI()),dir) && Math.round(nextPos.y())>=config.getHeight()) {
+                            if(warp>2){
+                                detruire();
+                            }
+                            else {
+                                nextPos = new RealCoordinates(this.getPos().x(),TPINTERVAL);
+                                warp++;
+                            }
+                        }
                         return nextPos;
                     }
                 default : return this.pos;

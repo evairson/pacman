@@ -1,8 +1,13 @@
 package GhostsAI;
 
+import config.Cell;
+import geometry.AStar;
 import geometry.IntCoordinates;
+import geometry.RealCoordinates;
 import model.Direction;
+import model.Ghost;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 import config.MazeConfig;
@@ -25,11 +30,24 @@ public class ClydeAI{
         return !config.getCell(intC).isPipe();
     }
 
-    public static Direction getDirection(MazeConfig config, IntCoordinates intC, Direction defaultDir){
-        if(isInNode(config, intC)){
-            return getRandomDir();
+    public static Direction getDirection(MazeConfig config, IntCoordinates intC, Direction defaultDir,IntCoordinates ghostPos) { //Voir commentaire dans BlinkyAI.java
+        if (!Ghost.CLYDE.isAlive() && ghostPos.equals(Ghost.CLYDE.toIntCoordinates())) {
+            if (ghostPos.equals(config.getGhostHousePos())){
+                Ghost.CLYDE.setSpeed(Ghost.CLYDE.getSpeed()/2);
+                Ghost.CLYDE.setIsAlive(true);
+                return Direction.NORTH;
+            }else{
+                ArrayList<IntCoordinates> path = AStar.shortestPath(ghostPos, config.getGhostHousePos(), config);
+                int pathlen = path.size();
+                IntCoordinates nextPos = path.get(pathlen-1);
+                return BlinkyAI.whichDir(ghostPos, nextPos);
+            }
         } else {
-            return defaultDir;
+            if (isInNode(config, intC)) {
+                return getRandomDir();
+            } else {
+                return defaultDir;
+            }
         }
     }
 }

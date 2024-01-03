@@ -105,7 +105,7 @@ public class App extends Application {
         root.setCenter(gameComponents);
         root.setBottom(hudPane);
 
-        var animationController = new AnimationController(gameView.getGraphicsUpdaters(), gameView.getMaze(), primaryStage, gameView, gameComponents, 0.8*scale);
+        var animationController = new AnimationController(gameView.getGraphicsUpdaters(), gameView.getMaze(), primaryStage, gameView, gameComponents, hudView, 0.8*scale);
         animationController.mainTheme();
         pacmanController.setAnimationController(animationController);
         maze.setAnimationController(animationController);
