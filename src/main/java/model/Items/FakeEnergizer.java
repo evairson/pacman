@@ -14,7 +14,7 @@ import java.util.ArrayList;
 
 public class FakeEnergizer extends Item{ 
 
-    private final static ArrayList<FakeEnergizer> itemList = new ArrayList<>();
+    public final static ArrayList<FakeEnergizer> itemList = new ArrayList<>();
     public int frameActivity;
 
     public FakeEnergizer(){
