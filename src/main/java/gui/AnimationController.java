@@ -282,11 +282,13 @@ public class AnimationController {
 
     public void ghostEatenSound() {
         AudioClip eaten = new AudioClip(AnimationController.class.getResource("pacManGhostEaten.mp3").toExternalForm());
+        eaten.setVolume(0.5);
         eaten.play();
     }
 
     public void mainTheme() {
         AudioClip main = new AudioClip(AnimationController.class.getResource("pacmanThemeOriginal.mp3").toExternalForm());
+        main.setVolume(0.1);
         main.play();
     }
 
