@@ -78,16 +78,20 @@ public class MazeConfig {
                                 return true;
                             }
                         } break;
-            case WEST :  for(int i = 0; i < grid.length; i++){
-                            if(grid[i][0]== c && !c.westWall()){
-                                return true;
-                            }
-                        } break;
-            case EAST :  for(int i = 0; i < grid.length; i++){
-                            if(grid[i][grid[0].length-1]== c && !c.eastWall()){
-                                return true;
-                            }
-                        } break;
+            case WEST :
+                for (Cell[] cells : grid) {
+                    if (cells[0] == c && !c.westWall()) {
+                        return true;
+                    }
+                }
+                break;
+            case EAST :
+                for (Cell[] cells : grid) {
+                    if (cells[grid[0].length - 1] == c && !c.eastWall()) {
+                        return true;
+                    }
+                }
+                break;
             case NONE : return false;
         }
         return false;
@@ -150,7 +154,7 @@ public class MazeConfig {
             //Remove the last character of the current line if it's '\n' (was causing errors)
             // Caused by Windaube Version, nique Bill Gates
             else{
-                split = currentLine.substring(0,currentLine.length()).split(",");
+                split = currentLine.split(",");
             }
             pos[i] = new IntCoordinates(Integer.parseInt(split[0].substring(3)),Integer.parseInt(split[1]));
         }
@@ -257,12 +261,12 @@ public class MazeConfig {
 
     public static MazeConfig mockExample() {
         return new MazeConfig(new Cell[][]{
-                {Cell.create(true, false, false, false, new Dot()), Cell.create(true, false, true, false, new Dot()), Cell.create(true, false, true, false, new Dot()), Cell.create(true, false, true, false, new Dot()), Cell.create(true, false, true, false, new Dot()), Cell.create(true, false, false, false, new Dot())},
+                {Cell.create(false, false, false, false, new Dot()), Cell.create(true, false, true, false, new Dot()), Cell.create(true, false, true, false, new Dot()), Cell.create(true, false, true, false, new Dot()), Cell.create(true, false, true, false, new Dot()), Cell.create(true, false, false, false, new Dot())},
                 {Cell.create(false, true, false, true, new Dot()), Cell.create(true, false, false, true, new Item()), Cell.create(true, false, false, false, new Item()), Cell.create(true, false, false, false, new Item()), Cell.create(true, true, false, false, new Item()), Cell.create(false, true, false, true, new Dot())},
                 {Cell.create(false, true, false, true, new Dot()), Cell.create(false, false, false, true, new Item()), Cell.create(false, false, false, false, new Item()), Cell.create(false, false, false, false, new Item()), Cell.create(false, true, false, false, new Item()), Cell.create(false, true, false, true, new Dot())},
                 {Cell.create(false, true, false, true, new Dot()), Cell.create(false, false, false, true, new Item()), Cell.create(false, false, false, false, new Item()), Cell.create(false, false, false, false, new Item()), Cell.create(false, true, false, false, new Item()), Cell.create(false, true, false, true, new Dot())},
                 {Cell.create(false, true, false, true, new Dot()), Cell.create(false, false, true, true, new Item()), Cell.create(false, false, true, false, new Item()), Cell.create(false, false, true, false, new Item()), Cell.create(false, true, true, false, new Item()), Cell.create(false, true, false, true, new Dot())},
-                {Cell.create(false, false, true, true, new Dot()), Cell.create(true, false, true, false, new Dot()), Cell.create(true, false, true, false, new Dot()), Cell.create(true, false, true, false, new Dot()), Cell.create(true, false, true, false, new Dot()), Cell.create(false, true, true, false, new Dot())}
+                {Cell.create(false, false, false, true, new Dot()), Cell.create(true, false, true, false, new Dot()), Cell.create(true, false, true, false, new Dot()), Cell.create(true, false, true, false, new Dot()), Cell.create(true, false, true, false, new Dot()), Cell.create(false, true, true, false, new Dot())}
         },
                 new IntCoordinates(3, 0),
                 new IntCoordinates(0, 3),

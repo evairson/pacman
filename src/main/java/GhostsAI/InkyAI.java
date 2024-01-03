@@ -12,7 +12,12 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class InkyAI {
+    private static Random rd = new Random();
 
+
+    public static void setRd(Random random){
+        rd = random;
+    }
     public static Direction getDirection(MazeConfig config, IntCoordinates pacPos, IntCoordinates ghostPos, Direction pacDir){ //Voir commentaire dans BlinkyAI.java
         if (!Ghost.INKY.isAlive() && ghostPos.equals(Ghost.INKY.toIntCoordinates())) {
             if (ghostPos.equals(config.getGhostHousePos())){

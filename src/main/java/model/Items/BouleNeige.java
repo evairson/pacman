@@ -77,6 +77,7 @@ public final class BouleNeige implements Critter {
     @Override
     public void tpToCenter(){
         RealCoordinates currCell = this.currCellR();
+        double test = this.pos.dist(currCell);
         if(this.isGoingToCenter() && this.pos.dist(currCell) < TPINTERVAL) {
             this.setPos(currCell);
         }

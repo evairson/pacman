@@ -10,7 +10,7 @@ import java.util.ArrayList;
     /*public boolean special;*/
 public class Energizer extends Item {
     public int frameActivity;
-    private static final ArrayList<Energizer> itemList = new ArrayList<>();
+    public static final ArrayList<Energizer> itemList = new ArrayList<>();
 
     public Energizer(){
         super.setCollectable(false);

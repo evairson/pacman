@@ -16,7 +16,7 @@ import javafx.scene.image.ImageView;
 public class Item {
     private boolean collectable;
     private boolean active = false;
-    protected String url;
+    public String url;
     protected ImageView image;
 
     public Item(){
