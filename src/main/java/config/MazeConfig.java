@@ -5,13 +5,14 @@ import model.Items.ItemBouleNeige;
 import model.Direction;
 import model.Items.Dot;
 import model.Items.Energizer;
-import model.Items.FakeEnergizer;
+import model.Items.PacManGhost;
 import model.Items.Item;
-import model.Items.ItemTest;
+import model.Items.FakeEnergizer;
 
 import java.io.*;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -19,9 +20,9 @@ import java.util.Objects;
 public class MazeConfig {
 
     private final Cell[][] grid;
-    private final IntCoordinates pacManPos, blinkyPos, pinkyPos, inkyPos, clydePos;
+    private final IntCoordinates pacManPos, blinkyPos, pinkyPos, inkyPos, clydePos, ghostHouse;
     public MazeConfig(Cell[][] grid, IntCoordinates pacManPos, IntCoordinates blinkyPos, IntCoordinates pinkyPos,
-                      IntCoordinates inkyPos, IntCoordinates clydePos) {
+                      IntCoordinates inkyPos, IntCoordinates clydePos, IntCoordinates ghostHousePos) {
         this.grid = new Cell[grid.length][];
         for (int i = 0; i < grid.length; i++) {
             this.grid[i] = new Cell[grid[i].length];
@@ -32,6 +33,7 @@ public class MazeConfig {
         this.inkyPos = inkyPos;
         this.pinkyPos = pinkyPos;
         this.clydePos = clydePos;
+        this.ghostHouse=ghostHousePos;
     }
 
     public IntCoordinates getPacManPos() {
@@ -53,6 +55,8 @@ public class MazeConfig {
     public IntCoordinates getClydePos() {
         return clydePos;
     }
+    public IntCoordinates getGhostHousePos(){ return this.ghostHouse;}
+
 
     public int getWidth() {
         return grid[0].length;
@@ -97,6 +101,15 @@ public class MazeConfig {
         return grid[Math.floorMod(pos.y(), getHeight())][Math.floorMod(pos.x(), getWidth())];
     }
 
+    public Cell[][] getGrid() {
+        return grid;
+    }
+
+    public void setCell(IntCoordinates pos, Cell c){
+        grid[pos.x()][pos.y()] = c;
+    }
+
+
     /** txtToMaze prend en entrée le chemin vers un fichier texte (String) et renvoie le labyrinthe associé (MazeConfig)
      *  Tout d'abord on lit le fichier texte avec readAllLines et on place la liste des lignes
      *  obtenue tout de suite dans un tableau "linesArray" pour une manipulation plus simple et efficace
@@ -111,8 +124,10 @@ public class MazeConfig {
      *  On return le MazeConfig construit par le tableau de cellules et les IntCoordinates
      * */
 
-    public static MazeConfig txtToMaze(List<String> lines) {
-        int height = lines.size()-5; // les 5 dernières lignes du .txt servent aux positions des personnages
+
+
+    public static MazeConfig txtToMaze(List<String> lines) throws IOException {
+        int height = lines.size()-6; // les 5 dernières lignes du .txt servent aux positions des personnages
         int width = 2 * ((lines.get(0).length()-1)/4) + 1; // les cases du tableau sont alternativement de largeur 1 et 3
         String[] linesArray = lines.toArray(new String[0]);
 
@@ -127,9 +142,10 @@ public class MazeConfig {
                 }
             }
         }
-        IntCoordinates[] pos = new IntCoordinates[5];
+        IntCoordinates[] pos = new IntCoordinates[6];
         String[] split;
-        for (int i = 0; i < 5; i++) { // on crée les IntCoordinates des 5 persos à partir des 5 dernières lignes
+
+        for (int i = 0; i < 6; i++) { // on crée les IntCoordinates des 5 persos à partir des 5 dernières lignes
             //The current line we're looking at
             String currentLine = linesArray[i+height];
             if(i == 4){
@@ -142,7 +158,7 @@ public class MazeConfig {
             }
             pos[i] = new IntCoordinates(Integer.parseInt(split[0].substring(3)),Integer.parseInt(split[1]));
         }
-        return new MazeConfig(stringToCell(lab),pos[0],pos[1],pos[2],pos[3],pos[4]);
+        return new MazeConfig(stringToCell(lab),pos[0],pos[1],pos[2],pos[3],pos[4],pos[5]);
     }
 
     /** stringToCell prend en entrée un tableau de String "lab" contenant les données des murs et contenus d'un labyrinthe
@@ -165,8 +181,8 @@ public class MazeConfig {
                         lab[i][j-1].equals("|"),
                         (lab[i][j].equals(" . "))? new Dot() :
                                 ((lab[i][j].equals(" E "))? new Energizer() :
-                                        ((lab[i][j].equals(" T "))? new ItemTest() :
-                                            ((lab[i][j].equals(" S "))? new FakeEnergizer() :
+                                        ((lab[i][j].equals(" T "))? new FakeEnergizer() :
+                                            ((lab[i][j].equals(" S "))? new PacManGhost() :
                                                 ((lab[i][j].equals(" B "))? new ItemBouleNeige() : new Item())))));
             }
         }
@@ -216,6 +232,7 @@ public class MazeConfig {
      *  3. Ajout d'une méthode de lecture de fichier dans la classe {@link MazeConfig}
      *
      */
+
     public static MazeConfig makeGenericExample(int x) throws IOException {
         try {
             InputStream file = Objects.requireNonNull(MazeConfig.class.getResourceAsStream("testMap" + x + ".txt"));
@@ -255,7 +272,8 @@ public class MazeConfig {
                 new IntCoordinates(0, 3),
                 new IntCoordinates(3, 5),
                 new IntCoordinates(5, 5),
-                new IntCoordinates(5, 1)
+                new IntCoordinates(5, 1),
+                new IntCoordinates(9,6)
         );
     }
 

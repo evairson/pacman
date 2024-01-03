@@ -26,10 +26,10 @@ public class PacmanController {
                     animationController.startPauseMenu();
                 }
             }
-            case A -> { PacMan.INSTANCE.getInventory().getNth(0).setActive(true); PacMan.INSTANCE.getInventory().remove(0);}
-            case Z -> { PacMan.INSTANCE.getInventory().getNth(1).setActive(true); PacMan.INSTANCE.getInventory().remove(1);}
-            case E -> { PacMan.INSTANCE.getInventory().getNth(2).setActive(true); PacMan.INSTANCE.getInventory().remove(2);}
-            case R -> { PacMan.INSTANCE.getInventory().getNth(3).setActive(true); PacMan.INSTANCE.getInventory().remove(3);}
+            case A -> { PacMan.INSTANCE.getInventory().getNth(0).setActive(true); PacMan.INSTANCE.getInventory().addUsed(PacMan.INSTANCE.getInventory().getNth(0)); PacMan.INSTANCE.getInventory().remove(0);}
+            case Z -> { PacMan.INSTANCE.getInventory().getNth(1).setActive(true); PacMan.INSTANCE.getInventory().addUsed(PacMan.INSTANCE.getInventory().getNth(1)); PacMan.INSTANCE.getInventory().remove(1);}
+            case E -> { PacMan.INSTANCE.getInventory().getNth(2).setActive(true); PacMan.INSTANCE.getInventory().addUsed(PacMan.INSTANCE.getInventory().getNth(2)); PacMan.INSTANCE.getInventory().remove(2);}
+            case R -> { PacMan.INSTANCE.getInventory().getNth(3).setActive(true); PacMan.INSTANCE.getInventory().addUsed(PacMan.INSTANCE.getInventory().getNth(3)); PacMan.INSTANCE.getInventory().remove(3);}
             default -> {
                 PacMan.INSTANCE.setNextDir(
                         switch (event.getCode()) {

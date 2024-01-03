@@ -88,14 +88,22 @@ public final class CritterGraphicsFactory {
 
     }
 
-    public String setImgGhost(Ghost critter, int numghost, String setimgghostNE){
-        if(!critter.isEnergized()) 
-        return Objects.requireNonNull(CritterGraphicsFactory.class.getResource(setimgghostNE+getDirectionString(critter)+etatghost+".png")).toString();
-        else {
-            return Objects.requireNonNull(CritterGraphicsFactory.class.getResource("ghost-blue"+etatghost+".png")).toString();
 
-        }  
+    public String setImgGhost(Ghost critter, int numghost, String setimgghostNE){
+        if (!critter.isAlive()){
+            return "ghost-dead.png";
+        }
+        if(!critter.isEnergized()) {
+            return Objects.requireNonNull(CritterGraphicsFactory.class.getResource(setimgghostNE + getDirectionString(critter) + etatghost + ".png")).toString();
+        }else {
+            return Objects.requireNonNull(CritterGraphicsFactory.class.getResource("ghost-blue" + etatghost + ".png")).toString();
+        }
     }
+
+    public String setImgFakeGhost(int numghost){
+        return Objects.requireNonNull(CritterGraphicsFactory.class.getResource("fakeGhost-" + getDirectionString(PacMan.INSTANCE) + etatghost + ".png")).toString();
+    }
+
 
     // Choix du numéro des fantômes
     public int getNumGhost(Critter critter){
@@ -157,16 +165,23 @@ public final class CritterGraphicsFactory {
 
                 //changer image pacman 
                 if(critter instanceof PacMan){
-                    if(Math.abs(critter.getPos().x() - pos.x()) >= 0.2 || Math.abs(critter.getPos().y() - pos.y()) >= 0.2 ){
-                        etatPacman = switch(etatPacman){
-                            case "ferme" -> "rond";
-                            case "rond" -> "ouvert";
-                            case "ouvert" -> "ferme";
-                            default -> "ferme";
-                        };
-                        pos = critter.getPos();
+                    if(critter.isFakeEnergized()){ 
+                        image.setImage(new Image(setImgFakeGhost(numGhost), taille, taille, true, false));
+                    
                     }
-                    image.setImage(new Image(setImgPacman(critter), taille, taille, true, false));
+                    else {
+                        if(Math.abs(critter.getPos().x() - pos.x()) >= 0.2 || Math.abs(critter.getPos().y() - pos.y()) >= 0.2 ){
+                            etatPacman = switch(etatPacman){
+                                case "ferme" -> "rond";
+                                case "rond" -> "ouvert";
+                                case "ouvert" -> "ferme";
+                                default -> "ferme";
+                            };
+                            pos = critter.getPos();
+                        }
+                        image.setImage(new Image(setImgPacman(critter), taille, taille, true, false));
+                    
+                    }
                 }
 
                  //changer image fantôme

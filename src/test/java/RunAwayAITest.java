@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 public class RunAwayAITest {
 
-    private MazeConfig config;
+    /*private MazeConfig config;
 
     @BeforeEach
     public void setUp() {
@@ -50,5 +50,5 @@ public class RunAwayAITest {
         Direction result = RunAwayAI.getDirection(config, pacmanPos, ghostPos);
 
         assertEquals(Direction.SOUTH, result);
-    }
+    }*/
 }

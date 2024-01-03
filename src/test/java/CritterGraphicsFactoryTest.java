@@ -1,3 +1,4 @@
+
 import gui.CritterGraphicsFactory;
 import org.testfx.framework.junit5.ApplicationTest;
 import gui.GraphicsUpdater;
@@ -86,3 +87,4 @@ public class CritterGraphicsFactoryTest extends ApplicationTest {
 
 
 }
+

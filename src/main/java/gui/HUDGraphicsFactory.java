@@ -11,7 +11,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import model.Items.FakeEnergizer;
+import model.Items.PacManGhost;
 import model.Items.Inventory;
 import model.Items.ItemBouleNeige;
 import model.MazeState;
@@ -75,7 +75,7 @@ public class HUDGraphicsFactory {
 
     public void updateItems(Inventory inventory, ImageView[] imageTab){
         for(int i = 0; i < 4; i ++){
-            if(inventory.getNth(i) instanceof FakeEnergizer){
+            if(inventory.getNth(i) instanceof PacManGhost){
                 imageTab[i].setImage(this.fakeEnergizerSprite);
             } else if(inventory.getNth(i) instanceof ItemBouleNeige){
                 imageTab[i].setImage(this.bouleNeigeSprite);

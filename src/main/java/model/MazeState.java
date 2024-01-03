@@ -10,6 +10,9 @@ package model;
  * - la position initiale de chaque élément du labyrinthe
  */
 
+
+import config.Cell;
+import geometry.*;
 import config.MazeConfig;
 
 import java.util.Map;
@@ -21,8 +24,12 @@ import model.Items.*;
 import model.Items.BouleNeige;
 import model.Items.Dot;
 import model.Items.Energizer;
-import model.Items.FakeEnergizer;
+import model.Items.PacManGhost;
 import model.Items.Item;
+
+
+import java.net.URISyntaxException;
+
 import java.util.*;
 
 import static model.Ghost.*;
@@ -150,13 +157,12 @@ public final class MazeState {
             
         }
 
-        // FIXME Pac-Man rules should somehow be in Pacman class
         var pacPos = PacMan.INSTANCE.getPos().round();
 
         if (!gridState[pacPos.y()][pacPos.x()]) { //Case déjà visitée ?
             if (config.getCell(pacPos).initialItem() instanceof Energizer) { // La case contient-elle un energizer ?
                 addScore(5);
-                if(!FakeEnergizer.isOneActive()) { config.getCell(pacPos).initialItem().setActive(true); }
+                if(!PacManGhost.isOneActive()) { config.getCell(pacPos).initialItem().setActive(true); }
                 gridState[pacPos.y()][pacPos.x()] = true;
             } else {
                 if (config.getCell(pacPos).initialItem().isCollectable()) {
@@ -185,49 +191,23 @@ public final class MazeState {
 
         // TODO: Faire une fonction dans item qui fait tout bien (le ramssage) pour chaque item (pour éviter d'écrire 'if ... instanceof ...') et qui ne met pas grid true si l'item n'est pas ramassé...
         for (var critter : critters) { // Collision PacMan Ghosts
-            if (critter instanceof Ghost && critter.getPos().round().equals(pacPos) && !PacMan.INSTANCE.isFakeEnergized()) {
-                if (PacMan.INSTANCE.isEnergized()) {
+            if (critter instanceof Ghost && ((critter.getPos().round().equals(pacPos) && !PacMan.INSTANCE.isFakeEnergized()) ||
+            (BouleNeige.INSTANCE.isActive() && critter.getPos().round().equals(BouleNeige.INSTANCE.getPos().round())))) {
+                if ((PacMan.INSTANCE.isEnergized() || (BouleNeige.INSTANCE.isActive() && critter.getPos().round().equals(BouleNeige.INSTANCE.getPos().round()))) && ((Ghost) critter).isAlive()) {
                     addScore(10);
                     animationController.ghostEatenSound();
-                    resetCritter(critter);
+                    ((Ghost) critter).setIsAlive(false);
+                    ((Ghost) critter).setSpeed(critter.getSpeed()*2);
                 } else {
-                    playerLost();
-                    return;
+                    if (((Ghost) critter).isAlive() && critter.getPos().round().equals(pacPos)) {
+                        playerLost();
+                        return;
+                    }
                 }
             }
-            if(BouleNeige.INSTANCE.isActive()){
-                var boulePos = BouleNeige.INSTANCE.getPos().round();
-                if(critter instanceof Ghost && critter.getPos().round().equals(boulePos)){
-                    addScore(10);
-                    animationController.ghostEatenSound();
-                    resetCritter(critter);
-
-                }
-            }
-        }
-        if (allDotsEaten() && animationController.hasntAlreadyWon()) {
-            CellGraphicsFactory.setFinNiveau(true);
-            Timer timer = new Timer();
-            timer.schedule(new TimerTask(){
-                @Override
-                public void run() {
-                    CellGraphicsFactory.setFinNiveau(false);
-                }
-            }, 3000);
         }
         // TODO: Faire une fonction dans item qui fait tout bien (le ramssage) pour chaque item (pour éviter d'écrire 'if ... instanceof ...') et qui ne met pas grid true si l'item n'est pas ramassé...
-        for (var critter : critters) { // Collision PacMan Ghosts
-            if (critter instanceof Ghost && critter.getPos().round().equals(pacPos) && !PacMan.INSTANCE.isFakeEnergized()) {
-                if (PacMan.INSTANCE.isEnergized()) {
-                    addScore(10);
-                    animationController.ghostEatenSound();
-                    resetCritter(critter);
-                } else {
-                    playerLost();
-                    return;
-                }
-            }
-        }
+
         if (allDotsEaten() && animationController.hasntAlreadyWon()) {
             this.resetItems();
             CellGraphicsFactory.setFinNiveau(true);
