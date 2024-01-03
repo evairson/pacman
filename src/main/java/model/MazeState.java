@@ -24,7 +24,7 @@ import model.Items.*;
 import model.Items.BouleNeige;
 import model.Items.Dot;
 import model.Items.Energizer;
-import model.Items.FakeEnergizer;
+import model.Items.PacManGhost;
 import model.Items.Item;
 
 
@@ -157,13 +157,12 @@ public final class MazeState {
             
         }
 
-        // FIXME Pac-Man rules should somehow be in Pacman class
         var pacPos = PacMan.INSTANCE.getPos().round();
 
         if (!gridState[pacPos.y()][pacPos.x()]) { //Case déjà visitée ?
             if (config.getCell(pacPos).initialItem() instanceof Energizer) { // La case contient-elle un energizer ?
                 addScore(5);
-                if(!FakeEnergizer.isOneActive()) { config.getCell(pacPos).initialItem().setActive(true); }
+                if(!PacManGhost.isOneActive()) { config.getCell(pacPos).initialItem().setActive(true); }
                 gridState[pacPos.y()][pacPos.x()] = true;
             } else {
                 if (config.getCell(pacPos).initialItem().isCollectable()) {

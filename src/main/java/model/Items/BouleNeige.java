@@ -8,6 +8,19 @@ import model.Direction;
 import model.MazeState;
 import model.PacMan;
 
+/**
+ * @see Critter
+ * 
+ * Ce critter est implémenter dès le départ dans le jeu mais n'est visible que lorsque pacMan utilise l'item
+ * @see ItemBouleNeige
+ * La boule de neige va tout droit dans la même direction de pacman au moment du lancer jusqu'à croiser un mur
+ * Elle tue les ennemis sur son passage et recolte les pac-gommes
+ * 
+ * 
+ */
+
+
+
 public final class BouleNeige implements Critter {
     private RealCoordinates pos;
     private Direction direction;

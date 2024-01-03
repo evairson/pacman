@@ -9,10 +9,14 @@ import model.Items.Inventory;
 
 /**
  * Implémente PacMan comme un singleton.
- * 1. Gestion du temps d'énergie : un timer qui se décrémente à chaque tick
- *    et qui désactive l'état énergisé quand il atteint 0.
- *    (voir https://stackoverflow.com/questions/4044726/how-to-set-a-timer-in-java)
- *
+ * 
+ * pacMan a une position et une direction 
+ * Il peut être en mode energizer ou fakeEnergizer quand il utilise un item
+ * La direction est contrôlé dans la classe PacmanControler
+ * @see PacmanController
+ * De plus pacman contient un inventaire pour pouvoir utiliser des items
+ * @see Inventory
+ * @see Item
  * 
  */
 public final class PacMan implements Critter {
@@ -20,7 +24,7 @@ public final class PacMan implements Critter {
     private RealCoordinates pos;
     private Direction direction = Direction.NONE;
     private Direction nextDir = Direction.NONE;
-    private boolean energized; //FIXME : remettre a false
+    private boolean energized; 
     public boolean fakeEnergized;
     private final Inventory inventory;
     static final double TPINTERVAL = 0.1;
