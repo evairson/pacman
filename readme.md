@@ -1,4 +1,4 @@
-# PacMan - Release v9.2
+# PacMan - Release v42.69
 
 ![PacMan Logo](https://upload.wikimedia.org/wikipedia/fr/thumb/a/a2/Pac-Man_Logo.svg/1280px-Pac-Man_Logo.svg.png)
 
@@ -37,11 +37,11 @@ Welcome to the first version of PacMan, a classic game reimagined with exciting 
 
 ## Release Notes
 
-- Version 9.2: First release of PacMan featuring classic gameplay, multiple levels, smart enemies, and new power-ups.
+- Version 42.69: Game is now "featuring" a fully-functionnal ghost house and we reduced the global volume!
 - Removed Herobrine.
 
 ## Downloads
 
-[Debian](https://www.mediafire.com/file/oetnp8xni0gyxtu/pacman-9.2-debian.zip/file) | [Mac OS](https://www.mediafire.com/file/g51huu0xg5n6orl/pacman-9.2-macos.zip/file) | [Windows](https://www.mediafire.com/file/9w6ayiui5at2ovi/pacman-9.2-windows.zip/file)
+[Debian](https://www.mediafire.com/file/laxmf2dfcth2snp/pacman-42.69-deb.zip/file) | [Mac OS](https://www.mediafire.com/file/vvmybxblubhfvm7/pacman-42.69-macos.zip/file) | [Windows](https://www.mediafire.com/file/7gam5zfuou54psj/pacman-42.69-windows.zip/file)
 
-Enjoy playing PacMan! If you encounter any issues or have feedback, feel free to contact us!
+Enjoy playing PacMan! If you encounter any issues or have feedback, feel free to [contact us](https://www.youtube.com/watch?v=dQw4w9WgXcQ)!
