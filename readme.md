@@ -16,8 +16,9 @@ Welcome to the first version of PacMan, a classic game reimagined with exciting 
 
 ## System Requirements
 
-- Operating System: Windows, macOS, Linux
+- Operating System: Windows, macOS Intel Chip, Linux
 - Java Runtime Environment (JRE) version 17 or higher
+- If you are working on apple chip please clone the repository and compile it with your ide.
 
 ## How to Play
 
